@@ -61,7 +61,14 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             };
 
+            UserCourse userCourse = new()
+            {
+                UserId = GetUserId(),
+                CourseId = course.Id,
+            };
+
             await _context.Courses.AddAsync(course);
+            await _context.UsersCourses.AddAsync(userCourse);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Details), new { id = course.Id});

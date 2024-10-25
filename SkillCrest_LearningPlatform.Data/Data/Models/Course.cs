@@ -25,6 +25,8 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         [Required]
         public DateTime DateCreated { get; set; }
 
+        public string? ImageUrl { get; set; }
+
         [Required]
         public string CreatorId { get; set; } = null!;
         [Required]

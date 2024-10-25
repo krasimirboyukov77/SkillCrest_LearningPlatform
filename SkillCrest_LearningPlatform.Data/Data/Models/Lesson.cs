@@ -26,6 +26,9 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         public DateTime DateCreated { get; set; }
 
         [Required]
+        public DateTime DueDate {  get; set; }
+
+        [Required]
         public string CreatorId { get; set; } = null!;
         [Required]
         [ForeignKey(nameof(CreatorId))]

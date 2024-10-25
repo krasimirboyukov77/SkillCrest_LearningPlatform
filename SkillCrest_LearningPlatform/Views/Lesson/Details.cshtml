@@ -1,0 +1,39 @@
+﻿@*
+
+@model AssignmentDetailsViewModel
+
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+<h2>@Model.Title</h2>
+<h5>Created By: @Model.CreatedBy</h5>
+<div class="bootstrap-iso">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label class="control-label">Description</label>
+                    <p>@Model.Description</p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Due Date</label>
+                    <p>@Model.DueDate.ToShortDateString()</p>
+                </div>
+                <div class="form-group">
+                    @if (Model.FilePaths.Count > 0)
+                    {
+                        @foreach (var material in Model.FilePaths)
+                        {
+                            <a class="btn btn-primary" href="@Url.Action("DownloadFile", "Assignment", new { filePath = material })">Download File</a>
+                        }
+                    }
+                    else
+                    {
+                        <p>No file available for download.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+*@
