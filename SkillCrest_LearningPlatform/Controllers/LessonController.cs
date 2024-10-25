@@ -22,7 +22,24 @@ namespace SkillCrest_LearningPlatform.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            return View();
+            var lesson = await _context.Lessons.Include(l=> l.Creator).FirstOrDefaultAsync(l=> l.Id.ToString() == id);
+
+            if (lesson == null)
+            {
+                return NotFound();
+            }
+
+            LessonDetailsViewModel viewModel = new()
+            {
+                Title = lesson.Title,
+                Description = lesson.Description ?? string.Empty,
+                Creator = lesson.Creator.UserName ?? string.Empty,
+                DueDate = lesson.DueDate.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
+                DateCreated = lesson.DateCreated.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
+
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -75,6 +92,8 @@ namespace SkillCrest_LearningPlatform.Controllers
                 CourseId = courseId,
                 CreatorId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty
             };
+
+            course.Lessons.Add(lesson);
 
             await _context.AddAsync(lesson);
             await _context.SaveChangesAsync();

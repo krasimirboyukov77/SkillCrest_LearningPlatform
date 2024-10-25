@@ -84,7 +84,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == courseGuid);
+            var course = await _context.Courses.Include(c=> c.Lessons).FirstOrDefaultAsync(c => c.Id == courseGuid);
 
             if (course == null)
             {
