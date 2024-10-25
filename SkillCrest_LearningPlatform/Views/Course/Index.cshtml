@@ -25,9 +25,19 @@
                     {
                         @foreach (var course in Model)
                         {
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                            <div class="col border-1">
+                                @if (String.IsNullOrWhiteSpace(course.ImageUrl))
+                                {
+                                    course.ImageUrl = "/SkillCrest_LearningPlatform/wwwroot/images/course-default-image.jpg";
+                                }
+                                <div class="img-thumbnail">
+                                <img class="bd-placeholder-img card-img-top"
+                                     src="~/images/course-default-image.jpg"
+                                     alt="Thumbnail"
+                                     width="100%"
+                                     height="225"
+                                     style="object-fit: cover;">
+                               
                                     <div class="card-body">
                                         <p><h3>@course.Title</h3></p>
                                         <p class="card-text">@course.Description</p>
@@ -40,7 +50,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         }
                     }
                     else

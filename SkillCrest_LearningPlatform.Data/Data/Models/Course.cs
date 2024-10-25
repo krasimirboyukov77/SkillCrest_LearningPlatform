@@ -12,6 +12,11 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
 {
     public class Course
     {
+        public Course()
+        {
+            Id = Guid.NewGuid();
+        }
+
         [Key]
         public Guid Id { get; set; }
 
@@ -25,7 +30,7 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         [Required]
         public DateTime DateCreated { get; set; }
 
-        public string? ImageUrl { get; set; }
+        public string? ImageUrl { get; set; } 
 
         [Required]
         public string CreatorId { get; set; } = null!;

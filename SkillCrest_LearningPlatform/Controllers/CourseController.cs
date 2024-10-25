@@ -28,8 +28,8 @@ namespace SkillCrest_LearningPlatform.Controllers
                 Title = c.Title,
                 Description = c.Description ?? string.Empty,
                 DateCreated = c.DateCreated.ToString("dd/MM/yyyy"),
-                Creator = c.Creator.UserName ?? string.Empty,
-
+                Creator = c.Creator.UserName ?? string.Empty
+                
             }).AsNoTracking()
             .ToListAsync();
 
@@ -58,7 +58,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 Description = viewModel.Description,
                 DateCreated = DateTime.Now,
                 CreatorId = GetUserId(),
-
+                ImageUrl = viewModel.ImageUrl
             };
 
             UserCourse userCourse = new()

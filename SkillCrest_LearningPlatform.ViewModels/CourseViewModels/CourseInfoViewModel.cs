@@ -13,6 +13,8 @@ namespace SkillCrest_LearningPlatform.ViewModels.CourseViewModels
         public required string Description { get; set; }
         public required string DateCreated { get; set; }
         public required string Creator {  get; set; }
+
+        public string? ImageUrl { get; set; }
         
     }
 }

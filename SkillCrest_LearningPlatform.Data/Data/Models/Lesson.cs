@@ -13,6 +13,11 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
 {
     public class Lesson
     {
+        public Lesson()
+        {
+            Id = Guid.NewGuid();
+        }
+
         [Key]
         public Guid Id { get; set; }
 

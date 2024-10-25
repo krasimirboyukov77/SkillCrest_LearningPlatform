@@ -10,6 +10,6 @@ namespace SkillCrest_LearningPlatform.ViewModels.CourseViewModels
     {
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
-
+        public string? ImageUrl { get; set; }
     }
 }
