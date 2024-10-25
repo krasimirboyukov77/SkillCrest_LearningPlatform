@@ -1,0 +1,42 @@
+﻿@model CourseDetailsViewModel
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <style>
+        body {
+            padding-bottom: 100px; 
+        }
+    </style>
+</head>
+<body>
+    <main class="container mt-4">
+        <h1>Assignments</h1> 
+        @if (Model.Lessons.Count > 0)
+        {
+            foreach (var assignment in Model.Lessons)
+            {
+                <div class="bg-light p-5 rounded mb-3">
+                    <h2>@assignment.Title</h2> 
+                    <p class="lead">@assignment.Description</p>
+                    <a type="button" class="btn btn-primary" asp-action="Details" asp-controller="Assignment" asp-route-id="@assignment.Id">Details</a>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No lessons yet!</p>
+        }
+        <div class="text-center mt-4">
+            <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Assignment" asp-route-courseId="@Model.Id">Click to create new assignment.</a>
+        </div>
+
+    </main>
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> 
+</body>
+</html>

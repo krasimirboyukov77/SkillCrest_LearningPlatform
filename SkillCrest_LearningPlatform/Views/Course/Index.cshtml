@@ -1,0 +1,64 @@
+﻿@model ICollection<CourseInfoViewModel>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Album example · Bootstrap v5.0</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/album/">
+
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <h2>Available Courses</h2>
+        <div class="album py-5 bg-light">
+            <div class="container">
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    @if (Model.Count > 0)
+                    {
+                        @foreach (var course in Model)
+                        {
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                                    <div class="card-body">
+                                        <p><h3>@course.Title</h3></p>
+                                        <p class="card-text">@course.Description</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <a type="button" class="btn btn-primary" asp-action="Details" asp-route-id="@course.Id">Enroll</a>
+                                            </div>
+                                            <small class="text-muted">@course.DateCreated</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    }
+                    else
+                    {
+                        <div class="container mt-5">
+                            <p>No courses yet!</p>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="container mt-5">
+            <div class="d-flex flex-column align-items-center">
+                <a type="button" asp-action="Create" class="btn btn-primary">Create Course</a>
+            </div>
+        </div>
+    </main>
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
