@@ -15,6 +15,7 @@ namespace SkillCrest_LearningPlatform.Data
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Lesson> Lessons { get; set; }
         public virtual DbSet<UserCourse> UsersCourses { get; set; }
+        public virtual DbSet<UserLessonProgress> UsersLessonsProgresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -22,6 +23,8 @@ namespace SkillCrest_LearningPlatform.Data
 
             builder.Entity<UserCourse>()
                 .HasKey(uc => new {uc.CourseId, uc.UserId});
+            builder.Entity<UserLessonProgress>()
+                .HasKey(ulp => new {ulp.LessonId,ulp.UserId});
         }
     }
 }

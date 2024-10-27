@@ -44,5 +44,7 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         [Required]
         [ForeignKey(nameof(CourseId))]
         public Course Course { get; set; } = null!;
+
+        public ICollection<UserLessonProgress> UsersLessonsProgresses { get; set; } = new HashSet<UserLessonProgress>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SkillCrest_LearningPlatform.Data.Data.Models;
+using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,6 @@ namespace SkillCrest_LearningPlatform.ViewModels.CourseViewModels
         public required string DateCreated { get; set; }
         public required string CreatorId { get; set; }
 
-        public ICollection<Lesson> Lessons { get; set; } = new HashSet<Lesson>();   
+        public ICollection<LessonDetailsViewModel> Lessons { get; set; } = new HashSet<LessonDetailsViewModel>();   
     }
 }

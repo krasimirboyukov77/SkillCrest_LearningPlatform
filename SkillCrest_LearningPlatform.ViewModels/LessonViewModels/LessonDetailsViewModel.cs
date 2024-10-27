@@ -8,6 +8,7 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
 {
     public class LessonDetailsViewModel
     {
+        public Guid? Id { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
 
@@ -15,5 +16,6 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
         public required string DateCreated { get; set; }
 
         public required string Creator {  get; set; }
+        public bool? IsCompleted { get; set; }
     }
 }

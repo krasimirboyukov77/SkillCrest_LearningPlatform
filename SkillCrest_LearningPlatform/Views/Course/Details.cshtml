@@ -19,12 +19,20 @@
         <h1>Lessons</h1> 
         @if (Model.Lessons.Count > 0)
         {
-            foreach (var assignment in Model.Lessons)
+            foreach (var lesson in Model.Lessons)
             {
                 <div class="bg-light p-5 rounded mb-3">
-                    <h2>@assignment.Title</h2> 
-                    <p class="lead">@assignment.Description</p>
-                    <a type="button" class="btn btn-primary" asp-action="Details" asp-controller="Lesson" asp-route-id="@assignment.Id">Details</a>
+                    <h2>@lesson.Title</h2>
+                    <p class="lead">@lesson.Description</p>
+
+                    <form action="/Lesson/ToggleLessonCompletion" method="post" class="lesson-completion-form" data-lesson-id="@lesson.Id">
+                        <button type="submit" class="completion-btn" aria-checked="@lesson.IsCompleted">
+                            <i class="fa @lesson.IsCompleted ? " fa-check-square" : "fa-square-o"></i>
+                            Mark as Completed
+                        </button>
+                    </form>
+
+                    <a type="button" class="btn btn-primary" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id">Details</a>
                 </div>
             }
         }

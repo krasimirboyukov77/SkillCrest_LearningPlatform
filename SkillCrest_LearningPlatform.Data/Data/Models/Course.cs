@@ -39,5 +39,7 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         public IdentityUser Creator { get; set; } = null!;
 
         public ICollection<Lesson> Lessons { get; set; } = new HashSet<Lesson>();
+
+        public ICollection<UserCourse> UsersCourses { get; set; } = new HashSet<UserCourse>();  
     }
 }

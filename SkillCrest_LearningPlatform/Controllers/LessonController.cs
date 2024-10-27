@@ -31,6 +31,7 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             LessonDetailsViewModel viewModel = new()
             {
+                Id = lesson.Id,
                 Title = lesson.Title,
                 Description = lesson.Description ?? string.Empty,
                 Creator = lesson.Creator.UserName ?? string.Empty,

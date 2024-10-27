@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SkillCrest_LearningPlatform.Data;
 using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
+using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
@@ -29,6 +30,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 Description = c.Description ?? string.Empty,
                 DateCreated = c.DateCreated.ToString("dd/MM/yyyy"),
                 Creator = c.Creator.UserName ?? string.Empty
+                
                 
             }).AsNoTracking()
             .ToListAsync();
@@ -84,7 +86,10 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var course = await _context.Courses.Include(c=> c.Lessons).FirstOrDefaultAsync(c => c.Id == courseGuid);
+            var course = await _context.Courses
+                .Include(c=> c.Lessons)
+                .ThenInclude(c=> c.UsersLessonsProgresses)
+                .Include(c=> c.Creator).FirstOrDefaultAsync(c => c.Id == courseGuid);
 
             if (course == null)
             {
@@ -97,7 +102,16 @@ namespace SkillCrest_LearningPlatform.Controllers
                 Title = course.Title,
                 DateCreated = course.DateCreated.ToString("dd-MM-yyyy"),
                 CreatorId = course.CreatorId,
-                Lessons = course.Lessons,
+                Lessons = course.Lessons.Select(l=> new LessonDetailsViewModel()
+                {
+                    Id = l.Id,
+                    Title = l.Title,
+                    Description = l.Description,
+                    DateCreated= l.DateCreated.ToString("dd-MM-yyyy"),
+                    DueDate = l.DueDate.ToString("dd-MM-yyyy"),
+                    Creator = l.Creator.UserName ?? string.Empty,
+                    IsCompleted = l.UsersLessonsProgresses.Any(ul=> ul.LessonId == l.Id && ul.UserId == GetUserId())
+                }).ToList(),
             };
 
             return View(viewModel);
