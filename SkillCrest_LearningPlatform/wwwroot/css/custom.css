@@ -25,15 +25,3 @@
         margin-right: 8px; /* Space between icon and text */
     }
 
-.incomplete-btn {
-    background-color: #ffcc00; /* Yellow for incomplete */
-    border: 2px solid #ff9900; /* Darker yellow border */
-    color: #fff; /* Text color */
-    cursor: pointer;
-    padding: 8px 12px; /* Padding */
-    font-size: 16px; /* Font size */
-    border-radius: 5px; /* Rounded corners */
-    display: flex; /* Flex to align icon and text */
-    align-items: center; /* Center vertically */
-    transition: background-color 0.3s, border-color 0.3s; /* Transition for smooth effects */
-}

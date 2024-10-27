@@ -24,24 +24,29 @@
                 <div class="bg-light p-5 rounded mb-3">
                     <h2>@lesson.Title</h2>
                     <p class="lead">@lesson.Description</p>
-                    <form action="/Lesson/ToggleLessonCompletion" method="post" class="lesson-completion-form" data-lesson-id="@lesson.Id">
-                        <input type="hidden" name="lessonId" value="@lesson.Id" />
+                    @if (!lesson.IsCompleted)
+                    {
+                        <form action="/Lesson/ToggleLessonCompletion" method="post" class="lesson-completion-form" data-lesson-id="@lesson.Id">
+                            <input type="hidden" name="lessonId" value="@lesson.Id" />
                         <input type="hidden" name="courseId" value="@Model.Id" />
-                        <button type="submit" class="completion-btn @(lesson.IsCompleted ? "completed" : "incomplete")" aria-checked="@lesson.IsCompleted.ToString().ToLower()">
-                            <i class="fa @(lesson.IsCompleted ? "fa-eye" : "fa-eye-slash")"></i>
-                            <span>Mark as @(lesson.IsCompleted ? "Incomplete" : "Complete")</span>
+                        <button type="submit" class="completion-btn incomplete" aria-checked="@lesson.IsCompleted.ToString().ToLower()">
+                            <i class="fa-eye"></i>
+                            <span>Mark as Complete</span>
                         </button>
                     </form>
-                    @if (lesson.IsCompleted)
+                    }
+                    else 
                     {
-                        <form action="/Lesson/MarkAsIncomplete" method="post" class="lesson-incomplete-form" data-lesson-id="@lesson.Id">
-                            <button type="submit" class="incomplete-btn" aria-checked="false">
-                                <i class="fa fa-eye-slash"></i> 
+                        <form action="/Lesson/MarkAsIncomplete" method="post" class="lesson-completion-form" data-lesson-id="@lesson.Id">
+                            <input type="hidden" name="lessonId" value="@lesson.Id" />
+                            <input type="hidden" name="courseId" value="@Model.Id" />
+                            <button type="submit" class="completion-btn completed" aria-checked="@lesson.IsCompleted.ToString().ToLower()">
+                                <i class="fa-eye-slash"></i>
                                 <span>Mark as Incomplete</span>
                             </button>
                         </form>
                     }
-                    <a type="button" class="btn btn-primary" asp-action="Details" asp-controller="Lesson" asp-route-lessonId="@lesson.Id" asp-route-courseId="@Model.Id">Details</a>
+                    <a type="button" class="btn btn-primary" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id">Details</a>
                 </div>
             }
         }

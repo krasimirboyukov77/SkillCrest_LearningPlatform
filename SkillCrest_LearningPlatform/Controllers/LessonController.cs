@@ -125,7 +125,14 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             if (lesson == null)
             {
-                return RedirectToAction("Index", "Course");
+                return RedirectToAction("Details", "Course", new { id = validCourseId });
+            }
+
+            bool UserLessonProgerssExists = _context.UsersLessonsProgresses.Any(ulp=> ulp.LessonId == validLessonId && ulp.UserId == GetUserId());
+
+            if (UserLessonProgerssExists)
+            {
+                return RedirectToAction("Details", "Course", new { id = validCourseId });
             }
 
             UserLessonProgress userLessonProgress = new()
@@ -140,6 +147,44 @@ namespace SkillCrest_LearningPlatform.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", "Course", new {id = validCourseId});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MarkAsIncomplete(string lessonId , string courseId)
+        {
+            bool isValidLessonId = Guid.TryParse(lessonId, out Guid validLessonId);
+
+            if (!isValidLessonId)
+            {
+                return RedirectToAction("Index", "Course");
+            }
+
+            bool isValidCourseId = Guid.TryParse(courseId, out Guid validCourseId);
+
+            if (!isValidCourseId)
+            {
+                return RedirectToAction("Index", "Course");
+            }
+
+
+            Lesson? lesson = await _context.Lessons.FirstOrDefaultAsync(l => l.Id == validLessonId);
+
+            if (lesson == null)
+            {
+                return RedirectToAction("Details", "Course", new { id = validCourseId });
+            }
+
+            UserLessonProgress? UserLessonProgerssExists = await _context.UsersLessonsProgresses.FirstOrDefaultAsync(ulp => ulp.LessonId == validLessonId && ulp.UserId == GetUserId());
+
+            if (UserLessonProgerssExists != null)
+            {
+                _context.UsersLessonsProgresses.Remove(UserLessonProgerssExists);
+                await _context.SaveChangesAsync();
+               
+            }
+
+            return RedirectToAction("Details", "Course", new { id = validCourseId });
+
         }
         private string GetUserId()
         {
