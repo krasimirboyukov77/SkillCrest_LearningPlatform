@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
 {
-    public class LessonDetailsViewModel
+    public class LessonInCourseViewModel
     {
         public Guid? Id { get; set; }
         public required string Title { get; set; }
@@ -15,7 +15,8 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
         public required string DueDate { get; set; }
         public required string DateCreated { get; set; }
 
-        public required string Creator {  get; set; }
-        
+        public required string Creator { get; set; }
+        public required bool IsCompleted { get; set; }
+
     }
 }

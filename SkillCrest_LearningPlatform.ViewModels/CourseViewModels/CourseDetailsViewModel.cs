@@ -15,6 +15,6 @@ namespace SkillCrest_LearningPlatform.ViewModels.CourseViewModels
         public required string DateCreated { get; set; }
         public required string CreatorId { get; set; }
 
-        public ICollection<LessonDetailsViewModel> Lessons { get; set; } = new HashSet<LessonDetailsViewModel>();   
+        public ICollection<LessonInCourseViewModel> Lessons { get; set; } = new HashSet<LessonInCourseViewModel>();   
     }
 }

@@ -101,5 +101,49 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return RedirectToAction(nameof(Details), new {id = lesson.Id});
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleLessonCompletion(string lessonId, string courseId)
+        {
+
+            bool isValidLessonId = Guid.TryParse(lessonId, out Guid validLessonId);
+
+            if (!isValidLessonId)
+            {
+                return RedirectToAction("Index", "Course");
+            }
+
+            bool isValidCourseId = Guid.TryParse(courseId, out Guid validCourseId);
+
+            if (!isValidCourseId)
+            {
+                return RedirectToAction("Index", "Course");
+            }
+
+
+            Lesson? lesson = await _context.Lessons.FirstOrDefaultAsync(l=> l.Id == validLessonId);
+
+            if (lesson == null)
+            {
+                return RedirectToAction("Index", "Course");
+            }
+
+            UserLessonProgress userLessonProgress = new()
+            {
+                LessonId = validLessonId,
+                UserId = GetUserId(),
+                IsCompleted = true,
+                CompletionDate = DateTime.Now,
+            };
+
+            await _context.UsersLessonsProgresses.AddAsync(userLessonProgress);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Course", new {id = validCourseId});
+        }
+        private string GetUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+        }
     }
 }

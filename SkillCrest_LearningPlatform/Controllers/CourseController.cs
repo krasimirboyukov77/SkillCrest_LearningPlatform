@@ -102,7 +102,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 Title = course.Title,
                 DateCreated = course.DateCreated.ToString("dd-MM-yyyy"),
                 CreatorId = course.CreatorId,
-                Lessons = course.Lessons.Select(l=> new LessonDetailsViewModel()
+                Lessons = course.Lessons.Select(l=> new LessonInCourseViewModel()
                 {
                     Id = l.Id,
                     Title = l.Title,

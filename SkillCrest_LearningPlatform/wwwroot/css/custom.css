@@ -1,0 +1,39 @@
+﻿.completion-btn {
+    background-color: transparent; /* Transparent background */
+    border: 2px solid transparent; /* Border to match the state */
+    color: #fff; /* Default text color */
+    cursor: pointer;
+    padding: 8px 12px; /* Padding */
+    font-size: 16px; /* Font size */
+    border-radius: 5px; /* Rounded corners */
+    display: flex; /* Flex to align icon and text */
+    align-items: center; /* Center vertically */
+    transition: background-color 0.3s, border-color 0.3s; /* Transition for smooth effects */
+}
+
+    .completion-btn.incomplete {
+        background-color: #ffcc00; /* Yellow for incomplete */
+        border-color: #ff9900; /* Darker yellow border */
+    }
+
+    .completion-btn.completed {
+        background-color: #4caf50; /* Green for completed */
+        border-color: #388e3c; /* Darker green border */
+    }
+
+    .completion-btn i {
+        margin-right: 8px; /* Space between icon and text */
+    }
+
+.incomplete-btn {
+    background-color: #ffcc00; /* Yellow for incomplete */
+    border: 2px solid #ff9900; /* Darker yellow border */
+    color: #fff; /* Text color */
+    cursor: pointer;
+    padding: 8px 12px; /* Padding */
+    font-size: 16px; /* Font size */
+    border-radius: 5px; /* Rounded corners */
+    display: flex; /* Flex to align icon and text */
+    align-items: center; /* Center vertically */
+    transition: background-color 0.3s, border-color 0.3s; /* Transition for smooth effects */
+}
