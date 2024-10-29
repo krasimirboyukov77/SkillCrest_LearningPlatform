@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkillCrest_LearningPlatform.Common\SkillCrest_LearningPlatform.Common.csproj" />
+    <ProjectReference Include="..\SkillCrest_LearningPlatform.Data.Models\SkillCrest_LearningPlatform.Data.Models.csproj" />
   </ItemGroup>
 
 </Project>
