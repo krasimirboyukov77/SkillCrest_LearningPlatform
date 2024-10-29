@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SkillCrest_LearningPlatform.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -22,12 +23,13 @@ public class AccountController : Controller
         _roleManager = roleManager;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public IActionResult RegisterTeacher()
     {
         return View();
     }
-
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> RegisterTeacher(TeacherRegisterViewModel model)
     {
@@ -59,13 +61,13 @@ public class AccountController : Controller
         }
         return View(model);
     }
-
+    [AllowAnonymous]
     [HttpGet]
     public IActionResult RegisterStudent()
     {
         return View();
     }
-
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> RegisterStudent(StudentRegisterViewModel model)
     {
@@ -96,7 +98,7 @@ public class AccountController : Controller
         }
         return View(model);
     }
-
+    
     [HttpGet]
     [AllowAnonymous]
     public IActionResult Login(string returnUrl = "")

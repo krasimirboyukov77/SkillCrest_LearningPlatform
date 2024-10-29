@@ -54,10 +54,12 @@
         {
             <p>No lessons yet!</p>
         }
-        <div class="text-center mt-4">
-            <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Lesson" asp-route-courseId="@Model.Id">Click to create new assignment.</a>
+        @if (User.IsInRole("Teacher"))
+        {
+            <div class="text-center mt-4">
+                <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Lesson" asp-route-courseId="@Model.Id">Click to create new assignment.</a>
         </div>
-
+        }
     </main>
     <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> 
 </body>

@@ -62,11 +62,14 @@
                 </div>
             </div>
         </div>
-        <div class="container mt-5">
-            <div class="d-flex flex-column align-items-center">
+        @if (User.IsInRole("Teacher"))
+        {
+            <div class="container mt-5">
+                <div class="d-flex flex-column align-items-center">
                 <a type="button" asp-action="Create" class="btn btn-primary">Create Course</a>
             </div>
         </div>
+        }
     </main>
     <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 </body>
