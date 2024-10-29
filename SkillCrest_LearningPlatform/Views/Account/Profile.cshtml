@@ -1,0 +1,26 @@
+﻿@model ProfileViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-thumbnail">
+            @{
+                var imageUrl = !String.IsNullOrWhiteSpace(Model.UserImage)
+                ? Url.Content(Model.UserImage)
+                : Url.Content("~/images/default-user-image.png");
+            }
+            <img src="@imageUrl"
+                 alt="Profile Picture"
+                 class="profile-image">
+        </div>
+        <h2 class="username">@Model.FullName</h2>
+        <h3 class="email">@Model.Email</h3>
+        <h3 class="school">@Model.SchoolName</h3>
+    </div>
+</body>
+</html>

@@ -26,13 +26,14 @@
                         @foreach (var course in Model)
                         {
                             <div class="col border-1">
-                                @if (String.IsNullOrWhiteSpace(course.ImageUrl))
-                                {
-                                    course.ImageUrl = "/SkillCrest_LearningPlatform/wwwroot/images/course-default-image.jpg";
+                                @{
+                                    var imageUrl = !String.IsNullOrWhiteSpace(course.ImageUrl)
+                                    ? Url.Content(course.ImageUrl)
+                                    : Url.Content("~/images/course-default-image.jpg");
                                 }
                                 <div class="img-thumbnail">
                                 <img class="bd-placeholder-img card-img-top"
-                                     src="~/images/course-default-image.jpg"
+                                         src="@imageUrl"
                                      alt="Thumbnail"
                                      width="100%"
                                      height="225"

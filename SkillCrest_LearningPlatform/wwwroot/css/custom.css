@@ -25,3 +25,27 @@
         margin-right: 8px; 
     }
 
+.profile-container {
+    text-align: center;
+    position: relative;
+    margin: 20px;
+}
+
+.profile-thumbnail {
+    width: 80px; /* Width of the thumbnail */
+    height: 80px; /* Height of the thumbnail */
+    border-radius: 50%; /* Make it circular */
+    overflow: hidden;
+    border: 2px solid #ccc; /* Optional border */
+    background-color: #f0f0f0; /* Fallback color */
+    margin: 0 auto; /* Center the thumbnail */
+}
+.profile-image {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+}
+
+.username {
+    margin-top: 10px; /* Ensure there's space below the thumbnail */
+    font-size: 1.5em; /* Adjust size as needed */
+}

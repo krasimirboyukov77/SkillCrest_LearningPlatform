@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using SkillCrest_LearningPlatform.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 [Authorize]
 public class AccountController : Controller
@@ -131,11 +132,52 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home"); // Redirect to a suitable action
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    {
+        var userId = GetUserId();
+
+        if(userId != Guid.Empty)
+        {
+            var currentUser = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (currentUser != null)
+            {
+                ProfileViewModel profile = new()
+                {
+                    Email = currentUser.Email ?? string.Empty,
+                    FullName = currentUser.FullName,
+                    SchoolName = currentUser.SchoolName,
+                    UserImage = currentUser.UserImage,
+                    Biography = currentUser.Biography,
+                    Interests = currentUser.Interests,
+                };
+                return View(profile);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        else
+        {
+            return BadRequest();
+        }
+    }
     private async Task EnsureRoleExists(string roleName)
     {
         if (!await _roleManager.RoleExistsAsync(roleName))
         {
             await _roleManager.CreateAsync(new IdentityRole<Guid> { Name = roleName });
         }
+    }
+    private Guid GetUserId()
+    {
+        if(Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userGuid))
+        {
+            return userGuid;
+        }
+
+        return Guid.Empty;
     }
 }
