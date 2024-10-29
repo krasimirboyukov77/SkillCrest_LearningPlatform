@@ -4,6 +4,7 @@ using SkillCrest_LearningPlatform.Data.Data.Models;
 using System;
 using System.Threading.Tasks;
 using SkillCrest_LearningPlatform.ViewModels.AccountViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 public class AccountController : Controller
 {
@@ -94,6 +95,30 @@ public class AccountController : Controller
             }
         }
         return View(model);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Login(string returnUrl = "")
+    {
+        return View(new LoginViewModel());
+    }
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+    {
+        var user = await _userManager.FindByNameAsync(loginViewModel.Email);
+        if (user != null)
+        {
+            var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Course");
+            }
+        }
+        ModelState.AddModelError("", "Invalid username or password");
+        return View(loginViewModel);
     }
 
     [HttpPost]
