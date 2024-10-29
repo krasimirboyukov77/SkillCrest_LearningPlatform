@@ -34,10 +34,10 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         public DateTime DueDate {  get; set; }
 
         [Required]
-        public string CreatorId { get; set; } = null!;
+        public Guid CreatorId { get; set; }
         [Required]
         [ForeignKey(nameof(CreatorId))]
-        public IdentityUser Creator { get; set; } = null!;
+        public ApplicationUser Creator { get; set; } = null!;
 
         [Required]
         public Guid CourseId { get; set; }

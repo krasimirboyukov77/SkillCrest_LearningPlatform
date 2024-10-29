@@ -91,7 +91,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 DueDate = lessonDueDate,
                 DateCreated = DateTime.Now,
                 CourseId = courseId,
-                CreatorId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty
+                CreatorId = GetUserId()
             };
 
             course.Lessons.Add(lesson);
@@ -186,9 +186,10 @@ namespace SkillCrest_LearningPlatform.Controllers
             return RedirectToAction("Details", "Course", new { id = validCourseId });
 
         }
-        private string GetUserId()
+        private Guid GetUserId()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userGuid);
+            return userGuid;
         }
     }
 }

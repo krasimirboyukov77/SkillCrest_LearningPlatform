@@ -1,27 +1,27 @@
 ﻿.completion-btn {
-    background-color: transparent; /* Transparent background */
-    border: 2px solid transparent; /* Border to match the state */
-    color: #fff; /* Default text color */
+    background-color: transparent; 
+    border: 2px solid transparent; 
+    color: #fff; 
     cursor: pointer;
-    padding: 8px 12px; /* Padding */
-    font-size: 16px; /* Font size */
-    border-radius: 5px; /* Rounded corners */
-    display: flex; /* Flex to align icon and text */
-    align-items: center; /* Center vertically */
-    transition: background-color 0.3s, border-color 0.3s; /* Transition for smooth effects */
+    padding: 8px 12px; 
+    font-size: 16px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
     .completion-btn.incomplete {
-        background-color: #ffcc00; /* Yellow for incomplete */
-        border-color: #ff9900; /* Darker yellow border */
+        background-color: #ffcc00; 
+        border-color: #ff9900; 
     }
 
     .completion-btn.completed {
-        background-color: #4caf50; /* Green for completed */
-        border-color: #388e3c; /* Darker green border */
+        background-color: #4caf50; 
+        border-color: #388e3c; 
     }
 
     .completion-btn i {
-        margin-right: 8px; /* Space between icon and text */
+        margin-right: 8px; 
     }
 

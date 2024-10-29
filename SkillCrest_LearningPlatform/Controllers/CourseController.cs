@@ -101,7 +101,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 Id = course.Id,
                 Title = course.Title,
                 DateCreated = course.DateCreated.ToString("dd-MM-yyyy"),
-                CreatorId = course.CreatorId,
+                CreatorId = course.CreatorId.ToString(),
                 Lessons = course.Lessons.Select(l=> new LessonInCourseViewModel()
                 {
                     Id = l.Id,
@@ -117,9 +117,10 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View(viewModel);
         }
 
-        private string GetUserId()
+        private Guid GetUserId()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userGuid);
+            return userGuid;
         }
     }
 }

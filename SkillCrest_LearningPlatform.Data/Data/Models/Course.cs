@@ -33,10 +33,10 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         public string? ImageUrl { get; set; } 
 
         [Required]
-        public string CreatorId { get; set; } = null!;
+        public Guid CreatorId { get; set; }
         [Required]
         [ForeignKey(nameof(CreatorId))]
-        public IdentityUser Creator { get; set; } = null!;
+        public ApplicationUser Creator { get; set; } = null!;
 
         public ICollection<Lesson> Lessons { get; set; } = new HashSet<Lesson>();
 

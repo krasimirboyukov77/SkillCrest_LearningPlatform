@@ -1,0 +1,43 @@
+﻿@model TeacherRegisterViewModel
+
+<h2>Register as a Teacher</h2>
+
+<form asp-action="RegisterTeacher" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SchoolName"></label>
+        <input asp-for="SchoolName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UserImage">(Optional)</label>
+        <input asp-for="UserImage" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Biography"></label>
+        <input asp-for="Biography" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Interests">(Optional)</label>
+        <input asp-for="Interests" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>

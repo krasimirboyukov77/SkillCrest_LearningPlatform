@@ -12,9 +12,9 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
     public class UserCourse
     {
         [Required]
-        public string UserId { get; set; } = null!;
+        public Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         public Guid CourseId { get; set; }
