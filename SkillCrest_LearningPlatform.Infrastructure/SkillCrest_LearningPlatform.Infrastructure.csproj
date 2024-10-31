@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkillCrest_LearningPlatform.Data.Models\SkillCrest_LearningPlatform.Data.Models.csproj" />
     <ProjectReference Include="..\SkillCrest_LearningPlatform.Data\SkillCrest_LearningPlatform.Data.csproj" />
   </ItemGroup>
 

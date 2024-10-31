@@ -17,13 +17,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{55E388E8-978
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{416AF261-FE6A-4817-9258-A4646FD4FF2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillCrest_LearningPlatform.Data.Models", "SkillCrest_LearningPlatform.Data.Models\SkillCrest_LearningPlatform.Data.Models.csproj", "{0F473B7E-F144-4FBC-9EED-0A412987FB10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillCrest_LearningPlatform.Data.Models", "SkillCrest_LearningPlatform.Data.Models\SkillCrest_LearningPlatform.Data.Models.csproj", "{0F473B7E-F144-4FBC-9EED-0A412987FB10}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8C5585DC-A7EB-4E03-890B-862588D4048A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", "{2B64EB1B-55A4-42CC-AFE7-EDBF5E6715E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillCrest_LearningPlatform.Infrastructure", "SkillCrest_LearningPlatform.Infrastructure\SkillCrest_LearningPlatform.Infrastructure.csproj", "{15696B23-B7E6-41B6-A49F-34B20405ACDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillCrest_LearningPlatform.Infrastructure", "SkillCrest_LearningPlatform.Infrastructure\SkillCrest_LearningPlatform.Infrastructure.csproj", "{15696B23-B7E6-41B6-A49F-34B20405ACDB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillCrest_LearningPlatform.Services", "SkillCrest_LearningPlatform.Services\SkillCrest_LearningPlatform.Services.csproj", "{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{15696B23-B7E6-41B6-A49F-34B20405ACDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15696B23-B7E6-41B6-A49F-34B20405ACDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15696B23-B7E6-41B6-A49F-34B20405ACDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,7 +71,8 @@ Global
 		{7FCCB1EB-7A89-4D01-9B77-3C8DD72B98F8} = {8C5585DC-A7EB-4E03-890B-862588D4048A}
 		{C13BF489-B1CF-48B8-B684-9D87E1EB0E5F} = {2B64EB1B-55A4-42CC-AFE7-EDBF5E6715E4}
 		{0F473B7E-F144-4FBC-9EED-0A412987FB10} = {98FC7777-34B0-4E79-93AC-E38865A04DF8}
-		{15696B23-B7E6-41B6-A49F-34B20405ACDB} = {55E388E8-9782-4F74-B809-F17B5CE86EFF}
+		{15696B23-B7E6-41B6-A49F-34B20405ACDB} = {416AF261-FE6A-4817-9258-A4646FD4FF2E}
+		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D} = {416AF261-FE6A-4817-9258-A4646FD4FF2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {734944B9-DAD2-4CD9-B02C-90D33BDB74EC}

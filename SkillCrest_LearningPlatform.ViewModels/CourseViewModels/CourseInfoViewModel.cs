@@ -11,7 +11,7 @@ namespace SkillCrest_LearningPlatform.ViewModels.CourseViewModels
         public required Guid Id { get; set; }
         public required string Title { get; set; }
         public required string Description { get; set; }
-        public required string DateCreated { get; set; }
+        public required DateTime DateCreated { get; set; }
         public required string Creator {  get; set; }
 
         public string? ImageUrl { get; set; }

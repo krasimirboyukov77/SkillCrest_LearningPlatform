@@ -55,7 +55,7 @@
                                                     <a asp-controller="Game" asp-action="Delete" asp-route-id="@course.Id" class="btn btn-danger btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Delete</a>
                                                 </div>
                                             }
-                                            <small class="text-muted">@course.DateCreated</small>
+                                            <small class="text-muted">@course.DateCreated.ToString("dd-MM-yyyy")</small>
                                         </div>
                                     </div>
                                 </div>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillCrest_LearningPlatform.Data;
 using SkillCrest_LearningPlatform.Data.Data.Models;
+using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using System.Runtime.CompilerServices;
@@ -13,29 +14,19 @@ namespace SkillCrest_LearningPlatform.Controllers
     [Authorize]
     public class CourseController : Controller
     {
-        private ApplicationDbContext _context;
-        public CourseController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly ICourseService _service;
+        public CourseController(ApplicationDbContext context, ICourseService service)
         {
-                _context = context;
+            this._context = context;
+            this._service = service;
         }
 
         public async Task<IActionResult> Index()
         {
-            var courseDetails = await _context.Courses
-                .Include(c=> c.Creator)
-                .Select(c=> new CourseInfoViewModel()
-            {
-                Id = c.Id,
-                Title = c.Title,
-                Description = c.Description ?? string.Empty,
-                DateCreated = c.DateCreated.ToString("dd/MM/yyyy"),
-                Creator = c.Creator.UserName ?? string.Empty
-                
-                
-            }).AsNoTracking()
-            .ToListAsync();
+            var courses = await _service.IndexGetCoursesByDateAsync();
 
-            return View(courseDetails);
+            return View(courses);
         }
         [Authorize(Roles = "Teacher")]
         [HttpGet]
@@ -55,73 +46,22 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return View(viewModel);
             }
 
-            Course course = new()
-            {
-                Title = viewModel.Title,
-                Description = viewModel.Description,
-                DateCreated = DateTime.Now,
-                CreatorId = GetUserId(),
-                ImageUrl = viewModel.ImageUrl
-            };
+            await _service.AddCourseAsync(viewModel);
 
-            UserCourse userCourse = new()
-            {
-                UserId = GetUserId(),
-                CourseId = course.Id,
-            };
-
-            await _context.Courses.AddAsync(course);
-            await _context.UsersCourses.AddAsync(userCourse);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Details), new { id = course.Id});
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            bool isValidGuid = Guid.TryParse(id, out Guid courseGuid);
+            CourseDetailsViewModel? viewModel = await _service.GetDetailsAboutCourseAsync(id);
 
-            if (!isValidGuid)
+            if(viewModel == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-
-            var course = await _context.Courses
-                .Include(c=> c.Lessons)
-                .ThenInclude(c=> c.UsersLessonsProgresses)
-                .Include(c=> c.Creator).FirstOrDefaultAsync(c => c.Id == courseGuid);
-
-            if (course == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            CourseDetailsViewModel viewModel = new()
-            {
-                Id = course.Id,
-                Title = course.Title,
-                DateCreated = course.DateCreated.ToString("dd-MM-yyyy"),
-                CreatorId = course.CreatorId.ToString(),
-                Lessons = course.Lessons.Select(l=> new LessonInCourseViewModel()
-                {
-                    Id = l.Id,
-                    Title = l.Title,
-                    Description = l.Description,
-                    DateCreated= l.DateCreated.ToString("dd-MM-yyyy"),
-                    DueDate = l.DueDate.ToString("dd-MM-yyyy"),
-                    Creator = l.Creator.UserName ?? string.Empty,
-                    IsCompleted = l.UsersLessonsProgresses.Any(ul=> ul.LessonId == l.Id && ul.UserId == GetUserId())
-                }).ToList(),
-            };
-
             return View(viewModel);
         }
 
-        private Guid GetUserId()
-        {
-            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userGuid);
-            return userGuid;
-        }
     }
 }

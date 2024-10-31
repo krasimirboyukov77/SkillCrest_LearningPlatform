@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SkillCrest_LearningPlatform.Data;
 using SkillCrest_LearningPlatform.Data.Data.Models;
+using SkillCrest_LearningPlatform.Infrastructure.Repositories;
+using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
+using SkillCrest_LearningPlatform.Services;
+using SkillCrest_LearningPlatform.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 {
     options.Password.RequireDigit = true;
@@ -26,7 +31,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
                .AddRoles<IdentityRole<Guid>>()
                .AddSignInManager<SignInManager<ApplicationUser>>()
                .AddUserManager<UserManager<ApplicationUser>>()
-               .AddDefaultTokenProviders(); 
+               .AddDefaultTokenProviders();
+
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped<ICourseService, CourseService>();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();
 
