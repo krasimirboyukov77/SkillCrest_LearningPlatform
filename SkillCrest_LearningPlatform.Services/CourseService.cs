@@ -24,6 +24,7 @@ namespace SkillCrest_LearningPlatform.Services
         {
             IEnumerable<CourseInfoViewModel> courseDetails = await this._repository
                 .GetAllAttached()
+                .AsNoTracking()
                 .Include(c=> c.Creator)
                 .Select(c => new CourseInfoViewModel()
                 {

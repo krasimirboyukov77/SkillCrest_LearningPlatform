@@ -33,11 +33,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
                .AddUserManager<UserManager<ApplicationUser>>()
                .AddDefaultTokenProviders();
 
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
-
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ILessonService, LessonService>();
 
 builder.Services.AddControllersWithViews();
 

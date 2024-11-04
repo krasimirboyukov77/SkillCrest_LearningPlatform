@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SkillCrest_LearningPlatform.Data;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
+using System.Linq.Expressions;
 
 namespace SkillCrest_LearningPlatform.Infrastructure.Repositories
 {
@@ -21,7 +22,31 @@ namespace SkillCrest_LearningPlatform.Infrastructure.Repositories
             await this.context.SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task<bool> Any(Expression<Func<T, bool>> predicate)
+        {
+
+            return await dbSet.AnyAsync(predicate);
+        }
+
+        public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await dbSet.FirstOrDefaultAsync(predicate);
+        }
+
+       public async Task<bool> DeleteEntityAsync(T entity)
+        { 
+
+            if (entity != null)
+            {
+                this.dbSet.Remove(entity);
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var entity = await this.GetByIdAsync(id);
 
@@ -42,10 +67,10 @@ namespace SkillCrest_LearningPlatform.Infrastructure.Repositories
         
         public IQueryable<T> GetAllAttached()
         {
-            return this.dbSet.AsQueryable();
+            return this.dbSet;
         }
 
-        public async Task<T> GetByIdAsync(string id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             T? entity = await this.dbSet.FindAsync(id);
 
@@ -66,5 +91,6 @@ namespace SkillCrest_LearningPlatform.Infrastructure.Repositories
                 return false;
             }
         }
+
     }
 }

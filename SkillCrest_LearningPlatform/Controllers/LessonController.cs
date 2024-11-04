@@ -7,6 +7,7 @@ using SkillCrest_LearningPlatform.Common.Lesson;
 using SkillCrest_LearningPlatform.Data.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using SkillCrest_LearningPlatform.Services.Interfaces;
 
 namespace SkillCrest_LearningPlatform.Controllers
 {
@@ -14,33 +15,24 @@ namespace SkillCrest_LearningPlatform.Controllers
     public class LessonController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public LessonController(ApplicationDbContext context)
+        private readonly ILessonService _lessonService;
+        public LessonController(ApplicationDbContext context, ILessonService lessonService)
         {
             _context = context;
+            _lessonService = lessonService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            var lesson = await _context.Lessons.Include(l=> l.Creator).FirstOrDefaultAsync(l=> l.Id.ToString() == id);
+            var lesson = await _lessonService.GetLessonDetails(id);
 
-            if (lesson == null)
+            if(lesson == null)
             {
                 return NotFound();
             }
 
-            LessonDetailsViewModel viewModel = new()
-            {
-                Id = lesson.Id,
-                Title = lesson.Title,
-                Description = lesson.Description ?? string.Empty,
-                Creator = lesson.Creator.UserName ?? string.Empty,
-                DueDate = lesson.DueDate.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
-                DateCreated = lesson.DateCreated.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
-
-            };
-
-            return View(viewModel);
+            return View(lesson);
         }
 
         [Authorize(Roles = "Teacher")]
@@ -65,133 +57,41 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return View(viewModel);
             }
 
-            bool isValidDate = DateTime.TryParseExact(viewModel.DueDate, Common.Lesson.ValidationConstants.LessonDateCreatedFormat,CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lessonDueDate);
+            bool resultFromCreation = await _lessonService.CreateLesson(viewModel);
 
-            if (!isValidDate)
+            if (resultFromCreation == false)
             {
                 return View(viewModel);
             }
 
-            bool isValidCourseId = Guid.TryParse(viewModel.CourseId, out Guid courseId);
-
-            if (!isValidCourseId)
-            {
-                return View(viewModel);
-            }
-
-            Course? course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
-
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            Lesson lesson = new()
-            {
-                Title = viewModel.Title,
-                Description = viewModel.Description,
-                DueDate = lessonDueDate,
-                DateCreated = DateTime.Now,
-                CourseId = courseId,
-                CreatorId = GetUserId()
-            };
-
-            course.Lessons.Add(lesson);
-
-            await _context.AddAsync(lesson);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Details), new {id = lesson.Id});
+            return RedirectToAction("Details","Course", new {id = viewModel.CourseId});
         }
 
         [HttpPost]
         public async Task<IActionResult> ToggleLessonCompletion(string lessonId, string courseId)
         {
-
-            bool isValidLessonId = Guid.TryParse(lessonId, out Guid validLessonId);
-
-            if (!isValidLessonId)
+            bool isToggled = await _lessonService.ToggleLessonCompletion(lessonId, courseId);
+            if (isToggled)
             {
-                return RedirectToAction("Index", "Course");
+                return RedirectToAction("Details", "Course", new { id = courseId });
             }
 
-            bool isValidCourseId = Guid.TryParse(courseId, out Guid validCourseId);
+            return View("Index", "Course");
 
-            if (!isValidCourseId)
-            {
-                return RedirectToAction("Index", "Course");
-            }
-
-
-            Lesson? lesson = await _context.Lessons.FirstOrDefaultAsync(l=> l.Id == validLessonId);
-
-            if (lesson == null)
-            {
-                return RedirectToAction("Details", "Course", new { id = validCourseId });
-            }
-
-            bool UserLessonProgerssExists = _context.UsersLessonsProgresses.Any(ulp=> ulp.LessonId == validLessonId && ulp.UserId == GetUserId());
-
-            if (UserLessonProgerssExists)
-            {
-                return RedirectToAction("Details", "Course", new { id = validCourseId });
-            }
-
-            UserLessonProgress userLessonProgress = new()
-            {
-                LessonId = validLessonId,
-                UserId = GetUserId(),
-                IsCompleted = true,
-                CompletionDate = DateTime.Now,
-            };
-
-            await _context.UsersLessonsProgresses.AddAsync(userLessonProgress);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Details", "Course", new {id = validCourseId});
         }
 
         [HttpPost]
         public async Task<IActionResult> MarkAsIncomplete(string lessonId , string courseId)
         {
-            bool isValidLessonId = Guid.TryParse(lessonId, out Guid validLessonId);
+           var isToggled = await _lessonService.MarkAsIncomplete(lessonId, courseId);
 
-            if (!isValidLessonId)
+
+            if (isToggled)
             {
-                return RedirectToAction("Index", "Course");
+                return RedirectToAction("Details", "Course", new { id = courseId });
             }
 
-            bool isValidCourseId = Guid.TryParse(courseId, out Guid validCourseId);
-
-            if (!isValidCourseId)
-            {
-                return RedirectToAction("Index", "Course");
-            }
-
-
-            Lesson? lesson = await _context.Lessons.FirstOrDefaultAsync(l => l.Id == validLessonId);
-
-            if (lesson == null)
-            {
-                return RedirectToAction("Details", "Course", new { id = validCourseId });
-            }
-
-            UserLessonProgress? UserLessonProgerssExists = await _context.UsersLessonsProgresses.FirstOrDefaultAsync(ulp => ulp.LessonId == validLessonId && ulp.UserId == GetUserId());
-
-            if (UserLessonProgerssExists != null)
-            {
-                _context.UsersLessonsProgresses.Remove(UserLessonProgerssExists);
-                await _context.SaveChangesAsync();
-               
-            }
-
-            return RedirectToAction("Details", "Course", new { id = validCourseId });
-
-        }
-        private Guid GetUserId()
-        {
-            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userGuid);
-            return userGuid;
+            return View("Index", "Course");
         }
     }
 }

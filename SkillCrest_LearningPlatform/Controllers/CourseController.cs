@@ -14,11 +14,9 @@ namespace SkillCrest_LearningPlatform.Controllers
     [Authorize]
     public class CourseController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly ICourseService _service;
-        public CourseController(ApplicationDbContext context, ICourseService service)
+        public CourseController(ICourseService service)
         {
-            this._context = context;
             this._service = service;
         }
 
