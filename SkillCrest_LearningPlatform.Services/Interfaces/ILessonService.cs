@@ -16,5 +16,7 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
         Task<bool> MarkAsIncomplete(string lessonId, string courseId);
         Task<LessonDetailsViewModel?> GetLessonById(string lessonId);
         Task<bool> EditLesson(LessonDetailsViewModel viewModel);
+        Task<DeleteLessonViewModel?> GetLessonForDelete(string lessonId);
+        Task<bool> DeleteLesson(DeleteLessonViewModel viewModel);
     }
 }

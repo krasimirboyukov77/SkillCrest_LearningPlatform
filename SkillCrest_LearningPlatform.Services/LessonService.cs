@@ -240,7 +240,70 @@ namespace SkillCrest_LearningPlatform.Services
                 lesson.Description = viewModel.Description;
                 lesson.DueDate = lessonDueDate;
 
-                await _lessonRepository.UpdateAsync(lesson);
+                var isEditsuccessful = await _lessonRepository.UpdateAsync(lesson);
+                if(isEditsuccessful) 
+                {
+                    return true;
+                }
+                
+            }
+
+            return false;
+        }
+
+        public async Task<DeleteLessonViewModel?> GetLessonForDelete(string lessonId)
+        {
+            Guid lessonGuid = Guid.Empty;
+            bool isValidId = IsGuidValid(lessonId, ref lessonGuid);
+
+            if (!isValidId)
+            {
+                return null;
+            }
+
+            Lesson? lesson = await _lessonRepository
+                .GetAllAttached()
+                .FirstOrDefaultAsync(l => l.Id == lessonGuid);
+
+            if (lesson == null)
+            {
+                return null;
+            }
+
+            DeleteLessonViewModel viewModel = new()
+            {
+                Id = lessonGuid,
+                Title = lesson.Title,
+                DateCreated = lesson.DateCreated.ToString("dd-MM-yyyy"),
+                CreatorId = lesson.CreatorId,
+                CourseId = lesson.CourseId,
+            };
+
+            return viewModel;   
+        }
+
+        public async Task<bool> DeleteLesson(DeleteLessonViewModel viewModel)
+        {
+            
+            var userId = GetUserId();
+
+            if(userId != viewModel.CreatorId)
+            {
+                return false;
+            }
+
+            Lesson? lesson = await _lessonRepository
+                .FirstOrDefaultAsync(l => l.Id == viewModel.Id);
+
+            if(lesson == null)
+            {
+                return false;
+            }
+
+            var isDeleteSuccessful = await _lessonRepository.DeleteEntityAsync(lesson);
+
+            if (isDeleteSuccessful)
+            {
                 return true;
             }
 

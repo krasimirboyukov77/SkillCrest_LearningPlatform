@@ -125,5 +125,31 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View(viewModel);
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string lessonId)
+        {
+            var lessonToDelete = await _lessonService.GetLessonForDelete(lessonId);
+
+            if(lessonToDelete == null)
+            {
+                return RedirectToAction("Index", "Course");
+            }
+
+            return View(lessonToDelete);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteLessonViewModel viewModel)
+        {
+            var isDeleteSuccessful = await _lessonService.DeleteLesson(viewModel);
+
+            if (isDeleteSuccessful)
+            {
+                return RedirectToAction("Details", "Course", new {id = viewModel.CourseId});
+            }
+
+            return RedirectToAction("Index", "Course");
+        }
     }
 }

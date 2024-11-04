@@ -50,6 +50,7 @@
                     @if (User.IsInRole("Teacher") && User?.Identity?.Name == lesson.Creator)
                     {
                         <a type="button" class="btn btn-primary" asp-action="Edit" asp-controller="Lesson" asp-route-lessonId="@lesson.Id">Edit lesson</a>
+                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-controller="Lesson" asp-route-lessonId="@lesson.Id">Delete lesson</a>
                     }
                 </div>
             }
