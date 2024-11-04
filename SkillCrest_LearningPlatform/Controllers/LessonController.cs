@@ -93,5 +93,37 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return View("Index", "Course");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string lessonId)
+        {
+            var lessonDetails = await _lessonService.GetLessonDetails(lessonId);
+
+            if(null == lessonDetails)
+            {
+                return RedirectToAction("Index", "Course");
+            }
+
+            return View(lessonDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(LessonDetailsViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var isUpdated = await _lessonService.EditLesson(viewModel);
+
+            if (isUpdated)
+            {
+                return RedirectToAction("Details", "Lesson", new { id = viewModel.Id });
+            }
+
+            return View(viewModel);
+
+        }
     }
 }

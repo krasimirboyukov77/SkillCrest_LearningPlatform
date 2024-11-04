@@ -1,0 +1,48 @@
+﻿@model LessonDetailsViewModel
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+<div class="bootstrap-iso">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="form-group ">
+                        <label class="control-label " asp-for="Title">
+                            Title
+                        </label>
+                        <input class="form-control" asp-for="Title" type="text" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label " asp-for="Description">
+                            Description
+                        </label>
+                        <textarea class="form-control" cols="40" asp-for="Description" rows="10"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label requiredField" asp-for="DueDate">
+                            Set DueDate
+                            <span class="asteriskField">
+                                *
+                            </span>
+                        </label>
+                        <input class="form-control" asp-for="DueDate" placeholder="MM/DD/YYYY" type="text" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <button type="submit" class="btn btn-primary " name="submit">
+                                Submit
+                            </button>
+                        </div>
+                        <input type="hidden" asp-for="Creator" />
+                        <input type="hidden" asp-for="DateCreated" />
+                        <input type="hidden" asp-for="Id" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

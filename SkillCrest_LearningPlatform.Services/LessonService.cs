@@ -189,6 +189,63 @@ namespace SkillCrest_LearningPlatform.Services
             return true;
 
         }
+
+        public async Task<LessonDetailsViewModel?> GetLessonById(string lessonId)
+        {
+            Guid lessonGuid = Guid.Empty;
+
+            bool islessonGuidValid = IsGuidValid(lessonId, ref lessonGuid);
+
+            if (!islessonGuidValid) 
+            {
+                return null;
+            }
+
+            var lesson = await _lessonRepository
+                .GetAllAttached()
+                .Include(l => l.Creator)
+                .FirstOrDefaultAsync(l => l.Id == lessonGuid);
+
+
+            if(lesson == null)
+            {
+                return null;
+            }
+
+
+            var lessonDetails = new LessonDetailsViewModel()
+            {
+                Id = lessonGuid,
+                Title = lesson.Title,
+                Description = lesson.Description,
+                DateCreated = lesson.DateCreated.ToString("dd-MM-yyyy"),
+                DueDate = lesson.DueDate.ToString("dd-MM-yyyy"),
+                Creator = lesson.Creator.UserName ?? string.Empty
+            };
+
+            return lessonDetails;
+        }
+
+        public async Task<bool> EditLesson(LessonDetailsViewModel viewModel)
+        {
+            Lesson? lesson = await _lessonRepository
+                .GetAllAttached().
+                FirstOrDefaultAsync(l=> l.Id == viewModel.Id);
+
+            bool isValidDate = DateTime.TryParseExact(viewModel.DueDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var lessonDueDate);
+
+            if (lesson != null)
+            {
+                lesson.Title = viewModel.Title;
+                lesson.Description = viewModel.Description;
+                lesson.DueDate = lessonDueDate;
+
+                await _lessonRepository.UpdateAsync(lesson);
+                return true;
+            }
+
+            return false;
+        }
     }
 }
 

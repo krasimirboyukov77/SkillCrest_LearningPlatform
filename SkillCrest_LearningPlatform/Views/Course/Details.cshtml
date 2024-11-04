@@ -47,6 +47,10 @@
                         </form>
                     }
                     <a type="button" class="btn btn-primary" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id">Details</a>
+                    @if (User.IsInRole("Teacher") && User?.Identity?.Name == lesson.Creator)
+                    {
+                        <a type="button" class="btn btn-primary" asp-action="Edit" asp-controller="Lesson" asp-route-lessonId="@lesson.Id">Edit lesson</a>
+                    }
                 </div>
             }
         }
