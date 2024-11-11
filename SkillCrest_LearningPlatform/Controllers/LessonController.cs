@@ -8,6 +8,9 @@ using SkillCrest_LearningPlatform.Data.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using SkillCrest_LearningPlatform.Services.Interfaces;
+using Microsoft.AspNetCore.Hosting.Server;
+using System.Net.NetworkInformation;
+using System.Web;
 
 namespace SkillCrest_LearningPlatform.Controllers
 {
@@ -50,14 +53,14 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         [Authorize(Roles = "Teacher")]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateLessonViewModel viewModel)
+        public async Task<IActionResult> Create(CreateLessonViewModel viewModel, IFormFile? file)
         {
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
 
-            bool resultFromCreation = await _lessonService.CreateLesson(viewModel);
+            bool resultFromCreation = await _lessonService.CreateLesson(viewModel, file: null);
 
             if (resultFromCreation == false)
             {
@@ -151,5 +154,25 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return RedirectToAction("Index", "Course");
         }
+
+        [HttpGet]
+        public IActionResult Download(string fileName)
+        {
+            
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", fileName);
+
+            
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound(); 
+            }
+
+           
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            var contentType = "application/octet-stream";
+
+            return File(fileBytes, contentType, fileName);
+        }
+
     }
 }

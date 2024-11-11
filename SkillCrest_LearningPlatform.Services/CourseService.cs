@@ -36,7 +36,7 @@ namespace SkillCrest_LearningPlatform.Services
 
 
                 })
-                .OrderBy(c => c.DateCreated)
+                .OrderByDescending(c => c.DateCreated)
                 .ToListAsync();
 
             return courseDetails;
@@ -54,9 +54,11 @@ namespace SkillCrest_LearningPlatform.Services
 
             var course = await _repository
                 .GetAllAttached()
+                .OrderBy(c => c.DateCreated)
                 .Include(c => c.Lessons)
                 .ThenInclude(c => c.UsersLessonsProgresses)
                 .Include(c => c.Creator).FirstOrDefaultAsync(c => c.Id == courseGuid);
+                
 
             CourseDetailsViewModel? viewModel = null;
 

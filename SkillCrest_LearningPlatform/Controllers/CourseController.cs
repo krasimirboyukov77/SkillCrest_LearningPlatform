@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SkillCrest_LearningPlatform.Data;
-using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
-using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
+
 
 namespace SkillCrest_LearningPlatform.Controllers
 {

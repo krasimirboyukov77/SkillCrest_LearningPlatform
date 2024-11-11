@@ -22,5 +22,11 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
 
         [Required]
         public string CourseId { get; set; } = null!;
+
+        [Range(0,int.MaxValue)]
+        public int Points { get; set; }
+
+        public string? FilePath { get; set; }
+        public string? FileName { get; set; }
     }
 }

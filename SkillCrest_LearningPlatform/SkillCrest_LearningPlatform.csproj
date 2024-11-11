@@ -31,4 +31,8 @@
     <ProjectReference Include="..\SkillCrest_LearningPlatform.ViewModels\SkillCrest_LearningPlatform.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>

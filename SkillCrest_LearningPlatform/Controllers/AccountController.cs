@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkillCrest_LearningPlatform.Data.Data.Models;
-using System;
-using System.Threading.Tasks;
 using SkillCrest_LearningPlatform.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;

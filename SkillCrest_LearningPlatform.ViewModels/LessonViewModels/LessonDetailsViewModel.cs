@@ -15,6 +15,10 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
         public required string DueDate { get; set; }
         public required string DateCreated { get; set; }
 
+        public int? Points { get; set; }
+        public string? FilePath { get; set; }
+        public string? FileName { get; set; }
+
         public required string Creator {  get; set; }
         
     }

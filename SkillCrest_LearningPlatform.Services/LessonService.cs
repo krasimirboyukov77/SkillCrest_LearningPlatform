@@ -5,12 +5,8 @@ using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SkillCrest_LearningPlatform.Services
 {
@@ -31,8 +27,22 @@ namespace SkillCrest_LearningPlatform.Services
             this._userLessonProgressRepository = userLessonProgressRepository;
             
         }
-        public async Task<bool> CreateLesson(CreateLessonViewModel viewModel)
+        public async Task<bool> CreateLesson(CreateLessonViewModel viewModel, IFormFile file)
         {
+            var filePathEntity = "";
+            var fileName = "";
+            if (file != null && file.Length > 0)
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", file.FileName);
+                filePathEntity = filePath;
+                fileName = Path.GetFileName(filePath);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+            }
+
 
             bool isValidDate = DateTime.TryParseExact(viewModel.DueDate, Common.Lesson.ValidationConstants.LessonDateCreatedFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lessonDueDate);
 
@@ -63,8 +73,19 @@ namespace SkillCrest_LearningPlatform.Services
                 DueDate = lessonDueDate,
                 DateCreated = DateTime.Now,
                 CourseId = courseId,
-                CreatorId = GetUserId()
+                CreatorId = GetUserId(),
+                FilePath = filePathEntity,
+                FileName = fileName
             };
+
+            if(viewModel.Points > 0)
+            {
+                lesson.Points = viewModel.Points;
+            }
+            else
+            {
+                lesson.Points = 0;
+            }
 
             course.Lessons.Add(lesson);
 
@@ -100,8 +121,11 @@ namespace SkillCrest_LearningPlatform.Services
                     Creator = lesson.Creator.UserName ?? string.Empty,
                     DueDate = lesson.DueDate.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
                     DateCreated = lesson.DateCreated.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
-
+                    Points = lesson.Points,
+                    FilePath = lesson.FilePath,
+                    FileName = lesson.FileName
                 };
+
             }
 
             return viewModel;
@@ -220,7 +244,10 @@ namespace SkillCrest_LearningPlatform.Services
                 Description = lesson.Description,
                 DateCreated = lesson.DateCreated.ToString("dd-MM-yyyy"),
                 DueDate = lesson.DueDate.ToString("dd-MM-yyyy"),
-                Creator = lesson.Creator.UserName ?? string.Empty
+                Creator = lesson.Creator.UserName ?? string.Empty,
+                Points = lesson.Points,
+                FilePath = lesson.FilePath,
+                FileName = lesson.FileName,
             };
 
             return lessonDetails;
