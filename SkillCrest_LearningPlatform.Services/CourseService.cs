@@ -54,7 +54,6 @@ namespace SkillCrest_LearningPlatform.Services
 
             var course = await _repository
                 .GetAllAttached()
-                .OrderBy(c => c.DateCreated)
                 .Include(c => c.Lessons)
                 .ThenInclude(c => c.UsersLessonsProgresses)
                 .Include(c => c.Creator).FirstOrDefaultAsync(c => c.Id == courseGuid);
@@ -79,7 +78,9 @@ namespace SkillCrest_LearningPlatform.Services
                         DueDate = l.DueDate.ToString("dd-MM-yyyy"),
                         Creator = l.Creator.UserName ?? string.Empty,
                         IsCompleted = l.UsersLessonsProgresses.Any(ul => ul.LessonId == l.Id && ul.UserId == GetUserId())
-                    }).ToList(),
+                    })
+                    .OrderBy(ls=> ls.IsCompleted)
+                    .ToList(),
                 };
             }
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SkillCrest_LearningPlatform.Data.Data.Models;
+using SkillCrest_LearningPlatform.Data.Models.QuizModels;
 
 namespace SkillCrest_LearningPlatform.Data
 {
@@ -18,6 +19,12 @@ namespace SkillCrest_LearningPlatform.Data
         public virtual DbSet<UserCourse> UsersCourses { get; set; }
         public virtual DbSet<UserLessonProgress> UsersLessonsProgresses { get; set; }
 
+
+        public virtual DbSet<Quiz> Quizzes { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Option> Options { get; set; }
+        public virtual DbSet<Answer> Answers { get; set; }
+        public virtual DbSet<QuizSubmission> QuizSubmissions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

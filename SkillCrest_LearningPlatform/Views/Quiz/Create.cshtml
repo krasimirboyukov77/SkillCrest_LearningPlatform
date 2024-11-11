@@ -1,0 +1,198 @@
+﻿@model CreateQuizViewModel
+
+<h2>Create Quiz</h2>
+
+<form asp-action="Create" asp-controller="Quiz" method="post">
+    <div>
+        <label>Quiz Title</label>
+        <input type="text" asp-for="Title" class="form-control" />
+    </div>
+
+    <div id="questions-container" class="questions-container">
+        <!-- Questions will be added here dynamically -->
+    </div>
+
+    <button type="button" onclick="addQuestion()" class="btn btn-primary">Add Question</button>
+    <button type="submit" class="btn btn-success mt-3">Save Quiz</button>
+</form>
+
+@section Scripts {
+    <script>
+        let questionIndex = 0;
+
+        function addQuestion() {
+            const questionHtml = `
+                        <div class="question-box" id="question_${questionIndex}">
+                            <div class="question-header">
+                                <h4>Question ${questionIndex + 1}</h4>
+                                <label>Question Text</label>
+                                <input type="text" name="Questions[${questionIndex}].Text" class="form-control" />
+
+                                <button type="button" onclick="removeQuestion(${questionIndex})" class="btn btn-danger btn-sm">Remove Question</button>
+                            </div>
+
+                            <div class="question-type">
+                                <label>Question Type</label>
+                                <select name="Questions[${questionIndex}].Type" class="form-control" onchange="toggleAddOptionButton(${questionIndex})">
+                                    <option value="0">MultipleChoice</option>
+                                    <option value="1">RadioButton</option>
+                                    <option value="2">OpenText</option>
+                                </select>
+                            </div>
+
+                            <!-- Option container -->
+                            <div class="options-container" id="options_${questionIndex}">
+                                <!-- Options for this question will be added here dynamically -->
+                            </div>
+
+                            <!-- OpenText Correct Answer input -->
+                            <div class="open-text-container" id="openText_${questionIndex}" style="display:none;">
+                                <label>Correct Answer Text</label>
+                                <input type="text" name="Questions[${questionIndex}].CorrectTextAnswer" class="form-control" />
+                            </div>
+                            <button type="button" class="add-option-button btn btn-info btn-sm" onclick="addOption(${questionIndex})">Add Option</button>
+                        </div>
+                    `;
+
+            // Append the question HTML to the questions container
+            document.getElementById("questions-container").insertAdjacentHTML("beforeend", questionHtml);
+            questionIndex++;
+        }
+
+        // Add an option for a specific question
+        function addOption(questionIdx) {
+            const optionsContainer = document.getElementById(`options_${questionIdx}`);
+            const optionIndex = optionsContainer.childElementCount;
+
+            const optionHtml = `
+                        <div class="option-box">
+                            <label>Option Text</label>
+                            <input type="text" name="Questions[${questionIdx}].Options[${optionIndex}].Text" class="form-control option-input" />
+                            <label>Is Correct</label>
+                                   <input type="hidden" name="Questions[${questionIdx}].Options[${optionIndex}].IsCorrect" value="false" />
+                    <input type="checkbox" name="Questions[${questionIdx}].Options[${optionIndex}].IsCorrect" value="true"
+                           onchange="handleCheckboxChange(this)" />
+                            <button type="button" onclick="removeOption(${questionIdx}, ${optionIndex})" class="btn btn-danger btn-sm">Remove Option</button>
+                        </div>
+                    `;
+
+            optionsContainer.insertAdjacentHTML("beforeend", optionHtml);
+        }
+
+        function handleCheckboxChange(checkbox) {
+            // Toggle the checkbox's value between "true" and "false"
+            checkbox.value = checkbox.checked ? "true" : "false";
+        }
+
+        // Remove an option from a specific question
+        function removeOption(questionIdx, optionIdx) {
+            const optionsContainer = document.getElementById(`options_${questionIdx}`);
+            const optionToRemove = optionsContainer.querySelectorAll('.option-box')[optionIdx];
+            optionsContainer.removeChild(optionToRemove);
+        }
+
+        // Remove a question from the quiz
+        function removeQuestion(questionIdx) {
+            const questionToRemove = document.getElementById(`question_${questionIdx}`);
+            questionToRemove.remove();
+            questionIndex--;
+        }
+
+        // Toggle visibility of "Add Option" button and the "Correct Answer Text" input based on question type
+        function toggleAddOptionButton(questionIdx) {
+            const questionTypeSelect = document.querySelector(`#question_${questionIdx} .question-type select`);
+            const addOptionButton = document.querySelector(`#question_${questionIdx} .add-option-button`);
+            const openTextContainer = document.querySelector(`#question_${questionIdx} .open-text-container`);
+            const optionsContainer = document.querySelector(`#question_${questionIdx} .options-container`);
+
+            if (questionTypeSelect.value == '2') { // OpenText selected
+                // Hide Add Option button for OpenText questions
+                addOptionButton.style.display = 'none';
+                // Show the container for the correct answer text (if applicable)
+                openTextContainer.style.display = 'block';
+                // Remove all existing options for OpenText type (no need for options here)
+                while (optionsContainer.firstChild) {
+                    optionsContainer.removeChild(optionsContainer.firstChild);
+                }
+            } else {
+                // Show Add Option button for other question types (e.g., Multiple Choice, Radio Button)
+                addOptionButton.style.display = 'block';
+                // Hide the correct answer text container for other types
+                openTextContainer.style.display = 'none';
+
+                // Optionally, you could reset options here or clear some values
+                // This will allow the options to be added correctly when switching back to multiple-choice or radio-button questions.
+            }
+        }
+    </script>
+}
+
+<style>
+    .questions-container {
+        margin-top: 20px;
+    }
+
+    .question-box {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    .question-header {
+        margin-bottom: 10px;
+    }
+
+        .question-header h4 {
+            margin-bottom: 10px;
+        }
+
+    .question-type,
+    .options-container {
+        margin-top: 15px;
+    }
+
+    .option-box {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .option-box input[type="text"] {
+            width: 150px;
+        }
+
+        .option-box button {
+            margin-left: 10px;
+        }
+
+    .add-option-button {
+        margin-top: 10px;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+    }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        border: none;
+    }
+
+    .btn-info {
+        background-color: #3498db;
+        border: none;
+    }
+
+    .form-control.option-input {
+        width: 250px;
+        display: inline-block;
+    }
+
+    .form-control {
+        width: 300px;
+        display: inline-block;
+    }
+</style>
