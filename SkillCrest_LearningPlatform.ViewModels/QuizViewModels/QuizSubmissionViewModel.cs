@@ -10,6 +10,7 @@ namespace SkillCrest_LearningPlatform.ViewModels.QuizViewModels
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;
+        public int TotalScore { get; set; }
         public List<QuestionAnswerViewModel> Questions { get; set; } = new List<QuestionAnswerViewModel>();
     }
 

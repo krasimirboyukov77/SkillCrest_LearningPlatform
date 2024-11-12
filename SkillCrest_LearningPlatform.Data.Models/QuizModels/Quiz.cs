@@ -24,6 +24,9 @@ namespace SkillCrest_LearningPlatform.Data.Models.QuizModels
         public DateTime DateCreated { get; set; }
 
         [Required]
+        public int TotalScore { get; set; }
+
+        [Required]
         public Guid CreatorId { get; set; }
 
         [Required]

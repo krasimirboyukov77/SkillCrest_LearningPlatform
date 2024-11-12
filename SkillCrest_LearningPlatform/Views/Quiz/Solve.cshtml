@@ -1,4 +1,5 @@
 ﻿@model QuizSubmissionViewModel
+
 @{
     ViewData["Title"] = Model.Title;
 }
@@ -6,47 +7,78 @@
 <h2>@Model.Title</h2>
 
 <form asp-action="SubmitQuiz" method="post">
+    <input type="hidden" name="Title" value="@Model.Title" />
+    <input type="hidden" name="Id" value="@Model.Id" />
+
     @for (int i = 0; i < Model.Questions.Count; i++)
+
     {
+
         var question = Model.Questions[i];
 
         <div class="question-box mb-4">
             <h4>@(i + 1). @question.Text</h4>
 
+            <input type="hidden" name="Questions[@i].Text" value="@question.Text" />
+            <input type="hidden" name="Questions[@i].Type" value="@question.Type" />
+            <input type="hidden" name="Questions[@i].QuestionId" value="@question.QuestionId" />
+
             @switch (question.Type)
+
             {
+
                 case 0: // Single Choice (Radio Buttons)
-                    @foreach (var option in question.Options)
+                    @for (int j = 0; j < question.Options.Count; j++)
+
                     {
+
+                        var option = question.Options[j];
+
                         <div>
-                            <input type="radio" asp-for="@option.SelectedOption" name="SelectedRadioButtonAnswer" value="@option" />
-                            <label>@option</label>
+                            <input type="radio"
+                                   name="Questions[@i].Options[@j].SelectedOption"
+                                   value="true"
+                            @(option.SelectedOption ? "checked" : "") />
+                            <input type="hidden" name="Questions[@i].Options[@j].Text" value="@option.Text" />
+                            <input type="hidden" name="Questions[@i].Options[@j].OptionId" value="@option.OptionId" />
+                            <label>@option.Text</label>
                         </div>
                     }
                     break;
 
-                case 1: // Single Choice (Radio Buttons)
-                    @foreach (var option in question.Options)
+
+
+                case 1: // Multiple Choice (Checkboxes)
+                    @for (int j = 0; j < question.Options.Count; j++)
+
                     {
+
+                        var option = question.Options[j];
+
                         <div>
-                            <input type="checkbox" asp-for="@option.SelectedOption" name="SelectedMultipleChoiceAnswers" value="@option" />
-                            <label>@option</label>
+                            <!-- Checkbox for selection -->
+                            <input type="checkbox"
+                                   name="Questions[@i].Options[@j].SelectedOption"
+                                   value="true"
+                            @(option.SelectedOption ? "checked" : "") />
+                            <input type="hidden" name="Questions[@i].Options[@j].Text" value="@option.Text" />
+                            <input type="hidden" name="Questions[@i].Options[@j].OptionId" value="@option.OptionId" />
+                            <label>@option.Text</label>
                         </div>
                     }
                     break;
+
+
 
                 case 2: // Open Text
-                foreach(var option in question.Options)
-                {
                     <div class="form-group">
                         <textarea class="form-control"
-                                  name="Questions[@i].TextResponse"
-                                  asp-for="@question.CorrectTextResponse"
+                                  name="Questions[@i].CorrectTextResponse"
                                   rows="3"
                                   placeholder="Write your answer here..."></textarea>
                     </div>
-                }
                     break;
+
             }
         </div>
     }

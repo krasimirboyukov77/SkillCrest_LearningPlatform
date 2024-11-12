@@ -54,7 +54,6 @@ namespace SkillCrest_LearningPlatform.Controllers
                         Type = question.Type,
                         CorrectTextResponse = question.CorrectTextResponse
                     };
-
                     _context.Questions.Add(newQuestion); // Add the question to the database context
 
                     // Step 3: Add options to the question
@@ -76,6 +75,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                     }
                 }
 
+                quiz.TotalScore = quiz.Questions.Count;
                 // Step 4: Save the changes to the database
                 _context.SaveChanges(); // Commit the transaction
 
@@ -99,6 +99,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             {
                 Id = quiz.Id,
                 Title = quiz.Title,
+                TotalScore = quiz.TotalScore,
                 Questions = quiz.Questions.Select(q => new QuestionAnswerViewModel
                 {
                     QuestionId = q.Id,
@@ -123,9 +124,10 @@ namespace SkillCrest_LearningPlatform.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitQuiz(QuizSubmissionViewModel viewModel)
         {
+            int score = 0;
             if (ModelState.IsValid)
             {
-                int totalScore = 0;
+                
                 string userId = User.Identity.GetUserId();
                 
                 foreach (var questionAnswer in viewModel.Questions)
@@ -144,29 +146,24 @@ namespace SkillCrest_LearningPlatform.Controllers
                             && question.CorrectTextResponse != null 
                             && questionAnswer.CorrectTextResponse != null)
                         {
-                            totalScore++;
+                            score++;
                             questionAnswer.IsCorrect = true;
                         }
                         
                     }
                     else if (question.Type == QuestionType.MultipleChoice)
                     {
-                        
                         // For multiple choice questions, check the selected option
-                        foreach (var option in questionAnswer.Options)
+                        var correctOptions = question.Options.Where(o => o.IsCorrect == true).Select(o => o.Id).ToList();
+                        var checkedOptions = questionAnswer.Options.Where(o=> o.SelectedOption == true).Select(o=> o.OptionId).ToList();
+
+                        bool areEqual = correctOptions.OrderBy(o=> o).SequenceEqual(checkedOptions.OrderBy(o=> o));
+                        if (areEqual)
                         {
-                            var correctOption = question.Options
-                                .FirstOrDefault(o => o.Id == option.OptionId && o.IsCorrect == true);
-                            if (correctOption == null)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                totalScore++;
-                                questionAnswer.IsCorrect = true;
-                            }
+                            questionAnswer.IsCorrect = true;
+                            score++;
                         }
+                       
                     }
                     else if(question.Type == QuestionType.RadioButton)
                     {
@@ -176,7 +173,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                             var correctOption = question.CorrectOptionId.FirstOrDefault();
                             if(correctOption == questionSelectedAnswer.OptionId)
                             {
-                                totalScore++;
+                                score++;
                                 questionAnswer.IsCorrect = true;
                             }
                             else
@@ -193,6 +190,8 @@ namespace SkillCrest_LearningPlatform.Controllers
                     QuizId = viewModel.Id,
                     StudentId = GetUserId(),
                     SubmissionDate = DateTime.Now,
+                    Score = score,
+                    TotalScore = viewModel.TotalScore,
                     Answers = viewModel.Questions.Select(q => new Answer()
                     {
                         QuestionId = q.QuestionId,
