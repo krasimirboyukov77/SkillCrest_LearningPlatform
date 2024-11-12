@@ -1,0 +1,55 @@
+﻿@model QuizSubmissionViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h2>@Model.Title</h2>
+
+<form asp-action="SubmitQuiz" method="post">
+    @for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        var question = Model.Questions[i];
+
+        <div class="question-box mb-4">
+            <h4>@(i + 1). @question.Text</h4>
+
+            @switch (question.Type)
+            {
+                case 0: // Single Choice (Radio Buttons)
+                    @foreach (var option in question.Options)
+                    {
+                        <div>
+                            <input type="radio" asp-for="@option.SelectedOption" name="SelectedRadioButtonAnswer" value="@option" />
+                            <label>@option</label>
+                        </div>
+                    }
+                    break;
+
+                case 1: // Single Choice (Radio Buttons)
+                    @foreach (var option in question.Options)
+                    {
+                        <div>
+                            <input type="checkbox" asp-for="@option.SelectedOption" name="SelectedMultipleChoiceAnswers" value="@option" />
+                            <label>@option</label>
+                        </div>
+                    }
+                    break;
+
+                case 2: // Open Text
+                foreach(var option in question.Options)
+                {
+                    <div class="form-group">
+                        <textarea class="form-control"
+                                  name="Questions[@i].TextResponse"
+                                  asp-for="@question.CorrectTextResponse"
+                                  rows="3"
+                                  placeholder="Write your answer here..."></textarea>
+                    </div>
+                }
+                    break;
+            }
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Submit Quiz</button>
+</form>

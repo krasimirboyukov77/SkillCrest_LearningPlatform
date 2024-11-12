@@ -12,7 +12,7 @@ using SkillCrest_LearningPlatform.Data;
 namespace SkillCrest_LearningPlatform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241029085305_InitialDb")]
+    [Migration("20241112082926_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -292,6 +292,15 @@ namespace SkillCrest_LearningPlatform.Data.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -340,6 +349,140 @@ namespace SkillCrest_LearningPlatform.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UsersLessonsProgresses");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Answer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OptionsId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuizSubmissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TextResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("QuizSubmissionId");
+
+                    b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Option", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Options");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CorrectOptionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorrectTextResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Quiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Quizzes");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.QuizSubmission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("QuizSubmissions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -461,9 +604,82 @@ namespace SkillCrest_LearningPlatform.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Answer", b =>
+                {
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Models.QuizModels.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Models.QuizModels.QuizSubmission", "QuizSubmission")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuizSubmissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("QuizSubmission");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Option", b =>
+                {
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Models.QuizModels.Question", "Question")
+                        .WithMany("Options")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Question", b =>
+                {
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Models.QuizModels.Quiz", "Quiz")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Quiz", b =>
+                {
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Data.Models.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.QuizSubmission", b =>
+                {
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Models.QuizModels.Quiz", "Quiz")
+                        .WithMany("QuizSubmissions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Data.Models.ApplicationUser", "Student")
+                        .WithMany("QuizSubmissions")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Lessons");
+
+                    b.Navigation("QuizSubmissions");
 
                     b.Navigation("UsersCourses");
 
@@ -480,6 +696,23 @@ namespace SkillCrest_LearningPlatform.Data.Migrations
             modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Data.Models.Lesson", b =>
                 {
                     b.Navigation("UsersLessonsProgresses");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Question", b =>
+                {
+                    b.Navigation("Options");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Quiz", b =>
+                {
+                    b.Navigation("Questions");
+
+                    b.Navigation("QuizSubmissions");
+                });
+
+            modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.QuizSubmission", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

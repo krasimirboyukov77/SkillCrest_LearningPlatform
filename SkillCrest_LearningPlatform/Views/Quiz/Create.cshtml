@@ -48,7 +48,7 @@
                             <!-- OpenText Correct Answer input -->
                             <div class="open-text-container" id="openText_${questionIndex}" style="display:none;">
                                 <label>Correct Answer Text</label>
-                                <input type="text" name="Questions[${questionIndex}].CorrectTextAnswer" class="form-control" />
+                                        <input type="text" name="Questions[${questionIndex}].CorrectTextResponse" class="form-control" />
                             </div>
                             <button type="button" class="add-option-button btn btn-info btn-sm" onclick="addOption(${questionIndex})">Add Option</button>
                         </div>
@@ -69,8 +69,7 @@
                             <label>Option Text</label>
                             <input type="text" name="Questions[${questionIdx}].Options[${optionIndex}].Text" class="form-control option-input" />
                             <label>Is Correct</label>
-                                   <input type="hidden" name="Questions[${questionIdx}].Options[${optionIndex}].IsCorrect" value="false" />
-                    <input type="checkbox" name="Questions[${questionIdx}].Options[${optionIndex}].IsCorrect" value="true"
+                            <input type="checkbox" name="Questions[${questionIdx}].Options[${optionIndex}].IsCorrect" value="true"
                            onchange="handleCheckboxChange(this)" />
                             <button type="button" onclick="removeOption(${questionIdx}, ${optionIndex})" class="btn btn-danger btn-sm">Remove Option</button>
                         </div>

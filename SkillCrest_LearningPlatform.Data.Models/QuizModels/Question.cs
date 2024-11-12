@@ -30,7 +30,7 @@ namespace SkillCrest_LearningPlatform.Data.Models.QuizModels
         [ForeignKey(nameof(QuizId))]
         public Quiz Quiz { get; set; } = null!;
         public List<Option> Options { get; set; } = new List<Option>();
-        public int? CorrectOptionId { get; set; }
+        public List<Guid> CorrectOptionId { get; set; } = new List<Guid>();
         public string? CorrectTextResponse { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace SkillCrest_LearningPlatform.Data.Models.QuizModels
         [Required]
         [ForeignKey(nameof(QuizSubmissionId))]
         public QuizSubmission QuizSubmission { get; set; } = null!;
-        public int? OptionId { get; set; }
+        public List<Guid> OptionsId { get; set; } = new List<Guid>();
         public string? TextResponse { get; set; }
         [Required]
         public bool IsCorrect { get; set; }

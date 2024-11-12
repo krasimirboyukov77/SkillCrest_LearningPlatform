@@ -26,6 +26,9 @@ namespace SkillCrest_LearningPlatform.Data.Models.QuizModels
         public Guid StudentId { get; set; }
 
         [Required]
+        public int Score { get; set; }
+
+        [Required]
         [ForeignKey(nameof(StudentId))]
         public ApplicationUser Student { get; set; } = null!;
         [Required]
