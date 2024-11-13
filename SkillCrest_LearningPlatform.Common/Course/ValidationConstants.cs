@@ -8,7 +8,7 @@ namespace SkillCrest_LearningPlatform.Common.Course
 {
     public class ValidationConstants
     {
-        public const int CourseTitleMinLength = 5;
+        public const int CourseTitleMinLength = 4;
         public const int CourseTitleMaxLength = 128;
 
         public const int CourseDescriptionMaxLength = 500;

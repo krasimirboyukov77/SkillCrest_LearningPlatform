@@ -6,6 +6,7 @@ using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Microsoft.AspNet.Identity;
 
 
 namespace SkillCrest_LearningPlatform.Services
@@ -15,17 +16,16 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<Lesson> _lessonRepository;
         private readonly IRepository<Course> _courseRepository;
         private readonly IRepository<UserLessonProgress> _userLessonProgressRepository;
-
+        
         public LessonService(IRepository<Lesson> lessonRepository, 
             IRepository<Course> courseRepository,
             IRepository<UserLessonProgress> userLessonProgressRepository,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor )
             :base(httpContextAccessor)
         {
             this._courseRepository = courseRepository;
             this._lessonRepository = lessonRepository;
             this._userLessonProgressRepository = userLessonProgressRepository;
-            
         }
         public async Task<bool> CreateLesson(CreateLessonViewModel viewModel, IFormFile file)
         {
@@ -336,6 +336,7 @@ namespace SkillCrest_LearningPlatform.Services
 
             return false;
         }
+
     }
 }
 

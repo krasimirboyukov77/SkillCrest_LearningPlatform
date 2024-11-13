@@ -1,4 +1,5 @@
 ﻿using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
+using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,13 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
 
          Task AddCourseAsync(CreateCourseViewModel viewModel);
 
-        Task<CourseDetailsViewModel?>? GetDetailsAboutCourseAsync(string id);
+         Task<CourseDetailsViewModel?> GetDetailsAboutCourseAsync(string id);
 
-        
+        Task<CourseEditViewModel?> GetCourseForEditAsync(string id);
+        Task<bool> EditCourse(CourseEditViewModel viewModel);
+
+        Task<IEnumerable<UserShortDetailsViewModel>?> GetUsersEnrolled(string courseId);
+
+        Task<bool> EnrollStudent(string courseId);
     }
 }

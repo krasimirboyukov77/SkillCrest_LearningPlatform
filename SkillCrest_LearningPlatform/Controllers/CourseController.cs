@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SkillCrest_LearningPlatform.Services;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
 
@@ -56,5 +57,61 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var course = await _service.GetCourseForEditAsync(id);
+
+            if(course == null)
+            {
+                return NotFound();
+            }
+
+            return View(course);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CourseEditViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var isUpdated = await _service.EditCourse(viewModel);
+
+            if (isUpdated)
+            {
+                return RedirectToAction("Details", "Course", new { id = viewModel.Id });
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Users(string courseId)
+        {
+            var usersInCourse = await _service.GetUsersEnrolled(courseId);
+
+            if (usersInCourse != null)
+            {
+                return View(usersInCourse);
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Enroll(string courseId)
+        {
+            var courseGuid = await _service.EnrollStudent(courseId);
+
+            if (courseGuid == false)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Details), new { id = courseId });
+        }
     }
 }
