@@ -27,11 +27,13 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
 
         [MaxLength(Common.Lesson.ValidationConstants.LessonDescriptionMaxLength)]
         public string? Description { get; set; }
+
         [Required]
         public DateTime DateCreated { get; set; }
 
         [Required]
         public DateTime DueDate {  get; set; }
+
 
         public int Points { get; set; }
 

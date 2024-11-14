@@ -8,7 +8,7 @@ namespace SkillCrest_LearningPlatform.Common.Lesson
 {
     public class ValidationConstants
     {
-        public const int LessonTitleMinLength = 5;
+        public const int LessonTitleMinLength = 4;
         public const int LessonTitleMaxLength = 128;
 
         public const int LessonDescriptionMaxLength = 700;

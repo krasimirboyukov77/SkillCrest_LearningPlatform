@@ -9,6 +9,7 @@
                             Course Title
                         </label>
                         <input class="form-control" asp-for="Title"  />
+                        <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
                     <div class="form-group ">
                         <label class="control-label " asp-for="ImageUrl">
@@ -21,6 +22,7 @@
                             Description
                         </label>
                         <textarea class="form-control" cols="20" asp-for="Description" rows="5"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>              
                     <div class="form-group">
                         <div>
@@ -33,3 +35,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
