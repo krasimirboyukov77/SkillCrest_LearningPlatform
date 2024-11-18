@@ -13,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews(); // For MVC controllers
 builder.Services.AddRazorPages();
 
+builder.Services.AddSingleton<DatabaseInitializer>();
+
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -43,6 +46,9 @@ builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+var initializer = app.Services.GetRequiredService<DatabaseInitializer>();
+initializer.InitializeDatabase();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

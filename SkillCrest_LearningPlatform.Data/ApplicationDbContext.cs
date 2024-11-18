@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SkillCrest_LearningPlatform.Data.Data.Models;
+using SkillCrest_LearningPlatform.Data.Models;
 using SkillCrest_LearningPlatform.Data.Models.QuizModels;
 
 namespace SkillCrest_LearningPlatform.Data
@@ -14,6 +15,7 @@ namespace SkillCrest_LearningPlatform.Data
         }
 
 
+        public virtual DbSet<Manager> Managers { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Lesson> Lessons { get; set; }
         public virtual DbSet<UserCourse> UsersCourses { get; set; }
