@@ -95,7 +95,7 @@ namespace SkillCrest_LearningPlatform.Services
             return true;
         }
 
-        public async Task<LessonDetailsViewModel?>? GetLessonDetails(string id)
+        public async Task<LessonDetailsViewModel?> GetLessonDetails(string id)
         {
 
             Guid lessonGuid = Guid.Empty;

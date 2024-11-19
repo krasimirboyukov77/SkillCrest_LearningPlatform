@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SkillCrest_LearningPlatform.Common;
+using SkillCrest_LearningPlatform.Data.Models.QuizModels;
 
 namespace SkillCrest_LearningPlatform.Data.Data.Models
 {
@@ -41,5 +42,7 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         public ICollection<Lesson> Lessons { get; set; } = new HashSet<Lesson>();
 
         public ICollection<UserCourse> UsersCourses { get; set; } = new HashSet<UserCourse>();  
+
+        public ICollection<Quiz>  Quizzes { get; set; } = new HashSet<Quiz>();
     }
 }

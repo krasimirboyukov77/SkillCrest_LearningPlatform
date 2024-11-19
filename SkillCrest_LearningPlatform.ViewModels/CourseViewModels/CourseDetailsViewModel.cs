@@ -1,5 +1,6 @@
 ﻿using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
+using SkillCrest_LearningPlatform.ViewModels.QuizViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace SkillCrest_LearningPlatform.ViewModels.CourseViewModels
         public string? Description { get; set; }
 
         public ICollection<LessonInCourseViewModel> Lessons { get; set; } = new HashSet<LessonInCourseViewModel>();   
+        public ICollection<QuizShortDetails> Quizzes { get; set; } = new HashSet<QuizShortDetails>();
     }
 }

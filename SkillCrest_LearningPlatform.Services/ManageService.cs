@@ -21,7 +21,7 @@ namespace SkillCrest_LearningPlatform.Services
             _courseRepository = courseRepository;
         }
 
-        public async Task<IEnumerable<CourseManageViewModel?>> GetCoursesForManage()
+        public async Task<IEnumerable<CourseManageViewModel>?> GetCoursesForManage()
         {
             var courses = await  _courseRepository.GetAllAttached()
                 .Include(c=> c.Creator)

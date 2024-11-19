@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillCrest_LearningPlatform.Data;
 
@@ -11,9 +12,11 @@ using SkillCrest_LearningPlatform.Data;
 namespace SkillCrest_LearningPlatform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119110155_CourseIdAddedToQuizEntity")]
+    partial class CourseIdAddedToQuizEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -683,7 +686,7 @@ namespace SkillCrest_LearningPlatform.Data.Migrations
             modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.QuizModels.Quiz", b =>
                 {
                     b.HasOne("SkillCrest_LearningPlatform.Data.Data.Models.Course", "Course")
-                        .WithMany("Quizzes")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -732,8 +735,6 @@ namespace SkillCrest_LearningPlatform.Data.Migrations
             modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Data.Models.Course", b =>
                 {
                     b.Navigation("Lessons");
-
-                    b.Navigation("Quizzes");
 
                     b.Navigation("UsersCourses");
                 });

@@ -27,28 +27,8 @@
 
             {
 
-                case 0: // Single Choice (Radio Buttons)
-                    @for (int j = 0; j < question.Options.Count; j++)
+                case 0: // Multiple choice (Checkboxes)
 
-                    {
-
-                        var option = question.Options[j];
-
-                        <div>
-                            <input type="radio"
-                                   name="Questions[@i].Options[@j].SelectedOption"
-                                   value="true"
-                            @(option.SelectedOption ? "checked" : "") />
-                            <input type="hidden" name="Questions[@i].Options[@j].Text" value="@option.Text" />
-                            <input type="hidden" name="Questions[@i].Options[@j].OptionId" value="@option.OptionId" />
-                            <label>@option.Text</label>
-                        </div>
-                    }
-                    break;
-
-
-
-                case 1: // Multiple Choice (Checkboxes)
                     @for (int j = 0; j < question.Options.Count; j++)
 
                     {
@@ -68,7 +48,25 @@
                     }
                     break;
 
+                case 1: // // Single Choice (Radio Buttons)
+                    @for (int j = 0; j < question.Options.Count; j++)
 
+                    {
+                        var option = question.Options[j];
+
+                        <div>
+                            <!-- Radio button -->
+                            <input type="radio"
+                                   name="Questions[@i].SelectedOption"
+                                   value="@option.OptionId"
+                            @(option.SelectedOption ? "checked" : "") />
+                            <!-- Hidden fields for option details -->
+                            <input type="hidden" name="Questions[@i].Options[@j].Text" value="@option.Text" />
+                            <input type="hidden" name="Questions[@i].Options[@j].OptionId" value="@option.OptionId" />
+                            <label>@option.Text</label>
+                        </div>
+                    }
+                    break;
 
                 case 2: // Open Text
                     <div class="form-group">

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using System.Globalization;
 using SkillCrest_LearningPlatform.Data.Models;
+using SkillCrest_LearningPlatform.Data.Models.QuizModels;
 
 namespace SkillCrest_LearningPlatform.Services
 {
@@ -15,17 +16,19 @@ namespace SkillCrest_LearningPlatform.Services
 
         private readonly IRepository<Course> _repository;
         private readonly IRepository<UserCourse> _userCourseRepository;
-
+        private readonly IRepository<Quiz> _quizRepository;
 
         public CourseService(IRepository<Course> repository, 
             IHttpContextAccessor httpContextAccessor,
             IRepository<UserCourse> userCourseRepository,
-            IRepository<Manager> managerRepository) 
+            IRepository<Manager> managerRepository,
+            IRepository<Quiz> quizRepository) 
             : base(httpContextAccessor, managerRepository) 
         
         {
-            this._repository = repository;
-            this._userCourseRepository = userCourseRepository;
+           _repository = repository;
+           _userCourseRepository = userCourseRepository;
+           _quizRepository = quizRepository;
         }
 
         public async Task<IEnumerable<CourseInfoViewModel>> IndexGetCoursesByDateAsync()
@@ -87,8 +90,14 @@ namespace SkillCrest_LearningPlatform.Services
                         Creator = l.Creator.UserName ?? string.Empty,
                         IsCompleted = l.UsersLessonsProgresses.Any(ul => ul.LessonId == l.Id && ul.UserId == GetUserId())
                     })
-                    .OrderBy(ls=> ls.IsCompleted)
+                    .OrderBy(ls => ls.IsCompleted)
                     .ToList(),
+                    Quizzes = _quizRepository.GetAllAttached().Where(q=> q.CourseId == course.Id).Select(q => new ViewModels.QuizViewModels.QuizShortDetails()
+                    {
+                        Id = q.Id,
+                        Title = q.Title,
+                    })
+                    .ToList()
                 };
             }
 

@@ -19,6 +19,16 @@
         <h1>Lessons</h1>
         <input type="hidden" name="courseId" value="@Model.Id" />
         <a type="button" class="btn btn-primary" asp-action="Users" asp-controller="Course" asp-route-courseId="@Model.Id">Users in course</a>
+        @if (Model.Quizzes.Count > 0)
+        {
+
+            foreach(var quiz in Model.Quizzes){
+             <div class="bg-light p-5 rounded mb-3">
+                    <h2>@quiz.Title</h2>
+                    <a type="button" class="btn btn-primary" asp-action="Solve" asp-controller="Quiz" asp-route-Id="@quiz.Id">Solve Quiz</a>
+              </div>
+            }
+        }
         @if (Model.Lessons.Count > 0)
         {
             foreach (var lesson in Model.Lessons)
@@ -65,7 +75,7 @@
         {
             <div class="text-center mt-4">
                 <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Lesson" asp-route-courseId="@Model.Id">Click to create new assignment.</a>
-                <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Quiz">Click to create new quiz.</a>
+                <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Quiz" asp-route-courseId="@Model.Id">Click to create new quiz.</a>
             </div>
         }
     </main>

@@ -22,9 +22,9 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         [HttpGet]
         // GET: Display the quiz creation form
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string courseId)
         {
-            var model = new CreateQuizViewModel(); // Initialize an empty view model
+            var model = new CreateQuizViewModel() { CourseId = Guid.Parse(courseId)};// Initialize an empty view model
             return View(model);
         }
 
@@ -40,7 +40,15 @@ namespace SkillCrest_LearningPlatform.Controllers
                     Title = model.Title,
                     DateCreated = DateTime.Now,
                     CreatorId = GetUserId(),
+                    CourseId = model.CourseId
                 };
+
+                var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == model.CourseId);
+
+                if (course != null)
+                {
+                    course.Quizzes.Add(quiz);
+                }
 
                 _context.Quizzes.Add(quiz); // Add the quiz to the database context
 

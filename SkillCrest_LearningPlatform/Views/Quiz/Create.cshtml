@@ -7,7 +7,7 @@
         <label>Quiz Title</label>
         <input type="text" asp-for="Title" class="form-control" />
     </div>
-
+    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
     <div id="questions-container" class="questions-container">
         <!-- Questions will be added here dynamically -->
     </div>
