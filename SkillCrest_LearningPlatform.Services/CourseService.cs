@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using System.Globalization;
+using SkillCrest_LearningPlatform.Data.Models;
 
 namespace SkillCrest_LearningPlatform.Services
 {
@@ -18,8 +19,9 @@ namespace SkillCrest_LearningPlatform.Services
 
         public CourseService(IRepository<Course> repository, 
             IHttpContextAccessor httpContextAccessor,
-            IRepository<UserCourse> userCourseRepository) 
-            : base(httpContextAccessor) 
+            IRepository<UserCourse> userCourseRepository,
+            IRepository<Manager> managerRepository) 
+            : base(httpContextAccessor, managerRepository) 
         
         {
             this._repository = repository;

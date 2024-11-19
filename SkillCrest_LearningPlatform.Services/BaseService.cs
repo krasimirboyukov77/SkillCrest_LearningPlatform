@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SkillCrest_LearningPlatform.Data.Models;
+using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SkillCrest_LearningPlatform.Services
 {
     public class BaseService : IBaseService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public BaseService(IHttpContextAccessor httpContextAccessor)
+        private readonly IRepository<Manager> _managerRepository;
+        public BaseService(IHttpContextAccessor httpContextAccessor,
+            IRepository<Manager> managerRepository)
         {
-            this._httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
+            _managerRepository = managerRepository;
         }
         public bool IsGuidValid(string? id, ref Guid parsedGuid)
         {
@@ -47,6 +47,20 @@ namespace SkillCrest_LearningPlatform.Services
             }
             
             return Guid.Empty;
+        }
+
+        public bool IsManager()
+        {
+            var userId = GetUserId();
+
+            var isManager = _managerRepository.GetByIdAsync(userId);
+
+            if (isManager == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

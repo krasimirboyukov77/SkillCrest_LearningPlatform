@@ -7,6 +7,7 @@ using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Microsoft.AspNet.Identity;
+using SkillCrest_LearningPlatform.Data.Models;
 
 
 namespace SkillCrest_LearningPlatform.Services
@@ -20,8 +21,9 @@ namespace SkillCrest_LearningPlatform.Services
         public LessonService(IRepository<Lesson> lessonRepository, 
             IRepository<Course> courseRepository,
             IRepository<UserLessonProgress> userLessonProgressRepository,
-            IHttpContextAccessor httpContextAccessor )
-            :base(httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IRepository<Manager> managerRepository)
+            :base(httpContextAccessor, managerRepository)
         {
             this._courseRepository = courseRepository;
             this._lessonRepository = lessonRepository;

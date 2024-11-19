@@ -1,0 +1,42 @@
+﻿@model CourseShortDetails
+
+@{
+    ViewData["Title"] = $"Manage Lessons";
+}
+
+<h2 class="my-4 text-center">Manage Lessons in Course @Model.CourseTitle</h2>
+
+<div class="d-flex justify-content-end mb-4">
+    <a asp-action="Create" class="btn btn-success btn-lg">
+        <i class="bi bi-plus-circle"></i> Add New Lesson
+    </a>
+</div>
+
+<table class="table table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Creator</th>
+            <th scope="col">Date Created</th>
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lesson in Model.Lessons)
+        {
+            <tr>
+                <td>@lesson.Title</td>
+                <td>@lesson.DateCreated</td>
+                <td>@lesson.DueDate</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-controller="Lesson" asp-route-id="@lesson.Id" class="btn btn-primary btn-sm me-2">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <a asp-action="Delete" asp-controller="Lesson" asp-route-id="@lesson.Id" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
