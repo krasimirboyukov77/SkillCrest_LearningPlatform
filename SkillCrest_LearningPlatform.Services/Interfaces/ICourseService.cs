@@ -21,6 +21,7 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
 
         Task<IEnumerable<UserShortDetailsViewModel>?> GetUsersEnrolled(string courseId);
 
-        Task<bool> EnrollStudent(string courseId);
+        Task<bool> EnrollStudentWithPassword(CoursePasswordViewModel viewModel);
+        Task<bool> EnrollStudentNoPassword(string courseId);
     }
 }

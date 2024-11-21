@@ -15,6 +15,9 @@ namespace SkillCrest_LearningPlatform.ViewModels.CourseViewModels
         public required string Creator {  get; set; }
 
         public string? ImageUrl { get; set; }
+        public string? Password { get; set; }
+
+        public bool IsEnrolled { get; set; }
         
     }
 }

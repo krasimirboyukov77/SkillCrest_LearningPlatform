@@ -102,16 +102,41 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Enroll(string courseId)
+        public IActionResult EnrollPassword(string courseId)
         {
-            var courseGuid = await _service.EnrollStudent(courseId);
+            var passwordViewModel = new CoursePasswordViewModel()
+            {
+                CourseId = courseId
+            };
+
+            return View(passwordViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Enroll(CoursePasswordViewModel viewModel)
+        {
+            var courseGuid = await _service.EnrollStudentWithPassword(viewModel);
 
             if (courseGuid == false)
             {
                 return NotFound();
             }
 
+            return RedirectToAction(nameof(Details), new { id = viewModel.CourseId });
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> EnrollNoPassword(string courseId)
+        {
+            var isSuccessful = await _service.EnrollStudentNoPassword(courseId);
+
+            if (!isSuccessful)
+            {
+                return NotFound();
+            }
             return RedirectToAction(nameof(Details), new { id = courseId });
         }
+
     }
 }

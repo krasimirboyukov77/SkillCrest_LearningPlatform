@@ -17,7 +17,6 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<Course> _repository;
         private readonly IRepository<UserCourse> _userCourseRepository;
         private readonly IRepository<Quiz> _quizRepository;
-
         public CourseService(IRepository<Course> repository, 
             IHttpContextAccessor httpContextAccessor,
             IRepository<UserCourse> userCourseRepository,
@@ -43,12 +42,28 @@ namespace SkillCrest_LearningPlatform.Services
                     Title = c.Title,
                     Description = c.Description ?? string.Empty,
                     DateCreated = c.DateCreated,
-                    Creator = c.Creator.UserName ?? string.Empty
-
+                    Creator = c.Creator.UserName ?? string.Empty,
+                    Password = c.Password
+                    
 
                 })
                 .OrderByDescending(c => c.DateCreated)
                 .ToListAsync();
+
+            var userId = GetUserId();
+
+            foreach (var course in courseDetails)
+            {
+                var userEnrolled = await _userCourseRepository.GetAllAttached().Where(c => c.UserId == userId && c.CourseId == course.Id).FirstOrDefaultAsync();
+                if (userEnrolled != null)
+                {
+                    course.IsEnrolled = true;
+                }
+                else
+                {
+                    course.IsEnrolled = false;
+                }
+            }
 
             return courseDetails;
         }
@@ -69,6 +84,11 @@ namespace SkillCrest_LearningPlatform.Services
                 .ThenInclude(c => c.UsersLessonsProgresses)
                 .Include(c => c.Creator).FirstOrDefaultAsync(c => c.Id == courseGuid);
                 
+            var isEnrolled = await _userCourseRepository.FirstOrDefaultAsync(c=> c.UserId == GetUserId() && c.CourseId == courseGuid);
+            if (isEnrolled == null)
+            {
+                return null;
+            }
 
             CourseDetailsViewModel? viewModel = null;
 
@@ -114,7 +134,7 @@ namespace SkillCrest_LearningPlatform.Services
                 Description = viewModel.Description,
                 DateCreated = DateTime.Now,
                 CreatorId = GetUserId(),
-                
+                Password = viewModel.Password,
             };
 
             bool isValidImage = isValidUrl(viewModel.ImageUrl ?? string.Empty);
@@ -129,6 +149,14 @@ namespace SkillCrest_LearningPlatform.Services
             }
 
             await _repository.AddAsync(course);
+
+            UserCourse enrolledUser = new()
+            {
+                UserId = GetUserId(),
+                CourseId = course.Id,
+            };
+
+            await _userCourseRepository.AddAsync(enrolledUser);
         }
 
         public async Task<CourseEditViewModel?> GetCourseForEditAsync(string id)
@@ -185,8 +213,7 @@ namespace SkillCrest_LearningPlatform.Services
 
             return false;
         }
-
-        public async Task<bool> EnrollStudent(string courseId)
+        public async Task<bool> EnrollStudentNoPassword(string courseId)
         {
             Guid courseGuid = Guid.Empty;
             bool isValidGuid = IsGuidValid(courseId, ref courseGuid);
@@ -203,10 +230,53 @@ namespace SkillCrest_LearningPlatform.Services
                 return false;
             }
 
-            var isUserAdded = await _userCourseRepository.FirstOrDefaultAsync(uc=> uc.UserId == userId && uc.CourseId == courseGuid);
+            var isUserEnrolled = await _userCourseRepository.FirstOrDefaultAsync(uc => uc.UserId == userId && uc.CourseId == courseGuid);
 
 
-            if (isUserAdded == null)
+            if (isUserEnrolled == null)
+            {
+                UserCourse enrolledUser = new()
+                {
+                    UserId = userId,
+                    CourseId = courseGuid,
+                };
+
+                await _userCourseRepository.AddAsync(enrolledUser);
+            }
+
+            return true;
+        }
+        public async Task<bool> EnrollStudentWithPassword(CoursePasswordViewModel viewModel)
+        {
+            Guid courseGuid = Guid.Empty;
+            bool isValidGuid = IsGuidValid(viewModel.CourseId, ref courseGuid);
+
+            if (!isValidGuid)
+            {
+                return false;
+            }
+
+            var userId = GetUserId();
+
+            if (userId == Guid.Empty)
+            {
+                return false;
+            }
+
+            var coursePassword = await _repository.GetAllAttached()
+                .Where(c => c.Id == courseGuid)
+                .Select(c => c.Password)
+                .FirstAsync();
+
+            if(coursePassword != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password))
+            {
+                return false;
+            }
+
+            var isUserEnrolled = await _userCourseRepository.FirstOrDefaultAsync(uc=> uc.UserId == userId && uc.CourseId == courseGuid);
+
+
+            if (isUserEnrolled == null)
             {
                 UserCourse enrolledUser = new()
                 {
