@@ -16,9 +16,10 @@ namespace SkillCrest_LearningPlatform.Controllers
             this._service = service;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchTerm)
         {
-            var courses = await _service.IndexGetCoursesByDateAsync();
+
+            var courses = await _service.IndexGetCoursesByDateAsync(searchTerm);
 
             return View(courses);
         }

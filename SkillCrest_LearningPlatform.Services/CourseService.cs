@@ -29,13 +29,19 @@ namespace SkillCrest_LearningPlatform.Services
            _userCourseRepository = userCourseRepository;
            _quizRepository = quizRepository;
         }
-
-        public async Task<IEnumerable<CourseInfoViewModel>> IndexGetCoursesByDateAsync()
+         
+        public async Task<ICollection<CourseInfoViewModel>> GetCoursesSortedByDate(string? searchTerm)
         {
-            IEnumerable<CourseInfoViewModel> courseDetails = await this._repository
-                .GetAllAttached()
-                .AsNoTracking()
-                .Include(c=> c.Creator)
+            var entities = string.IsNullOrEmpty(searchTerm)
+       ? await _repository.GetAllAttached().AsNoTracking().Include(c=> c.Creator).ToListAsync()
+        : await _repository.GetAllAttached()
+        .AsNoTracking()
+        .Include(c=> c.Creator)
+        .Where(c =>
+            c.Title.ToLower().Contains(searchTerm.ToLower()))
+        .ToListAsync();
+
+            var courseDetails = entities
                 .Select(c => new CourseInfoViewModel()
                 {
                     Id = c.Id,
@@ -44,11 +50,19 @@ namespace SkillCrest_LearningPlatform.Services
                     DateCreated = c.DateCreated,
                     Creator = c.Creator.UserName ?? string.Empty,
                     Password = c.Password
-                    
+
 
                 })
-                .OrderByDescending(c => c.DateCreated)
-                .ToListAsync();
+                .OrderBy(c => c.DateCreated)
+                .ToList();
+
+            return courseDetails;
+        }
+
+
+        public async Task<ICollection<CourseInfoViewModel>> IndexGetCoursesByDateAsync(string searchTerm)
+        {
+            ICollection<CourseInfoViewModel> courseDetails = await GetCoursesSortedByDate(searchTerm);
 
             var userId = GetUserId();
 
@@ -326,5 +340,6 @@ namespace SkillCrest_LearningPlatform.Services
             return Uri.TryCreate(url, UriKind.Absolute, out uriResult) &&
                    (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
+
     }
 }

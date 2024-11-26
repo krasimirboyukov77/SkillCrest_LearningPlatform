@@ -10,9 +10,9 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
 {
     public interface ICourseService 
     {
-         Task<IEnumerable<CourseInfoViewModel>> IndexGetCoursesByDateAsync();
+         Task<ICollection<CourseInfoViewModel>> IndexGetCoursesByDateAsync(string searchTerm);
 
-         Task AddCourseAsync(CreateCourseViewModel viewModel);
+        Task AddCourseAsync(CreateCourseViewModel viewModel);
 
          Task<CourseDetailsViewModel?> GetDetailsAboutCourseAsync(string id);
 
