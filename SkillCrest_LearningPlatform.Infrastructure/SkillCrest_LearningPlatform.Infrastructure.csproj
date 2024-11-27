@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SkillCrest_LearningPlatform.Data.Models\SkillCrest_LearningPlatform.Data.Models.csproj" />
     <ProjectReference Include="..\SkillCrest_LearningPlatform.Data\SkillCrest_LearningPlatform.Data.csproj" />
   </ItemGroup>

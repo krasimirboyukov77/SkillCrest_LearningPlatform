@@ -6,10 +6,87 @@
     <div>
         <label>Quiz Title</label>
         <input type="text" asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
     <div id="questions-container" class="questions-container">
-        <!-- Questions will be added here dynamically -->
+        @if (Model.Questions != null && Model.Questions.Any())
+        {
+            for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                var question = Model.Questions[i];
+                <div class="question-box" id="question_@i">
+                    <div class="question-header">
+                        <h4>Question @(i + 1)</h4>
+                        <label>Question Text</label>
+                        <input type="text" name="Questions[@i].Text" value="@question.Text" class="form-control" />
+                        <span asp-validation-for="Questions[@i].Text" class="text-danger"></span>
+                        <button type="button" onclick="removeQuestion(@i)" class="btn btn-danger btn-sm">Remove Question</button>
+                    </div>
+
+                    <div class="question-type">
+                        <label>Question Type</label>
+                        <select name="Questions[@i].Type" class="form-control" onchange="toggleAddOptionButton(@i)">
+                            @if ((int)question.Type == 0)
+                            {
+                                <option value="0" selected>MultipleChoice</option>
+                            }
+                            else
+                            {
+                                <option value="0">MultipleChoice</option>
+                            }
+
+                            @if ((int)question.Type == 1)
+                            {
+                                <option value="1" selected>RadioButton</option>
+                            }
+                            else
+                            {
+                                <option value="1">RadioButton</option>
+                            }
+
+                            @if ((int)question.Type == 2)
+                            {
+                                <option value="2" selected>OpenText</option>
+                            }
+                            else
+                            {
+                                <option value="2">OpenText</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="options-container" id="options_@i">
+                        @if (question.Options != null && question.Options.Any())
+                        {
+                            for (int j = 0; j < question.Options.Count; j++)
+                            {
+                                var option = question.Options[j];
+                                <div class="option-box">
+                                    <label>Option Text</label>
+                                    <input type="text" name="Questions[@i].Options[@j].Text" value="@option.Text" class="form-control option-input" />
+                                    <label>Is Correct</label>
+                                    <input type="@((int)question.Type == 1 ? "radio" : "checkbox")"
+                                           name="@((int)question.Type == 1 ? $"Questions[@i].IsCorrect" : $"Questions[@i].Options[@j].IsCorrect")"
+                                           value="true" @(option.IsCorrect ? "checked" : "") onchange="handleCheckboxChange(this)" />
+                                    <button type="button" onclick="removeOption(@i, @j)" class="btn btn-danger btn-sm">Remove Option</button>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <!-- OpenText Correct Answer -->
+                    <div class="open-text-container" id="openText_@i" style="@((int)question.Type == 2 ? "" : "display:none;")">
+                        <label>Correct Answer Text</label>
+                        <input type="text" name="Questions[@i].CorrectTextResponse" value="@question.CorrectTextResponse" class="form-control" />
+                        <span asp-validation-for="Questions[@i].CorrectTextResponse" class="text-danger"></span>
+                    </div>
+
+                    <button type="button" class="add-option-button btn btn-info btn-sm" onclick="addOption(@i)">Add Option</button>
+                </div>
+            }
+        }
     </div>
 
     <button type="button" onclick="addQuestion()" class="btn btn-primary">Add Question</button>
@@ -18,44 +95,37 @@
 
 @section Scripts {
     <script>
-        let questionIndex = 0;
+        let questionIndex = @Model.Questions?.Count ?? 0;
 
         function addQuestion() {
             const questionHtml = `
-                        <div class="question-box" id="question_${questionIndex}">
-                            <div class="question-header">
-                                <h4>Question ${questionIndex + 1}</h4>
-                                <label>Question Text</label>
-                                <input type="text" name="Questions[${questionIndex}].Text" class="form-control" />
+                <div class="question-box" id="question_${questionIndex}">
+                    <div class="question-header">
+                        <h4>Question ${questionIndex + 1}</h4>
+                        <label>Question Text</label>
+                        <input type="text" name="Questions[${questionIndex}].Text" class="form-control" />
+                        <button type="button" onclick="removeQuestion(${questionIndex})" class="btn btn-danger btn-sm">Remove Question</button>
+                    </div>
 
-                                <button type="button" onclick="removeQuestion(${questionIndex})" class="btn btn-danger btn-sm">Remove Question</button>
-                            </div>
+                    <div class="question-type">
+                        <label>Question Type</label>
+                        <select name="Questions[${questionIndex}].Type" class="form-control" onchange="toggleAddOptionButton(${questionIndex})">
+                            <option value="0">MultipleChoice</option>
+                            <option value="1">RadioButton</option>
+                            <option value="2">OpenText</option>
+                        </select>
+                    </div>
 
-                            <div class="question-type">
-                                <label>Question Type</label>
-                                <select name="Questions[${questionIndex}].Type" class="form-control" onchange="toggleAddOptionButton(${questionIndex})">
-                                    <option value="0">MultipleChoice</option>
-                                    <option value="1">RadioButton</option>
-                                    <option value="2">OpenText</option>
-                                </select>
-                            </div>
+                    <div class="options-container" id="options_${questionIndex}"></div>
 
-                            <!-- Option container -->
-                            <div class="options-container" id="options_${questionIndex}">
-                                <!-- Options for this question will be added here dynamically -->
-                            </div>
+                    <div class="open-text-container" id="openText_${questionIndex}" style="display:none;">
+                        <label>Correct Answer Text</label>
+                        <input type="text" name="Questions[${questionIndex}].CorrectTextResponse" class="form-control" />
+                    </div>
 
-                            <!-- OpenText Correct Answer input -->
-                            <div class="open-text-container" id="openText_${questionIndex}" style="display:none;">
-                                <label>Correct Answer Text</label>
-                                <input type="text" name="Questions[${questionIndex}].CorrectTextResponse" class="form-control" />
-                            </div>
-
-                            <button type="button" class="add-option-button btn btn-info btn-sm" onclick="addOption(${questionIndex})">Add Option</button>
-                        </div>
-                    `;
-
-            // Append the question HTML to the questions container
+                    <button type="button" class="add-option-button btn btn-info btn-sm" onclick="addOption(${questionIndex})">Add Option</button>
+                </div>
+            `;
             document.getElementById("questions-container").insertAdjacentHTML("beforeend", questionHtml);
             questionIndex++;
         }
@@ -63,35 +133,27 @@
         function addOption(questionIdx) {
             const optionsContainer = document.getElementById(`options_${questionIdx}`);
             const optionIndex = optionsContainer.childElementCount;
-
-            // Determine question type to set the input type correctly
-            const questionTypeSelect = document.querySelector(`select[name="Questions[${questionIdx}].Type"]`);
-            const isRadioButton = questionTypeSelect.value === "1"; // 1 corresponds to RadioButton
+            const isRadioButton = document.querySelector(`select[name="Questions[${questionIdx}].Type"]`).value === "1";
 
             const optionHtml = `
-                        <div class="option-box">
-                            <label>Option Text</label>
-                            <input type="text" name="Questions[${questionIdx}].Options[${optionIndex}].Text" class="form-control option-input" />
-                            <label>Is Correct</label>
-                            <input type="${isRadioButton ? 'radio' : 'checkbox'}"
-                                   name="${isRadioButton ? `Questions[${questionIdx}].IsCorrect` : `Questions[${questionIdx}].Options[${optionIndex}].IsCorrect`}"
-                                   value="true" onchange="handleCheckboxChange(this)" />
-                            <button type="button" onclick="removeOption(${questionIdx}, ${optionIndex})" class="btn btn-danger btn-sm">Remove Option</button>
-                        </div>
-                    `;
-
+                <div class="option-box">
+                    <label>Option Text</label>
+                    <input type="text" name="Questions[${questionIdx}].Options[${optionIndex}].Text" class="form-control option-input" />
+                    <label>Is Correct</label>
+                    <input type="${isRadioButton ? 'radio' : 'checkbox'}"
+                           name="${isRadioButton ? `Questions[${questionIdx}].IsCorrect` : `Questions[${questionIdx}].Options[${optionIndex}].IsCorrect`}"
+                           value="true" onchange="handleCheckboxChange(this)" />
+                    <button type="button" onclick="removeOption(${questionIdx}, ${optionIndex})" class="btn btn-danger btn-sm">Remove Option</button>
+                </div>
+            `;
             optionsContainer.insertAdjacentHTML("beforeend", optionHtml);
         }
 
         function handleCheckboxChange(input) {
             if (input.type === "radio") {
-                // If a radio button is selected, ensure others are deselected
-                const optionsContainer = input.closest('.options-container');
-                const radios = optionsContainer.querySelectorAll('input[type="radio"]');
+                const radios = input.closest('.options-container').querySelectorAll('input[type="radio"]');
                 radios.forEach(radio => {
-                    if (radio !== input) {
-                        radio.checked = false;
-                    }
+                    if (radio !== input) radio.checked = false;
                 });
             }
         }
@@ -103,43 +165,28 @@
         }
 
         function removeQuestion(questionIdx) {
-            const questionToRemove = document.getElementById(`question_${questionIdx}`);
-            questionToRemove.remove();
-            questionIndex--;
+            document.getElementById(`question_${questionIdx}`).remove();
         }
 
         function toggleAddOptionButton(questionIdx) {
-            const questionTypeSelect = document.querySelector(`#question_${questionIdx} .question-type select`);
+            const typeSelect = document.querySelector(`#question_${questionIdx} .question-type select`);
             const addOptionButton = document.querySelector(`#question_${questionIdx} .add-option-button`);
             const openTextContainer = document.querySelector(`#question_${questionIdx} .open-text-container`);
             const optionsContainer = document.querySelector(`#question_${questionIdx} .options-container`);
 
-            if (questionTypeSelect.value === '2') { // OpenText selected
+            if (typeSelect.value === "2") {
                 addOptionButton.style.display = 'none';
                 openTextContainer.style.display = 'block';
-
-                // Remove all options for OpenText
                 while (optionsContainer.firstChild) {
                     optionsContainer.removeChild(optionsContainer.firstChild);
                 }
             } else {
                 addOptionButton.style.display = 'block';
                 openTextContainer.style.display = 'none';
-
-                // Update the type of "Is Correct" inputs for existing options
-                const isRadioButton = questionTypeSelect.value === '1';
-                const isCorrectInputs = optionsContainer.querySelectorAll('input[type="checkbox"], input[type="radio"]');
-                isCorrectInputs.forEach((input, idx) => {
-                    input.type = isRadioButton ? 'radio' : 'checkbox';
-                    input.name = isRadioButton
-                        ? `Questions[${questionIdx}].IsCorrect`
-                        : `Questions[${questionIdx}].Options[${idx}].IsCorrect`;
-                });
             }
         }
     </script>
 }
-
 
 <style>
     .questions-container {

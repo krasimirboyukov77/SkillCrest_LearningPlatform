@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SkillCrest_LearningPlatform.Data;
 using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services;
 using SkillCrest_LearningPlatform.Services.Interfaces;
+
+using SkillCrest_LearningPlatform.Infrastructure.ApplicationBuilderExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +16,14 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<DatabaseInitializer>();
 
+string adminEmail = builder.Configuration.GetValue<string>("Administrator:Email")!;
+string adminUsername = builder.Configuration.GetValue<string>("Administrator:Username")!;
+string adminPassword = builder.Configuration.GetValue<string>("Administrator:Password")!;
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+        options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
@@ -70,6 +74,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.SeedAdministrator(adminEmail, adminUsername, adminPassword);
 
 app.MapControllerRoute(
     name: "default",
