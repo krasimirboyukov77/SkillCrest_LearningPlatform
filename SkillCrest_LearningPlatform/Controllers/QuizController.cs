@@ -60,8 +60,15 @@ namespace SkillCrest_LearningPlatform.Controllers
                         QuizId = quiz.Id,
                         Text = question.Text,
                         Type = question.Type,
-                        CorrectTextResponse = question.CorrectTextResponse
                     };
+                    if(question.CorrectTextResponse == null)
+                    {
+                        newQuestion.CorrectTextResponse = "No answer.";
+                    }
+                    else
+                    {
+                        newQuestion.CorrectTextResponse = question.CorrectTextResponse;
+                    }
                     _context.Questions.Add(newQuestion); // Add the question to the database context
 
                     // Step 3: Add options to the question
@@ -137,26 +144,34 @@ namespace SkillCrest_LearningPlatform.Controllers
             {
                 
                 string userId = User.Identity.GetUserId();
-                
+
                 foreach (var questionAnswer in viewModel.Questions)
                 {
-                    // Retrieve the question from the database
-                    var question = _context.Questions.Include(q=> q.Options)
+
+                    var question = _context.Questions.Include(q => q.Options)
                           .FirstOrDefault(q => q.Id == questionAnswer.QuestionId);
 
                     if (question == null) continue;
 
-
-                    // Check the answer based on the question type
                     if (question.Type == QuestionType.OpenText)
                     {
-                       if(question.CorrectTextResponse.ToLower().Trim() == questionAnswer.CorrectTextResponse.ToLower().Trim() 
+                        if (question.CorrectTextResponse == "No anwser.")
+                        {
+                            score++;
+                            questionAnswer.IsCorrect = true;
+                        }
+                        else if(questionAnswer.CorrectTextResponse == null)
+                        {
+                            questionAnswer.IsCorrect = false;
+                        }
+                       else if(question.CorrectTextResponse.ToLower().Trim() == questionAnswer.CorrectTextResponse.ToLower().Trim() 
                             && question.CorrectTextResponse != null 
                             && questionAnswer.CorrectTextResponse != null)
                         {
                             score++;
                             questionAnswer.IsCorrect = true;
                         }
+                     
                         
                     }
                     else if (question.Type == QuestionType.MultipleChoice)
