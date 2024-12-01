@@ -148,8 +148,8 @@ namespace SkillCrest_LearningPlatform.Controllers
                 foreach (var questionAnswer in viewModel.Questions)
                 {
 
-                    var question = _context.Questions.Include(q => q.Options)
-                          .FirstOrDefault(q => q.Id == questionAnswer.QuestionId);
+                    var question = await _context.Questions.Include(q => q.Options)
+                          .FirstOrDefaultAsync(q => q.Id == questionAnswer.QuestionId);
 
                     if (question == null) continue;
 

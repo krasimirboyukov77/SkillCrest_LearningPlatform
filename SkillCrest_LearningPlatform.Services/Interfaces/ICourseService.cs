@@ -23,5 +23,6 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
 
         Task<bool> EnrollStudentWithPassword(CoursePasswordViewModel viewModel);
         Task<bool> EnrollStudentNoPassword(string courseId);
+        Task<bool> LeaveCourse(string courseId);
     }
 }

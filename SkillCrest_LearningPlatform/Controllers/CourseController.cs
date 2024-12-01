@@ -139,5 +139,17 @@ namespace SkillCrest_LearningPlatform.Controllers
             return RedirectToAction(nameof(Details), new { id = courseId });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Leave(string courseId)
+        {
+            var isSuccessful = await _service.LeaveCourse(courseId);
+
+            if (!isSuccessful)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

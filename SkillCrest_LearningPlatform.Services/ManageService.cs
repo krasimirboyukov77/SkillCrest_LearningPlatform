@@ -18,7 +18,7 @@ namespace SkillCrest_LearningPlatform.Services
             IRepository<Manager> managerRepository)
             :base(httpContextAccessor, managerRepository)
         {
-            _courseRepository = courseRepository;
+            this._courseRepository = courseRepository;
         }
 
         public async Task<IEnumerable<CourseManageViewModel>?> GetCoursesForManage()

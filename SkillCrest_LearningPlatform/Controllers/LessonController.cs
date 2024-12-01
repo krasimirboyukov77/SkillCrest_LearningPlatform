@@ -60,7 +60,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return View(viewModel);
             }
 
-            bool resultFromCreation = await _lessonService.CreateLesson(viewModel, file: null);
+            bool resultFromCreation = await _lessonService.CreateLesson(viewModel, file);
 
             if (resultFromCreation == false)
             {
@@ -174,5 +174,17 @@ namespace SkillCrest_LearningPlatform.Controllers
             return File(fileBytes, contentType, fileName);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UploadFile(IFormFile file, string lessonId)
+        {
+            var isUploaded = await _lessonService.UploadFile(file, lessonId);
+
+            if (!isUploaded)
+            {
+                return BadRequest();
+            }
+
+            return Json(new { success = true });
+        }
     }
 }

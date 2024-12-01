@@ -31,9 +31,7 @@ namespace SkillCrest_LearningPlatform.Data.Data.Models
         [Required]
         public DateTime DateCreated { get; set; }
 
-        [Required]
         public DateTime DueDate {  get; set; }
-
 
         public int Points { get; set; }
 

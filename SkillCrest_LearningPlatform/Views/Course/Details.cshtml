@@ -78,6 +78,7 @@
                 <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Quiz" asp-route-courseId="@Model.Id">Click to create new quiz.</a>
             </div>
         }
+        <a type="button" class="btn btn-primary" asp-action="Leave" asp-controller="Course" asp-route-courseId="@Model.Id.ToString()">Leave Course</a>
     </main>
     <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> 
 </body>

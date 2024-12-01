@@ -1,5 +1,4 @@
-﻿
-@model LessonDetailsViewModel
+﻿@model LessonDetailsViewModel
 
 <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
 
@@ -25,17 +24,34 @@
                     <label class="control-label">Date Created</label>
                     <p>@Model.DateCreated</p>
                 </div>
-                @if(!String.IsNullOrEmpty(Model.FilePath)){
-                <div class="form-group d-flex align-items-center">
-                    <a type="button" class="btn btn-primary mr-4" asp-action="Download" asp-controller="Lesson" asp-route-fileName="@Model.FilePath">
-                        Download file
-                    </a>
-                    <div style="width: 20px;"></div>
-                    <span>@Model.FileName</span> 
-                </div>
+
+                @if (!string.IsNullOrEmpty(Model.FilePath))
+                {
+                    <div class="form-group d-flex align-items-center">
+                        <a class="btn btn-primary mr-4" asp-action="Download" asp-controller="Lesson" asp-route-fileName="@Model.FilePath">
+                            Download file
+                        </a>
+                        <span>@Model.FileName</span>
+                    </div>
+                }
+
+                @if (Model.IsSubmitted == false)
+                {
+                    <!-- File Upload Form -->
+                    <form asp-action="UploadFile" asp-controller="Lesson" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="file">Choose a file to upload:</label>
+                            <input type="file" name="file" id="file" class="form-control" />
+                            <input type="hidden" asp-for="Id" value="@Model.Id" name="lessonId" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                Upload
+                            </button>
+                        </div>
+                    </form>
                 }
             </div>
         </div>
     </div>
 </div>
-

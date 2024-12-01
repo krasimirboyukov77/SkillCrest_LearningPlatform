@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillCrest_LearningPlatform.Data;
 
@@ -11,9 +12,11 @@ using SkillCrest_LearningPlatform.Data;
 namespace SkillCrest_LearningPlatform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241201111237_SubmissionCourseChangedToLesson")]
+    partial class SubmissionCourseChangedToLesson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -752,7 +755,7 @@ namespace SkillCrest_LearningPlatform.Data.Migrations
 
             modelBuilder.Entity("SkillCrest_LearningPlatform.Data.Models.Submission", b =>
                 {
-                    b.HasOne("SkillCrest_LearningPlatform.Data.Data.Models.Lesson", "Lesson")
+                    b.HasOne("SkillCrest_LearningPlatform.Data.Data.Models.Course", "Lesson")
                         .WithMany()
                         .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Cascade)

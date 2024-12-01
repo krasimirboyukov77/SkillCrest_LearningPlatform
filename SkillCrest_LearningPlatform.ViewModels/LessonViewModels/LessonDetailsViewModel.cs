@@ -19,6 +19,8 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
         public string? FilePath { get; set; }
         public string? FileName { get; set; }
 
+        public bool IsSubmitted { get; set; }   
+
         public required string Creator {  get; set; }
         
     }

@@ -13,8 +13,8 @@ namespace SkillCrest_LearningPlatform.Services
         public BaseService(IHttpContextAccessor httpContextAccessor,
             IRepository<Manager> managerRepository)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _managerRepository = managerRepository;
+            this._httpContextAccessor = httpContextAccessor;
+            this._managerRepository = managerRepository;
         }
         public bool IsGuidValid(string? id, ref Guid parsedGuid)
         {

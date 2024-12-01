@@ -17,18 +17,23 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<Lesson> _lessonRepository;
         private readonly IRepository<Course> _courseRepository;
         private readonly IRepository<UserLessonProgress> _userLessonProgressRepository;
+        private readonly IRepository<Submission> _submissionRepository;
         
         public LessonService(IRepository<Lesson> lessonRepository, 
             IRepository<Course> courseRepository,
             IRepository<UserLessonProgress> userLessonProgressRepository,
             IHttpContextAccessor httpContextAccessor,
-            IRepository<Manager> managerRepository)
+            IRepository<Manager> managerRepository,
+            IRepository<Submission> submissionRepository)
             :base(httpContextAccessor, managerRepository)
         {
             this._courseRepository = courseRepository;
             this._lessonRepository = lessonRepository;
             this._userLessonProgressRepository = userLessonProgressRepository;
+            this._submissionRepository = submissionRepository;
         }
+
+
         public async Task<bool> CreateLesson(CreateLessonViewModel viewModel, IFormFile file)
         {
             var filePathEntity = "";
@@ -128,6 +133,13 @@ namespace SkillCrest_LearningPlatform.Services
                     FileName = lesson.FileName
                 };
 
+            }
+
+            var submission = await _submissionRepository.FirstOrDefaultAsync(s => s.LessonId == viewModel.Id && s.UploaderId == GetUserId());
+
+            if (submission != null)
+            {
+                viewModel.IsSubmitted = true;
             }
 
             return viewModel;
@@ -339,6 +351,49 @@ namespace SkillCrest_LearningPlatform.Services
             return false;
         }
 
+        public async Task<bool> UploadFile(IFormFile file, string lessonId)
+        {
+            var filePathEntity = "";
+            var fileName = "";
+            if (file != null && file.Length > 0)
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", file.FileName);
+                filePathEntity = filePath;
+                fileName = Path.GetFileName(filePath);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+            }
+
+            Guid lessonGuid = Guid.Empty;
+            bool isValidId = IsGuidValid(lessonId, ref lessonGuid);
+
+            if (!isValidId)
+            {
+                return false;
+            }
+
+            var lessonExist = await _lessonRepository.FirstOrDefaultAsync(l=> l.Id ==  lessonGuid);
+
+            if (lessonExist == null)
+            {
+                return false;
+            }
+
+            Submission newSubmission = new Submission()
+            {
+                LessonId = lessonGuid,
+                UploaderId = GetUserId(),
+                FileName = fileName,
+                FilePath = filePathEntity
+            };
+
+            await _submissionRepository.AddAsync(newSubmission);
+            
+            return true;
+        }
     }
 }
 

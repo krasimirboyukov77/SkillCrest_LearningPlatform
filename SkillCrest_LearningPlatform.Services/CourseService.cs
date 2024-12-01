@@ -25,9 +25,9 @@ namespace SkillCrest_LearningPlatform.Services
             : base(httpContextAccessor, managerRepository) 
         
         {
-           _repository = repository;
-           _userCourseRepository = userCourseRepository;
-           _quizRepository = quizRepository;
+           this._repository = repository;
+           this._userCourseRepository = userCourseRepository;
+           this._quizRepository = quizRepository;
         }
          
         public async Task<ICollection<CourseInfoViewModel>> GetCoursesSortedByDate(string? searchTerm)
@@ -332,6 +332,35 @@ namespace SkillCrest_LearningPlatform.Services
             }
 
             return null;
+        }
+
+        public async Task<bool> LeaveCourse(string courseId)
+        {
+            Guid courseGuid = Guid.Empty;
+            bool isValidGuid = IsGuidValid(courseId, ref courseGuid);
+
+            if (!isValidGuid)
+            {
+                return false;
+            }
+
+            var course = await _repository.FirstOrDefaultAsync(c=> c.Id == courseGuid);
+
+            if (course == null)
+            {
+                return false;
+            }
+
+            var userCourse = await _userCourseRepository.FirstOrDefaultAsync(uc=> uc.CourseId == courseGuid && uc.UserId == GetUserId());
+
+            if (userCourse == null)
+            {
+                return false;
+            }
+
+            await _userCourseRepository.DeleteEntityAsync(userCourse);
+
+            return true;
         }
 
         private bool isValidUrl(string url)

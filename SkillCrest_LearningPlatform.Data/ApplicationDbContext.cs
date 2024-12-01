@@ -20,6 +20,7 @@ namespace SkillCrest_LearningPlatform.Data
         public virtual DbSet<Lesson> Lessons { get; set; }
         public virtual DbSet<UserCourse> UsersCourses { get; set; }
         public virtual DbSet<UserLessonProgress> UsersLessonsProgresses { get; set; }
+        public virtual DbSet<Submission> Submissions { get; set; }
 
 
         public virtual DbSet<Quiz> Quizzes { get; set; }
