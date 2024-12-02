@@ -37,6 +37,25 @@ namespace SkillCrest_LearningPlatform.Services
             return true;
         }
 
+        public async Task<ApplicationUser?> GetUser(string id)
+        {
+            Guid userGuid = Guid.Empty;
+
+            var isUserIdValid = Guid.TryParse(id, out  userGuid);
+
+            if (!isUserIdValid)
+            {
+                return null;
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user;
+        }
         public Guid GetUserId()
         {
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;

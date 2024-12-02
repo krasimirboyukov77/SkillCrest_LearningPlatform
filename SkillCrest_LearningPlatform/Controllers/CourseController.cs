@@ -165,5 +165,18 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveUser(string courseId, string userId)
+        {
+            var isSuccessful = await _service.RemoveUserFromCourse(courseId, userId);
+
+            if(!isSuccessful)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

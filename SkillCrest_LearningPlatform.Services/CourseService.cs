@@ -307,12 +307,19 @@ namespace SkillCrest_LearningPlatform.Services
             return true;
         }
 
-        public async Task<IEnumerable<UserShortDetailsViewModel>?> GetUsersEnrolled(string courseId)
+        public async Task<UserListViewModel?> GetUsersEnrolled(string courseId)
         {
             Guid courseGuid = Guid.Empty;
-            bool isValidGuid = IsGuidValid(courseId, ref courseGuid);
+            bool isValidCourseGuid = IsGuidValid(courseId, ref courseGuid);
 
-            if (!isValidGuid)
+            if (!isValidCourseGuid)
+            {
+                return null;
+            }
+            
+            var course = await _repository.FirstOrDefaultAsync(c=> c.Id == courseGuid);
+
+            if (course == null)
             {
                 return null;
             }
@@ -326,15 +333,18 @@ namespace SkillCrest_LearningPlatform.Services
                 {
                     UserName = uc.User.UserName ?? string.Empty,
                     ImageUrl = uc.User.UserImage ?? string.Empty,
+                    Id = uc.UserId.ToString().ToLowerInvariant(),
                 })
                 .ToListAsync();
 
-            if (usersInCourse.Any())
+            var userList = new UserListViewModel()
             {
-                return usersInCourse;
-            }
+                CreatorId = course.CreatorId.ToString().ToLowerInvariant(),
+                CurrentCourseId = courseId,
+                ShortDetails = usersInCourse,
+            };
 
-            return null;
+                return userList;     
         }
 
         public async Task<bool> LeaveCourse(string courseId)
@@ -417,6 +427,41 @@ namespace SkillCrest_LearningPlatform.Services
             }
 
             return false;
+        }
+        public async Task<bool> RemoveUserFromCourse(string courseId, string userId)
+        {
+            Guid courseGuid = Guid.Empty;
+            bool isValidGuid = IsGuidValid(courseId, ref courseGuid);
+
+            if (!isValidGuid)
+            {
+                return false;
+            }
+
+            var course = await _repository.FirstOrDefaultAsync(c => c.Id == courseGuid);
+
+            if (course == null)
+            {
+                return false;
+            }
+
+            var user = await GetUser(userId);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var userCourse = await _userCourseRepository.FirstOrDefaultAsync(uc=> uc.UserId == user.Id && uc.CourseId == courseGuid);
+
+            if (userCourse == null)
+            {
+                return false;
+            }
+
+            await _userCourseRepository.DeleteEntityAsync(userCourse);
+
+            return true;
         }
     }
 }

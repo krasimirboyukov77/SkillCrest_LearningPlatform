@@ -19,7 +19,8 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
         Task<CourseEditViewModel?> GetCourseForEditAsync(string id);
         Task<bool> EditCourse(CourseEditViewModel viewModel);
 
-        Task<IEnumerable<UserShortDetailsViewModel>?> GetUsersEnrolled(string courseId);
+        Task<UserListViewModel?> GetUsersEnrolled(string courseId);
+        Task<bool> RemoveUserFromCourse(string courseId, string userId);
 
         Task<bool> EnrollStudentWithPassword(CoursePasswordViewModel viewModel);
         Task<bool> EnrollStudentNoPassword(string courseId);

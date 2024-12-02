@@ -18,6 +18,7 @@
     <main class="container mt-4">
         <h1>Lessons</h1>
         <input type="hidden" name="courseId" value="@Model.Id" />
+        <input type="hidden" name="creatorId" value="@Model.CreatorId" />
         <a type="button" class="btn btn-primary" asp-action="Users" asp-controller="Course" asp-route-courseId="@Model.Id">Users in course</a>
         @if (Model.Quizzes.Count > 0)
         {

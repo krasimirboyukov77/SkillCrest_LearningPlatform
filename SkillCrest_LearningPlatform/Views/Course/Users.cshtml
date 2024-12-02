@@ -1,7 +1,10 @@
-﻿@model IEnumerable<UserShortDetailsViewModel> 
+﻿@inject SkillCrest_LearningPlatform.Services.Interfaces.IBaseService BaseService
+
+@model UserListViewModel
 
 @{
     ViewData["Title"] = "User List";
+    var currentUserId = BaseService.GetUserId().ToString();
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -14,11 +17,23 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var user in Model.ShortDetails)
         {
             <tr>
                 <td>@user.UserName</td>
-                
+                <td>
+                    @if (Model.CreatorId == currentUserId )
+                    {
+                        if (user.Id == Model.CreatorId)
+                        {
+                            <p>You</p>
+                        }
+                        else
+                        {
+                        <a type="button" class="btn btn-primary" asp-action="RemoveUser" asp-controller="Course" asp-route-courseId="@Model.CurrentCourseId" asp-roud-userId="@user.Id">Remove User</a>
+                        }
+                    }
+                </td>
             </tr>
         }
     </tbody>
