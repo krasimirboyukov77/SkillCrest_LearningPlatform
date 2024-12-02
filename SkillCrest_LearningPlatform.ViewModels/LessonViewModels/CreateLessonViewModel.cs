@@ -17,9 +17,7 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
             ValidationConstants.LessonDescriptionMaxLength, 
             ErrorMessage =ErrorMessages.LessonDescriptionErrorMessage)]
         public string? Description { get; set; }
-
-        [Required(ErrorMessage = ErrorMessages.RequiredErrorMessage)]
-        public string DueDate { get; set; } = null!;
+        public string? DueDate { get; set; } 
 
         [Required]
         public string CourseId { get; set; } = null!;

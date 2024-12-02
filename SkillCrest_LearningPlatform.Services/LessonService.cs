@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SkillCrest_LearningPlatform.Data.Data.Models;
-using SkillCrest_LearningPlatform.Infrastructure.Repositories;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using SkillCrest_LearningPlatform.Data.Models;
 
 
@@ -23,9 +22,9 @@ namespace SkillCrest_LearningPlatform.Services
             IRepository<Course> courseRepository,
             IRepository<UserLessonProgress> userLessonProgressRepository,
             IHttpContextAccessor httpContextAccessor,
-            IRepository<Manager> managerRepository,
+            UserManager<ApplicationUser> userManager,
             IRepository<Submission> submissionRepository)
-            :base(httpContextAccessor, managerRepository)
+            :base(httpContextAccessor, userManager)
         {
             this._courseRepository = courseRepository;
             this._lessonRepository = lessonRepository;
@@ -50,12 +49,21 @@ namespace SkillCrest_LearningPlatform.Services
 
             }
 
+            DateTime? dueDate;
 
-            bool isValidDate = DateTime.TryParseExact(viewModel.DueDate, Common.Lesson.ValidationConstants.LessonDateCreatedFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lessonDueDate);
-
-            if (!isValidDate)
+            if (viewModel.DueDate != null)
             {
-                return false;
+                bool isValidDate = DateTime.TryParseExact(viewModel.DueDate, Common.Lesson.ValidationConstants.LessonDateCreatedFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lessonDueDate);
+
+                if (!isValidDate)
+                {
+                    return false;
+                }
+                dueDate = lessonDueDate;
+            }
+            else
+            {
+                dueDate = null;
             }
 
             Guid courseId = Guid.Empty;
@@ -77,7 +85,7 @@ namespace SkillCrest_LearningPlatform.Services
             {
                 Title = viewModel.Title,
                 Description = viewModel.Description,
-                DueDate = lessonDueDate,
+                DueDate = dueDate,
                 DateCreated = DateTime.Now,
                 CourseId = courseId,
                 CreatorId = GetUserId(),
@@ -126,20 +134,31 @@ namespace SkillCrest_LearningPlatform.Services
                     Title = lesson.Title,
                     Description = lesson.Description ?? string.Empty,
                     Creator = lesson.Creator.UserName ?? string.Empty,
-                    DueDate = lesson.DueDate.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
+                    DueDate = lesson.DueDate?.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat) ,
                     DateCreated = lesson.DateCreated.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
                     Points = lesson.Points,
                     FilePath = lesson.FilePath,
                     FileName = lesson.FileName
                 };
 
-            }
+                var submission = await _submissionRepository.FirstOrDefaultAsync(s => s.LessonId == viewModel.Id && s.UploaderId == GetUserId());
 
-            var submission = await _submissionRepository.FirstOrDefaultAsync(s => s.LessonId == viewModel.Id && s.UploaderId == GetUserId());
+                if (submission != null)
+                {
+                    viewModel.IsSubmitted = true;
 
-            if (submission != null)
-            {
-                viewModel.IsSubmitted = true;
+                    viewModel.Submission = new SubmissionViewModel()
+                    {
+                        Id = submission.Id.ToString(),
+                        FileName = submission.FileName,
+                        FilePath = submission.FilePath,
+                    };
+                }
+                else
+                {
+                    viewModel.IsSubmitted = false;
+                }
+
             }
 
             return viewModel;
@@ -257,7 +276,7 @@ namespace SkillCrest_LearningPlatform.Services
                 Title = lesson.Title,
                 Description = lesson.Description,
                 DateCreated = lesson.DateCreated.ToString("dd-MM-yyyy"),
-                DueDate = lesson.DueDate.ToString("dd-MM-yyyy"),
+                DueDate = lesson.DueDate?.ToString("dd-MM-yyyy"),
                 Creator = lesson.Creator.UserName ?? string.Empty,
                 Points = lesson.Points,
                 FilePath = lesson.FilePath,
@@ -341,7 +360,9 @@ namespace SkillCrest_LearningPlatform.Services
                 return false;
             }
 
-            var isDeleteSuccessful = await _lessonRepository.DeleteEntityAsync(lesson);
+            lesson.IsDeleted = true;
+
+            var isDeleteSuccessful = await _lessonRepository.UpdateAsync(lesson);
 
             if (isDeleteSuccessful)
             {

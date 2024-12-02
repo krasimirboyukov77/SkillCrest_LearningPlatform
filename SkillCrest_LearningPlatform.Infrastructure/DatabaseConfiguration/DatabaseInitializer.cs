@@ -18,17 +18,17 @@ public class DatabaseInitializer
         {
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            // Check if database exists, create it if not, and apply migrations
+           
             if (!context.Database.CanConnect())
             {
                 Console.WriteLine("Database does not exist. Creating...");
-                context.Database.EnsureCreated(); // Create the database if it doesn't exist
+                context.Database.EnsureCreated(); 
                 Console.WriteLine("Database created.");
             }
             else
             {
                 Console.WriteLine("Database exists. Applying migrations...");
-                context.Database.Migrate(); // Apply all pending migrations
+                context.Database.Migrate();
                 Console.WriteLine("Migrations applied.");
             }
         }

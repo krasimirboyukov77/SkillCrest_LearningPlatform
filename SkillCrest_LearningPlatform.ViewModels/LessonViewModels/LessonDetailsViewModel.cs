@@ -22,6 +22,7 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
         public bool IsSubmitted { get; set; }   
 
         public required string Creator {  get; set; }
-        
+
+        public SubmissionViewModel? Submission { get; set; }
     }
 }

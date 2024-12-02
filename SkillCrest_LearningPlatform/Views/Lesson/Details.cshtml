@@ -18,7 +18,14 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Due Date</label>
-                    <p>@Model.DueDate</p>
+                        @if (Model.DueDate != null)
+                        {
+                        <p>@Model.DueDate</p>
+                        }
+                        else
+                        {
+                            <p>No Due Date!</p>
+                        }
                 </div>
                 <div class="form-group">
                     <label class="control-label">Date Created</label>
@@ -35,7 +42,7 @@
                     </div>
                 }
 
-                @if (Model.IsSubmitted == false)
+                @if (Model.IsSubmitted == false && (Model.DueDate != null && DateTime.Parse(Model.DueDate)>DateTime.Now))
                 {
                     <!-- File Upload Form -->
                     <form asp-action="UploadFile" asp-controller="Lesson" method="post" enctype="multipart/form-data">
@@ -50,6 +57,21 @@
                             </button>
                         </div>
                     </form>
+                }
+                else
+                {
+                    <p>You can not upload anymore!</p>
+                }
+
+
+                @if (Model.Submission != null)
+                {
+                    <div class="form-group d-flex align-items-center">
+                        <a class="btn btn-primary mr-4" asp-action="Download" asp-controller="Lesson" asp-route-fileName="@Model.Submission.FilePath">
+                            Download your submission
+                        </a>
+                        <span>@Model.FileName</span>
+                    </div>
                 }
             </div>
         </div>

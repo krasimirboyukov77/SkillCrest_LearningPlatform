@@ -8,7 +8,7 @@ namespace SkillCrest_LearningPlatform.ViewModels.QuizViewModels
 {
     public class CreateOptionViewModel
     {
-        public string Text { get; set; } = null!;
-        public bool IsCorrect { get; set; }
+        public required string Text { get; set; } = null!;
+        public required bool IsCorrect { get; set; }
     }
 }

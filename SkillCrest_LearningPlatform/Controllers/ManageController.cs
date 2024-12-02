@@ -4,7 +4,7 @@ using SkillCrest_LearningPlatform.Services.Interfaces;
 
 namespace SkillCrest_LearningPlatform.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class ManageController : Controller
     {
         private readonly IManageService _manageService;

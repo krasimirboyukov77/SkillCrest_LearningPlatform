@@ -28,7 +28,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (this.baseService.IsManager() == true)
+                        @if (await this.baseService.IsAdmin() == true)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Manage" asp-action="Index">Manage</a>
@@ -39,9 +39,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Courses</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Quiz" asp-action="Solve" asp-route-id="A34A5199-2047-4ED7-B48D-0A9FDCFB376B">Solve quiz</a>
                         </li>
                         <form asp-controller="Course" asp-action="Index" method="get">
                             <input type="text" name="searchTerm" value="@ViewBag.SearchTerm" placeholder="Search..." />

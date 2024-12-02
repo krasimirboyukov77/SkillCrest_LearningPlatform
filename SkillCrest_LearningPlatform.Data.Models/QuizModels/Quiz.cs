@@ -37,6 +37,9 @@ namespace SkillCrest_LearningPlatform.Data.Models.QuizModels
         public Guid CreatorId { get; set; }
 
         [Required]
+        public bool IsDeleted { get; set; }
+
+        [Required]
         [ForeignKey(nameof(CreatorId))]
         public ApplicationUser Creator { get; set; } = null!;
         public List<Question> Questions { get; set; } = new List<Question>();

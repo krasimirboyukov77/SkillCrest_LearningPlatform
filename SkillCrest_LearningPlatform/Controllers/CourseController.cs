@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using SkillCrest_LearningPlatform.Services;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
@@ -147,6 +148,19 @@ namespace SkillCrest_LearningPlatform.Controllers
             if (!isSuccessful)
             {
                 return BadRequest();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string courseId)
+        {
+            var isDeleted = await _service.DeleteCourse(courseId);
+
+            if(isDeleted == false)
+            {
+                return NotFound();
             }
 
             return RedirectToAction(nameof(Index));

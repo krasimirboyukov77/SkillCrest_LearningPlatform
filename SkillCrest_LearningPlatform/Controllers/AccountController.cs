@@ -108,7 +108,7 @@ public class AccountController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
-        var user = await _userManager.FindByNameAsync(loginViewModel.Email);
+        var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
         if (user != null)
         {
             var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
@@ -123,11 +123,11 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken] // Ensure CSRF protection
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
-        await _signInManager.SignOutAsync(); // This signs the user out
-        return RedirectToAction("Index", "Home"); // Redirect to a suitable action
+        await _signInManager.SignOutAsync(); 
+        return RedirectToAction("Index", "Home"); 
     }
 
     [HttpGet]

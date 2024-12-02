@@ -28,5 +28,6 @@ namespace SkillCrest_LearningPlatform.Common.Account
         public const int SchoolNameMaxLength = 128;
 
         public const string AdminRoleName = "Admin";
+        public const string TeacherRoleName = "Teacher";
     }
 }

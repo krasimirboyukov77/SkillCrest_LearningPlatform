@@ -11,7 +11,7 @@ using SkillCrest_LearningPlatform.Infrastructure.ApplicationBuilderExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews(); // For MVC controllers
+builder.Services.AddControllersWithViews(); 
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<DatabaseInitializer>();
@@ -19,6 +19,10 @@ builder.Services.AddSingleton<DatabaseInitializer>();
 string adminEmail = builder.Configuration.GetValue<string>("Administrator:Email")!;
 string adminUsername = builder.Configuration.GetValue<string>("Administrator:Username")!;
 string adminPassword = builder.Configuration.GetValue<string>("Administrator:Password")!;
+
+string teacherEmail = builder.Configuration.GetValue<string>("Teacher:Email")!;
+string teacherUsername = builder.Configuration.GetValue<string>("Teacher:Username")!;
+string teacherPassword = builder.Configuration.GetValue<string>("Teacher:Password")!;
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -76,6 +80,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.SeedAdministrator(adminEmail, adminUsername, adminPassword);
+app.SeedTeacher(teacherEmail, teacherUsername, teacherPassword);
 
 app.MapControllerRoute(
     name: "default",

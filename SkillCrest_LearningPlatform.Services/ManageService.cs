@@ -1,11 +1,10 @@
 ﻿using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
-using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using SkillCrest_LearningPlatform.ViewModels.ManageViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using SkillCrest_LearningPlatform.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace SkillCrest_LearningPlatform.Services
 {
@@ -15,8 +14,8 @@ namespace SkillCrest_LearningPlatform.Services
 
         public ManageService(IRepository<Course> courseRepository,
             IHttpContextAccessor httpContextAccessor,
-            IRepository<Manager> managerRepository)
-            :base(httpContextAccessor, managerRepository)
+            UserManager<ApplicationUser> userManager)
+            :base(httpContextAccessor, userManager)
         {
             this._courseRepository = courseRepository;
         }

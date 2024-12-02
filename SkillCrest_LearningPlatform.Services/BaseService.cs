@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.Data.Models;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using System.Security.Claims;
+using SkillCrest_LearningPlatform.Common.Account;
 
 namespace SkillCrest_LearningPlatform.Services
 {
     public class BaseService : IBaseService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IRepository<Manager> _managerRepository;
-        public BaseService(IHttpContextAccessor httpContextAccessor,
-            IRepository<Manager> managerRepository)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public BaseService(
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<ApplicationUser> userManager)
         {
             this._httpContextAccessor = httpContextAccessor;
-            this._managerRepository = managerRepository;
+            this._userManager = userManager;
         }
         public bool IsGuidValid(string? id, ref Guid parsedGuid)
         {
@@ -49,13 +53,18 @@ namespace SkillCrest_LearningPlatform.Services
             return Guid.Empty;
         }
 
-        public bool IsManager()
+        public async Task<bool> IsAdmin()
         {
-            var userId = GetUserId();
+            var user = await _userManager.FindByIdAsync(GetUserId().ToString());
 
-            var isManager = _managerRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
 
-            if (isManager == null)
+            var isAdmin = await _userManager.IsInRoleAsync(user, ValidationConstants.TeacherRoleName);
+
+            if (isAdmin == false)
             {
                 return false;
             }

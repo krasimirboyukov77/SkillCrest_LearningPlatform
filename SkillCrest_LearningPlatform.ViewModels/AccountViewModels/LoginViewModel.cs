@@ -10,7 +10,7 @@ namespace SkillCrest_LearningPlatform.ViewModels.AccountViewModels
     public class LoginViewModel
     {
         [Required]
-        [RegularExpression("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;")]
+        [EmailAddress]
         public string Email { get; set; } = null!;
 
         [Required]

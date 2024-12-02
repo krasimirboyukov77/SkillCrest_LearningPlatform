@@ -71,7 +71,7 @@
         {
             <p>No lessons yet!</p>
         }
-        @if (User.IsInRole("Teacher"))
+        @if (User.IsInRole("Teacher") && User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.CreatorId)
         {
             <div class="text-center mt-4">
                 <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Lesson" asp-route-courseId="@Model.Id">Click to create new assignment.</a>

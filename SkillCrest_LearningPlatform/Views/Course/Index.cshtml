@@ -47,32 +47,32 @@
                                             {
                                                 if (!string.IsNullOrEmpty(course.Password))
                                                 {
-                                                                    <div class="btn-group">
-                                                                        <a class="btn btn-primary" asp-action="EnrollPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
-                                                                    </div>
+                                                 <div class="btn-group">
+                                                   <a class="btn btn-primary" asp-action="EnrollPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
+                                                  </div>
                                                 }
                                                 else
                                                 {
-                                                                    <div class="btn-group">
-                                                                        <a class="btn btn-primary" asp-action="EnrollNoPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
-                                                                    </div>
+                                                  <div class="btn-group">
+                                                     <a class="btn btn-primary" asp-action="EnrollNoPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
+                                                 </div>
                                                 }
                                             }
                                             else
                                             {
-                                                            <div class="btn-group">
-                                                                <a class="btn btn-primary" asp-action="Details" asp-controller="Course" asp-route-id="@course.Id">View</a>
-                                                            </div>
+                                                <div class="btn-group">
+                                                  <a class="btn btn-primary" asp-action="Details" asp-controller="Course" asp-route-id="@course.Id">View</a>
+                                                </div>
                                             }
 
                                             @if (User?.Identity?.Name == course.Creator)
                                             {
-                                                            <div class="col-6 px-1">
-                                                                <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-warning btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Edit</a>
-                                                            </div>
-                                                            <div class="col-6 px-1">
-                                                                <a asp-controller="Course" asp-action="Delete" asp-route-id="@course.Id" class="btn btn-danger btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Delete</a>
-                                                            </div>
+                                                <div class="col-6 px-1">
+                                                   <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-warning btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Edit</a>
+                                               </div>
+                                                <div class="col-6 px-1">
+                                                   <a asp-controller="Course" asp-action="Delete" asp-route-courseId="@course.Id.ToString()" class="btn btn-danger btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Delete</a>
+                                                </div>
                                             }
                                                     <small class="text-muted">@course.DateCreated.ToString("dd-MM-yyyy")</small>
                                                 </div>
@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        @if (User.IsInRole("Teacher"))
+        @if (User?.IsInRole("Teacher") ?? false)
         {
                 <div class="container mt-5">
                     <div class="d-flex flex-column align-items-center">

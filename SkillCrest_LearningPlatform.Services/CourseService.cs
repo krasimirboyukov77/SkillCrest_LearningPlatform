@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using System.Globalization;
-using SkillCrest_LearningPlatform.Data.Models;
 using SkillCrest_LearningPlatform.Data.Models.QuizModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace SkillCrest_LearningPlatform.Services
 {
@@ -17,17 +17,20 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<Course> _repository;
         private readonly IRepository<UserCourse> _userCourseRepository;
         private readonly IRepository<Quiz> _quizRepository;
+        private readonly IRepository<Lesson> _lessonRepository;
         public CourseService(IRepository<Course> repository, 
             IHttpContextAccessor httpContextAccessor,
+            UserManager<ApplicationUser> userManager,
             IRepository<UserCourse> userCourseRepository,
-            IRepository<Manager> managerRepository,
-            IRepository<Quiz> quizRepository) 
-            : base(httpContextAccessor, managerRepository) 
+            IRepository<Quiz> quizRepository,
+            IRepository<Lesson> lessonRepository) 
+            : base(httpContextAccessor, userManager) 
         
         {
            this._repository = repository;
            this._userCourseRepository = userCourseRepository;
            this._quizRepository = quizRepository;
+           this._lessonRepository = lessonRepository;
         }
          
         public async Task<ICollection<CourseInfoViewModel>> GetCoursesSortedByDate(string? searchTerm)
@@ -120,7 +123,7 @@ namespace SkillCrest_LearningPlatform.Services
                         Title = l.Title,
                         Description = l.Description,
                         DateCreated = l.DateCreated.ToString("dd-MM-yyyy"),
-                        DueDate = l.DueDate.ToString("dd-MM-yyyy"),
+                        DueDate = l.DueDate?.ToString("dd-MM-yyyy"),
                         Creator = l.Creator.UserName ?? string.Empty,
                         IsCompleted = l.UsersLessonsProgresses.Any(ul => ul.LessonId == l.Id && ul.UserId == GetUserId())
                     })
@@ -370,5 +373,50 @@ namespace SkillCrest_LearningPlatform.Services
                    (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
 
+        public async Task<bool> DeleteCourse(string courseId)
+        {
+            Guid courseGuid = Guid.Empty;
+            bool isValidGuid = IsGuidValid(courseId, ref courseGuid);
+
+            if (!isValidGuid)
+            {
+                return false;
+            }
+
+
+            Course? course = await _repository
+                .FirstOrDefaultAsync(l => l.Id == courseGuid);
+
+            if (course == null)
+            {
+                return false;
+            }
+
+            course.IsDeleted = true;
+
+            var lessons = await _lessonRepository.GetAllAttached().Where(l => l.CourseId == courseGuid).ToListAsync();
+
+            if (lessons.Any())
+            {
+
+                foreach (var lesson in lessons)
+                {
+                    lesson.IsDeleted = true;
+                    var isLessonsDeletedSuccessful = await _lessonRepository.UpdateAsync(lesson);
+                    if (!isLessonsDeletedSuccessful)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            var isCourseDeleteSuccessful = await _repository.UpdateAsync(course);
+            if (!isCourseDeleteSuccessful)
+            {
+                return false;
+            }
+
+            return false;
+        }
     }
 }

@@ -13,8 +13,6 @@ namespace SkillCrest_LearningPlatform.Data
             : base(options)
         {
         }
-
-
         public virtual DbSet<Manager> Managers { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Lesson> Lessons { get; set; }
@@ -23,11 +21,13 @@ namespace SkillCrest_LearningPlatform.Data
         public virtual DbSet<Submission> Submissions { get; set; }
 
 
+        //Entities for Quiz
         public virtual DbSet<Quiz> Quizzes { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Option> Options { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<QuizSubmission> QuizSubmissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -36,6 +36,10 @@ namespace SkillCrest_LearningPlatform.Data
                 .HasKey(uc => new {uc.CourseId, uc.UserId});
             builder.Entity<UserLessonProgress>()
                 .HasKey(ulp => new {ulp.LessonId,ulp.UserId});
+
+            builder.Entity<Course>().HasQueryFilter(c => !c.IsDeleted);
+            builder.Entity<Lesson>().HasQueryFilter(l => !l.IsDeleted);
+            builder.Entity<Quiz>().HasQueryFilter(q => !q.IsDeleted);
         }
     }
 }

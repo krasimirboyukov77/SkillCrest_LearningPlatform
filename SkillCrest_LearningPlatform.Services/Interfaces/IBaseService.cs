@@ -10,6 +10,6 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
     {
         bool IsGuidValid(string? id, ref Guid parsedGuid);
         Guid GetUserId();
-        public bool IsManager();
+        public Task<bool> IsAdmin();
     }
 }
