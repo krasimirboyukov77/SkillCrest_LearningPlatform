@@ -1,13 +1,14 @@
-﻿using SkillCrest_LearningPlatform.Data.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
+using Microsoft.AspNetCore.Identity;
+
+using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
-using System.Globalization;
 using SkillCrest_LearningPlatform.Data.Models.QuizModels;
-using Microsoft.AspNetCore.Identity;
+using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 
 namespace SkillCrest_LearningPlatform.Services
 {

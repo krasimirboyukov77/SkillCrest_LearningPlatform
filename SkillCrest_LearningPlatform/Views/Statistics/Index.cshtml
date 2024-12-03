@@ -1,0 +1,106 @@
+﻿@using SkillCrest_LearningPlatform.ViewModels.StatisticsViewModels
+
+@model ICollection<CourseStatisticsViewModel>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Statistics</title>
+    <style>
+        .course-container {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .course-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .progress-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-label {
+            width: 150px; /* Adjust width as needed */
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .progress-bar-inner[data-completion="0"] {
+            background-color: #e74c3c;
+        }
+
+        .progress-bar-inner[data-completion="100"] {
+            background-color: #2ecc71;
+        }
+
+        .progress-bar-inner[data-completion]:not([data-completion="0"]):not([data-completion="100"]) {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Statistics</h1>
+
+
+    @if (Model != null && Model.Count > 0)
+    {
+        foreach (var course in Model)
+        {
+            <div class="course-container">
+                <div class="course-header">@course.CourseName</div>
+                <div class="progress-section">
+                    <!-- Lessons Label -->
+                    <div class="progress-label">
+                        @course.CompletedLessons / @course.TotalLessons
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner"
+                             style="width: @course.CompletedPercentage%"
+                             data-completion="@course.CompletedPercentage">
+                            @course.CompletedPercentage%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No courses found for this user.</p>
+    }
+</body>
+</html>

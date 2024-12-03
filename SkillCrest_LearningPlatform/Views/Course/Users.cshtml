@@ -22,7 +22,7 @@
             <tr>
                 <td>@user.UserName</td>
                 <td>
-                    @if (Model.CreatorId == currentUserId )
+                    @if (Model.CreatorId == currentUserId || await BaseService.IsAdmin() )
                     {
                         if (user.Id == Model.CreatorId)
                         {

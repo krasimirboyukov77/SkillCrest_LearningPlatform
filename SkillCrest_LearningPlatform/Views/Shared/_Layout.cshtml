@@ -40,6 +40,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Courses</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
+                        </li>
                         <form asp-controller="Course" asp-action="Index" method="get">
                             <input type="text" name="searchTerm" value="@ViewBag.SearchTerm" placeholder="Search..." />
                             <button type="submit">Search</button>

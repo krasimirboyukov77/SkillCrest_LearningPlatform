@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using SkillCrest_LearningPlatform.Data;
 using SkillCrest_LearningPlatform.Data.Data.Models;
 using SkillCrest_LearningPlatform.Infrastructure.Repositories;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
 builder.Services.AddScoped<IManageService, ManageService>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 builder.Services.AddControllersWithViews();
 
