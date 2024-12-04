@@ -1,6 +1,8 @@
-﻿@model IEnumerable<CourseManageViewModel>
+﻿@using SkillCrest_LearningPlatform.ViewModels.ManageViewModels
+@model IEnumerable<CourseManageViewModel>
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Manage Courses";
 }
 
@@ -29,14 +31,17 @@
                 <td>@course.CreatorName</td>
                 <td>@course.DateCreated</td>
                 <td class="text-center">
-                    <a asp-action="Edit"  asp-controller="Course" asp-route-id="@course.Id" class="btn btn-primary btn-sm me-2">
+                    <!-- Edit button (no area specified, should go to default area) -->
+                    <a asp-area="" asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-primary btn-sm me-2">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
-                    <a asp-action="Delete" asp-controller="Course" asp-route-id="@course.Id" class="btn btn-danger btn-sm">
+                    <!-- Delete button (no area specified, should go to default area) -->
+                    <a asp-area="" asp-controller="Course" asp-action="Delete" asp-route-id="@course.Id" class="btn btn-danger btn-sm">
                         <i class="bi bi-trash"></i> Delete
                     </a>
-                    <a asp-action="LessonsInCourse" asp-controller="Manage" asp-route-courseId="@course.Id" class="btn btn-success btn-sm">
-                        <i class="bi bi-trash"></i>Lessons For Course
+                    <!-- Lessons For Course button (inside the Admin area) -->
+                    <a asp-area="Admin" asp-controller="Manage" asp-action="LessonsInCourse" asp-route-courseId="@course.Id" class="btn btn-success btn-sm">
+                        <i class="bi bi-book"></i> Lessons For Course
                     </a>
                 </td>
             </tr>

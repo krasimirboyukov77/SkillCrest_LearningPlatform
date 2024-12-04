@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillCrest_LearningPlatform.Services.Interfaces;
+using SkillCrest_LearningPlatform.Common.Account;
 
-namespace SkillCrest_LearningPlatform.Controllers
+namespace SkillCrest_LearningPlatform.Areas.Admin.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Area(ValidationConstants.AdminRoleName)]
+    [Authorize(Roles = "Admin")]
     public class ManageController : Controller
     {
         private readonly IManageService _manageService;
@@ -28,7 +30,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         {
             var courseWithLessons = await _manageService.GetLessonsForCourseToManage(courseId);
 
-            if(courseWithLessons == null)
+            if (courseWithLessons == null)
             {
                 return NotFound();
             }

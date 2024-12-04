@@ -85,8 +85,17 @@ app.SeedAdministrator(adminEmail, adminUsername, adminPassword);
 app.SeedTeacher(teacherEmail, teacherUsername, teacherPassword);
 
 app.MapControllerRoute(
+    name: "admin",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+app.MapDefaultControllerRoute();
+
 app.MapRazorPages();
 
 app.Run();

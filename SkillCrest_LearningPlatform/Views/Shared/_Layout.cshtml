@@ -28,12 +28,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (await this.baseService.IsAdmin() == true)
-                        {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Manage" asp-action="Index">Manage</a>
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Manage" asp-action="Index">Manage</a>
                             </li>
-                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>
                         </li>
