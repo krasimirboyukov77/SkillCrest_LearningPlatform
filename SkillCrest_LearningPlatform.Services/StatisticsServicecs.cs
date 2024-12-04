@@ -6,6 +6,8 @@ using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.StatisticsViewModels;
 using Microsoft.EntityFrameworkCore;
+using SkillCrest_LearningPlatform.Data.Migrations;
+using SkillCrest_LearningPlatform.Data.Models;
 
 
 namespace SkillCrest_LearningPlatform.Services
@@ -15,11 +17,13 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<UserLessonProgress> _userLessonProgressRepository;
         private readonly IRepository<UserCourse> _userCoursesRepository;
         private readonly IRepository<Lesson> _lessonsRepository;
+        private readonly IRepository<Submission> _submissionRepository;
 
         public StatisticsService(
             IRepository<UserLessonProgress> userLessonProgress,
             IRepository<UserCourse> userCourse,
             IHttpContextAccessor httpContextAccessor,
+            IRepository<Submission> submissionRepository,
             IRepository<Lesson> lessonsRepository,
             UserManager<ApplicationUser> userManager)
             :base(httpContextAccessor, userManager)
@@ -27,6 +31,7 @@ namespace SkillCrest_LearningPlatform.Services
             this._userLessonProgressRepository = userLessonProgress;
             this._userCoursesRepository = userCourse;
             this._lessonsRepository = lessonsRepository;
+            this._submissionRepository = submissionRepository;
         }
 
         public async Task<ICollection<CourseStatisticsViewModel>> GetCoureStatistic()
@@ -75,6 +80,32 @@ namespace SkillCrest_LearningPlatform.Services
             }
 
             return courseList;
+        }
+
+        public async Task<ICollection<StatisticsSubmissionViewModel>?> GetSubmissionsForLesson(string lessonId)
+        {
+            Guid lessonGuid = Guid.Empty;
+            bool isValidGuid = IsGuidValid(lessonId, ref lessonGuid);
+
+            if (!isValidGuid)
+            {
+                return null;
+            }
+
+            var lessonSubmissions = await _submissionRepository
+                .GetAllAttached()
+                .Include(s=> s.Uploader)
+                .Where(s=> s.LessonId == lessonGuid)
+                .Select(s=> new StatisticsSubmissionViewModel()
+                {
+                    FileName = s.FileName,
+                    FilePath = s.FilePath,
+                    UploaderName = s.Uploader.FullName,
+                    Id = s.Id.ToString()
+                })
+                .ToListAsync();
+
+            return lessonSubmissions;
         }
     }
 }

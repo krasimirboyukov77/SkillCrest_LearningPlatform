@@ -81,7 +81,7 @@ namespace SkillCrest_LearningPlatform.Services
                 return false;
             }
 
-            var isAdmin = await _userManager.IsInRoleAsync(user, ValidationConstants.TeacherRoleName);
+            var isAdmin = await _userManager.IsInRoleAsync(user, ValidationConstants.AdminRoleName);
 
             if (isAdmin == false)
             {
