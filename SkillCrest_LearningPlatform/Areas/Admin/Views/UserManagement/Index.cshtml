@@ -1,0 +1,73 @@
+﻿@model List<SkillCrest_LearningPlatform.ViewModels.AccountViewModels.UsersWithRolesViewModel>
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h2 class="my-4 text-center">Manage Users</h2>
+
+<table class="table table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Assign Role</th>
+            <th scope="col">Enroll in Course</th>
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @foreach (var role in user.Roles)
+                    {
+                        <span class="badge bg-secondary">@role</span>
+                        <form asp-action="RemoveRole" asp-controller="UserManagement" method="post" style="display:inline;">
+                            <input type="hidden" name="userId" value="@user.UserId" />
+                            <input type="hidden" name="role" value="@role" />
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i> Remove
+                            </button>
+                        </form>
+                    }
+                </td>
+                <td>
+                    <form asp-action="AssignRole" asp-controller="UserManagement" method="post">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <select name="role" class="form-select d-inline w-auto">
+                            @foreach (var role in user.AllRoles)
+                            {
+                                <option value="@role.Value">@role.Text</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Assign</button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="EnrollInCourse" asp-controller="UserManagement" method="post">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <select name="courseId" class="form-select d-inline w-auto">
+                            @foreach (var course in user.AvailableCourses)
+                            {
+                                <option value="@course.Value">@course.Text</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Enroll</button>
+                    </form>
+                </td>
+                <td class="text-center">
+                    <form asp-action="DeleteUser" asp-controller="UserManagement" method="post">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
