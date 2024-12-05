@@ -135,8 +135,8 @@ namespace SkillCrest_LearningPlatform.Services
                     Title = lesson.Title,
                     Description = lesson.Description ?? string.Empty,
                     Creator = lesson.Creator.UserName ?? string.Empty,
-                    DueDate = lesson.DueDate?.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat) ,
-                    DateCreated = lesson.DateCreated.ToString(Common.Lesson.ValidationConstants.LessonDateCreatedFormat),
+                    DueDate = lesson.DueDate?.ToString(Common.Lesson.ValidationConstants.LessonDateFormat) ,
+                    DateCreated = lesson.DateCreated.ToString(Common.Lesson.ValidationConstants.LessonDateFormat),
                     Points = lesson.Points,
                     FilePath = lesson.FilePath,
                     FileName = lesson.FileName

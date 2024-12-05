@@ -9,11 +9,14 @@ using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
 using SkillCrest_LearningPlatform.Data.Models.QuizModels;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
+using SkillCrest_LearningPlatform.Common;
 
 namespace SkillCrest_LearningPlatform.Services
 {
     public class CourseService : BaseService,ICourseService
     {
+        public const string CourseDateFormat = Common.Course.ValidationConstants.CourseDateCreatedFormat;
+        public const string LessonDateFormat = Common.Lesson.ValidationConstants.LessonDateFormat;
 
         private readonly IRepository<Course> _repository;
         private readonly IRepository<UserCourse> _userCourseRepository;
@@ -116,15 +119,15 @@ namespace SkillCrest_LearningPlatform.Services
                 {
                     Id = course.Id,
                     Title = course.Title,
-                    DateCreated = course.DateCreated.ToString("dd-MM-yyyy"),
+                    DateCreated = course.DateCreated.ToString(CourseDateFormat),
                     CreatorId = course.CreatorId.ToString(),
                     Lessons = course.Lessons.Select(l => new LessonInCourseViewModel()
                     {
                         Id = l.Id,
                         Title = l.Title,
                         Description = l.Description,
-                        DateCreated = l.DateCreated.ToString("dd-MM-yyyy"),
-                        DueDate = l.DueDate?.ToString("dd-MM-yyyy"),
+                        DateCreated = l.DateCreated.ToString(CourseDateFormat),
+                        DueDate = l.DueDate?.ToString(LessonDateFormat),
                         Creator = l.Creator.UserName ?? string.Empty,
                         IsCompleted = l.UsersLessonsProgresses.Any(ul => ul.LessonId == l.Id && ul.UserId == GetUserId())
                     })
