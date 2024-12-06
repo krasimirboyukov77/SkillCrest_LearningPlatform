@@ -26,5 +26,13 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return View(submissions);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> QuizSubmissions(string quizId)
+        {
+            var submissions = await _statisticsService.GetQuizSubmissions(quizId);
+
+            return View(submissions);
+        }
     }
 }

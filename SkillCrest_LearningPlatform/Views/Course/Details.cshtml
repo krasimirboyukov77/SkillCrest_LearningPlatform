@@ -24,19 +24,20 @@
         {
 
             foreach(var quiz in Model.Quizzes){
-                if(quiz.IsSubmitted == false){
-             <div class="bg-light p-5 rounded mb-3">
+                 <div class="bg-light p-5 rounded mb-3">
                     <h2>@quiz.Title</h2>
+                @if(quiz.IsSubmitted == false){
                     <a type="button" class="btn btn-primary" asp-action="Solve" asp-controller="Quiz" asp-route-Id="@quiz.Id">Solve Quiz</a>
-                    </div>
+                   
                 }
                 else
                 {
-                    <div class="bg-light p-5 rounded mb-3">
-                        <h2>@quiz.Title</h2>
                         <p>You scored @quiz.Score points out of @quiz.TotalScore.</p>
-                    </div>
+                   
                 }
+                    <a type="button" class="btn btn-info" asp-action="QuizSubmissions" asp-controller="Statistics" asp-route-quizId="@quiz.Id">Submissions</a>
+
+                </div>
             }
         }
         @if (Model.Lessons.Count > 0)

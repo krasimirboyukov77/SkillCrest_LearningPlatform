@@ -15,6 +15,6 @@ namespace SkillCrest_LearningPlatform.ViewModels.QuizViewModels
         public int Score { get; set; }
         public bool IsSubmitted { get; set; }
 
-
+        public string? Submitter { get; set; }
     }
 }

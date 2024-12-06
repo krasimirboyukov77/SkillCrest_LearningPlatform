@@ -8,6 +8,8 @@ using SkillCrest_LearningPlatform.ViewModels.StatisticsViewModels;
 using Microsoft.EntityFrameworkCore;
 using SkillCrest_LearningPlatform.Data.Migrations;
 using SkillCrest_LearningPlatform.Data.Models;
+using SkillCrest_LearningPlatform.Data.Models.QuizModels;
+using SkillCrest_LearningPlatform.ViewModels.QuizViewModels;
 
 
 namespace SkillCrest_LearningPlatform.Services
@@ -18,6 +20,7 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<UserCourse> _userCoursesRepository;
         private readonly IRepository<Lesson> _lessonsRepository;
         private readonly IRepository<Submission> _submissionRepository;
+        private readonly IRepository<QuizSubmission> _quizSubmissionRepository;
 
         public StatisticsService(
             IRepository<UserLessonProgress> userLessonProgress,
@@ -25,6 +28,7 @@ namespace SkillCrest_LearningPlatform.Services
             IHttpContextAccessor httpContextAccessor,
             IRepository<Submission> submissionRepository,
             IRepository<Lesson> lessonsRepository,
+            IRepository<QuizSubmission> quizSubmissionRepository,
             UserManager<ApplicationUser> userManager)
             :base(httpContextAccessor, userManager)
         {
@@ -32,6 +36,7 @@ namespace SkillCrest_LearningPlatform.Services
             this._userCoursesRepository = userCourse;
             this._lessonsRepository = lessonsRepository;
             this._submissionRepository = submissionRepository;
+            this._quizSubmissionRepository = quizSubmissionRepository;
         }
 
         public async Task<ICollection<CourseStatisticsViewModel>> GetCoureStatistic()
@@ -106,6 +111,34 @@ namespace SkillCrest_LearningPlatform.Services
                 .ToListAsync();
 
             return lessonSubmissions;
+        }
+
+        public async Task<ICollection<QuizShortDetails>?> GetQuizSubmissions(string quizId)
+        {
+            Guid quizGuid = Guid.Empty;
+            bool isValidGuid = IsGuidValid(quizId, ref quizGuid);
+
+            if (!isValidGuid)
+            {
+                return null;
+            }
+
+            var viewModel = await _quizSubmissionRepository
+                .GetAllAttached()
+                .Include(s=> s.Quiz)
+                .Include(s=> s.Student)
+                .Where(qs=> qs.QuizId == quizGuid)
+                .Select(qs=> new QuizShortDetails()
+                {
+                    Id = qs.Id,
+                    Title = qs.Quiz.Title,
+                    TotalScore = qs.TotalScore,
+                    Score = qs.Score,
+                    Submitter = qs.Student.FullName
+                })
+                .ToListAsync();
+
+            return viewModel;
         }
     }
 }
