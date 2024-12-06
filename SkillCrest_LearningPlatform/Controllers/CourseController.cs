@@ -35,6 +35,7 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         [Authorize(Roles ="Teacher")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateCourseViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -73,6 +74,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CourseEditViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -115,6 +117,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Enroll(CoursePasswordViewModel viewModel)
         {
             var courseGuid = await _service.EnrollStudentWithPassword(viewModel);

@@ -21,20 +21,20 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpGet]
-        // GET: Display the quiz creation form
+
         public async Task<IActionResult> Create(string courseId)
         {
-            var model = new CreateQuizViewModel() { CourseId = Guid.Parse(courseId)};// Initialize an empty view model
+            var model = new CreateQuizViewModel() { CourseId = Guid.Parse(courseId)};
             return View(model);
         }
 
-        // POST: Handling the quiz form submission
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateQuizViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Step 1: Create the quiz
                 var quiz = new Quiz
                 {
                     Title = model.Title,
@@ -50,9 +50,8 @@ namespace SkillCrest_LearningPlatform.Controllers
                     course.Quizzes.Add(quiz);
                 }
 
-                _context.Quizzes.Add(quiz); // Add the quiz to the database context
-
-                // Step 2: Create the questions for this quiz
+                _context.Quizzes.Add(quiz); 
+  
                 foreach (var question in model.Questions)
                 {
                     var newQuestion = new Question
@@ -69,9 +68,9 @@ namespace SkillCrest_LearningPlatform.Controllers
                     {
                         newQuestion.CorrectTextResponse = question.CorrectTextResponse;
                     }
-                    _context.Questions.Add(newQuestion); // Add the question to the database context
+                    _context.Questions.Add(newQuestion); 
 
-                    // Step 3: Add options to the question
+
                     foreach (var option in question.Options)
                     {
                         var newOption = new Option
@@ -86,19 +85,18 @@ namespace SkillCrest_LearningPlatform.Controllers
                             newQuestion.CorrectOptionId.Add(newOption.Id);
                         }
 
-                        _context.Options.Add(newOption); // Add the option to the database context
+                        _context.Options.Add(newOption);
                     }
                 }
 
                 quiz.TotalScore = quiz.Questions.Count;
-                // Step 4: Save the changes to the database
-                _context.SaveChanges(); // Commit the transaction
 
-                // Step 5: Redirect to a page (e.g., the list of quizzes or quiz details)
-                return RedirectToAction("Index", "Course"); // Assuming there's a method to list quizzes
+                _context.SaveChanges(); 
+
+
+                return RedirectToAction("Index", "Course"); 
             }
 
-            // If model is invalid, return to the form with the validation errors
             return View(model);
         }
 
@@ -137,6 +135,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubmitQuiz(QuizSubmissionViewModel viewModel)
         {
             int score = 0;
@@ -176,7 +175,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                     }
                     else if (question.Type == QuestionType.MultipleChoice)
                     {
-                        // For multiple choice questions, check the selected option
+
                         var correctOptions = question.Options.Where(o => o.IsCorrect == true).Select(o => o.Id).ToList();
                         var checkedOptions = questionAnswer.Options.Where(o=> o.SelectedOption == true).Select(o=> o.OptionId).ToList();
 
@@ -207,7 +206,6 @@ namespace SkillCrest_LearningPlatform.Controllers
                     }
                 }
 
-                // Save the quiz result to the database
                 var quizSubmission = new QuizSubmission()
                 {
                     QuizId = viewModel.Id,
@@ -228,7 +226,6 @@ namespace SkillCrest_LearningPlatform.Controllers
                 _context.QuizSubmissions.Add(quizSubmission);   
                 _context.SaveChanges();
 
-                // Redirect to the result page with the score
                 return RedirectToAction("Index", "Course");
             }
 

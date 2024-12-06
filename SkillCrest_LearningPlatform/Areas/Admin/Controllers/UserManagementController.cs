@@ -73,6 +73,7 @@ namespace SkillCrest_LearningPlatform.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignRole(string userId, string role)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -87,6 +88,7 @@ namespace SkillCrest_LearningPlatform.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveRole(string userId, string role)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -99,6 +101,7 @@ namespace SkillCrest_LearningPlatform.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUser(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -111,6 +114,7 @@ namespace SkillCrest_LearningPlatform.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnrollInCourse(string userId, string courseId)
         {
             if (!await _userService.EnrollStudent(courseId, userId))

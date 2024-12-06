@@ -6,7 +6,7 @@ using SkillCrest_LearningPlatform.Common.Account;
 namespace SkillCrest_LearningPlatform.Areas.Admin.Controllers
 {
     [Area(ValidationConstants.AdminRoleName)]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = ValidationConstants.AdminRoleName)]
     public class ManageController : Controller
     {
         private readonly IManageService _manageService;

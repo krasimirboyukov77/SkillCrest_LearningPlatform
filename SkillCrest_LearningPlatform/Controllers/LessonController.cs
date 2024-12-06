@@ -53,6 +53,7 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         [Authorize(Roles = "Teacher")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateLessonViewModel viewModel, IFormFile? file)
         {
             if (!ModelState.IsValid)
@@ -71,6 +72,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleLessonCompletion(string lessonId, string courseId)
         {
             bool isToggled = await _lessonService.ToggleLessonCompletion(lessonId, courseId);
@@ -84,6 +86,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkAsIncomplete(string lessonId , string courseId)
         {
            var isToggled = await _lessonService.MarkAsIncomplete(lessonId, courseId);
@@ -111,6 +114,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(LessonDetailsViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -143,6 +147,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeleteLessonViewModel viewModel)
         {
             var isDeleteSuccessful = await _lessonService.DeleteLesson(viewModel);
@@ -175,6 +180,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadFile(IFormFile file, string lessonId)
         {
             var isUploaded = await _lessonService.UploadFile(file, lessonId);
