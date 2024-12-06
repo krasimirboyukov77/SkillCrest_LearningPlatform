@@ -11,5 +11,10 @@ namespace SkillCrest_LearningPlatform.ViewModels.QuizViewModels
         public required Guid Id {  get; set; }
         public required string Title { get; set; }
 
+        public int TotalScore { get; set; }
+        public int Score { get; set; }
+        public bool IsSubmitted { get; set; }
+
+
     }
 }

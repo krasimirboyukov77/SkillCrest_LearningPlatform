@@ -10,6 +10,7 @@ using SkillCrest_LearningPlatform.ViewModels.CourseViewModels;
 using SkillCrest_LearningPlatform.Data.Models.QuizModels;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using SkillCrest_LearningPlatform.Common;
+using SkillCrest_LearningPlatform.ViewModels.QuizViewModels;
 
 namespace SkillCrest_LearningPlatform.Services
 {
@@ -22,12 +23,14 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<UserCourse> _userCourseRepository;
         private readonly IRepository<Quiz> _quizRepository;
         private readonly IRepository<Lesson> _lessonRepository;
+        private readonly IRepository<QuizSubmission> _quizSubmissionRepository;
         public CourseService(IRepository<Course> repository, 
             IHttpContextAccessor httpContextAccessor,
             UserManager<ApplicationUser> userManager,
             IRepository<UserCourse> userCourseRepository,
             IRepository<Quiz> quizRepository,
-            IRepository<Lesson> lessonRepository) 
+            IRepository<Lesson> lessonRepository,
+            IRepository<QuizSubmission> quizSubmissionRepository) 
             : base(httpContextAccessor, userManager) 
         
         {
@@ -35,6 +38,7 @@ namespace SkillCrest_LearningPlatform.Services
            this._userCourseRepository = userCourseRepository;
            this._quizRepository = quizRepository;
            this._lessonRepository = lessonRepository;
+           this._quizSubmissionRepository = quizSubmissionRepository;
         }
          
         public async Task<ICollection<CourseInfoViewModel>> GetCoursesSortedByDate(string? searchTerm)
@@ -133,13 +137,44 @@ namespace SkillCrest_LearningPlatform.Services
                     })
                     .OrderBy(ls => ls.IsCompleted)
                     .ToList(),
-                    Quizzes = _quizRepository.GetAllAttached().Where(q=> q.CourseId == course.Id).Select(q => new ViewModels.QuizViewModels.QuizShortDetails()
-                    {
-                        Id = q.Id,
-                        Title = q.Title,
-                    })
-                    .ToList()
                 };
+
+                var quizzes = _quizRepository.GetAllAttached().Where(q => q.CourseId == course.Id).Select(q => new ViewModels.QuizViewModels.QuizShortDetails()
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                })
+                     .ToList();
+
+                var quizzesListViewModel = new List<QuizShortDetails>();
+
+                foreach(var quiz in quizzes)
+                {
+                    var isSubmitted = await _quizSubmissionRepository
+                        .GetAllAttached()
+                        .Where(qs => qs.QuizId == quiz.Id && qs.StudentId == GetUserId())
+                        .FirstOrDefaultAsync();
+
+                    var model = new QuizShortDetails()
+                    {
+                        Id = quiz.Id,
+                        Title = quiz.Title,
+                        IsSubmitted = false
+                    };
+                    if (isSubmitted == null)
+                    {
+                        quizzesListViewModel.Add(model);
+                    }
+                    else
+                    {
+                        model.IsSubmitted = true;
+                        model.TotalScore = isSubmitted.TotalScore;
+                        model.Score = isSubmitted.Score;
+                        quizzesListViewModel.Add(model);
+                    }
+                }
+
+                viewModel.Quizzes = quizzesListViewModel;
             }
 
             return viewModel;
