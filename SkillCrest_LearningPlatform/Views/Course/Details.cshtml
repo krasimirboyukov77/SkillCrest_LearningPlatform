@@ -1,4 +1,9 @@
-﻿@model CourseDetailsViewModel
+﻿@using SkillCrest_LearningPlatform.Services.Interfaces
+@inject IBaseService baseService
+
+@model CourseDetailsViewModel
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -35,10 +40,14 @@
                         <p>You scored @quiz.Score points out of @quiz.TotalScore.</p>
                    
                 }
+                    @if (User.IsInRole("Teacher") && Model.CreatorId == baseService.GetUserId().ToString())
+                    {
                     <a type="button" class="btn btn-info" asp-action="QuizSubmissions" asp-controller="Statistics" asp-route-quizId="@quiz.Id">Submissions</a>
 
+                    }
                 </div>
-            }
+                 }
+                
         }
         @if (Model.Lessons.Count > 0)
         {
