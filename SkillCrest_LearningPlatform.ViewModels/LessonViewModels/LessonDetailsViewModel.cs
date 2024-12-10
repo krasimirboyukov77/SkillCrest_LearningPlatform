@@ -24,5 +24,8 @@ namespace SkillCrest_LearningPlatform.ViewModels.LessonViewModels
         public required string Creator {  get; set; }
 
         public SubmissionViewModel? Submission { get; set; }
+
+        public double Grade { get; set; }
+        public string? Comment { get; set; }
     }
 }

@@ -11,6 +11,8 @@ using SkillCrest_LearningPlatform.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting.Server;
 using System.Net.NetworkInformation;
 using System.Web;
+using System.Runtime.CompilerServices;
+using SkillCrest_LearningPlatform.Data.Models;
 
 namespace SkillCrest_LearningPlatform.Controllers
 {
@@ -30,7 +32,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         {
             var lesson = await _lessonService.GetLessonDetails(id);
 
-            if(lesson == null)
+            if (lesson == null)
             {
                 return NotFound();
             }
@@ -40,7 +42,7 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         [Authorize(Roles = "Teacher")]
         [HttpGet]
-       public IActionResult Create(string courseId)
+        public IActionResult Create(string courseId)
         {
 
             CreateLessonViewModel viewModel = new CreateLessonViewModel()
@@ -68,7 +70,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return View(viewModel);
             }
 
-            return RedirectToAction("Details","Course", new {id = viewModel.CourseId});
+            return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
         }
 
         [HttpPost]
@@ -87,9 +89,11 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> MarkAsIncomplete(string lessonId , string courseId)
+        public async Task<IActionResult> MarkAsIncomplete(string lessonId, string courseId)
         {
-           var isToggled = await _lessonService.MarkAsIncomplete(lessonId, courseId);
+
+
+            var isToggled = await _lessonService.MarkAsIncomplete(lessonId, courseId);
 
 
             if (isToggled)
@@ -105,7 +109,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         {
             var lessonDetails = await _lessonService.GetLessonDetails(lessonId);
 
-            if(null == lessonDetails)
+            if (null == lessonDetails)
             {
                 return RedirectToAction("Index", "Course");
             }
@@ -138,7 +142,7 @@ namespace SkillCrest_LearningPlatform.Controllers
         {
             var lessonToDelete = await _lessonService.GetLessonForDelete(lessonId);
 
-            if(lessonToDelete == null)
+            if (lessonToDelete == null)
             {
                 return RedirectToAction("Index", "Course");
             }
@@ -150,11 +154,16 @@ namespace SkillCrest_LearningPlatform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeleteLessonViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
             var isDeleteSuccessful = await _lessonService.DeleteLesson(viewModel);
 
             if (isDeleteSuccessful)
             {
-                return RedirectToAction("Details", "Course", new {id = viewModel.CourseId});
+                return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
             }
 
             return RedirectToAction("Index", "Course");
@@ -163,16 +172,16 @@ namespace SkillCrest_LearningPlatform.Controllers
         [HttpGet]
         public IActionResult Download(string fileName)
         {
-            
+
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", fileName);
 
-            
+
             if (!System.IO.File.Exists(filePath))
             {
-                return NotFound(); 
+                return NotFound();
             }
 
-           
+
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
             var contentType = "application/octet-stream";
 
@@ -192,5 +201,28 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return Json(new { success = true });
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Evaluation(string submissionId, double grade)
+        {
+            if (grade < 2 || grade > 6)
+            {
+                return Json(new { success = false, message = "Invalid submission ID or grade." });
+            }
+
+            var isSuccessful = await _lessonService.EvaluationSubmission(submissionId, grade);
+
+            if (isSuccessful)
+            {
+                return Json(new { success = true, message = "Grade submitted successfully." });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Failed to submit grade." });
+            }
+        }
     }
 }
+

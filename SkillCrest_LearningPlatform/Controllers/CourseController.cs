@@ -17,6 +17,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             this._service = service;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string searchTerm)
         {
 
@@ -120,6 +121,10 @@ namespace SkillCrest_LearningPlatform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Enroll(CoursePasswordViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
             var courseGuid = await _service.EnrollStudentWithPassword(viewModel);
 
             if (courseGuid == false)
@@ -181,5 +186,6 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        
     }
 }

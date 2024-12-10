@@ -21,6 +21,7 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<Lesson> _lessonsRepository;
         private readonly IRepository<Submission> _submissionRepository;
         private readonly IRepository<QuizSubmission> _quizSubmissionRepository;
+        private readonly IRepository<Grade> _gradeRepository;
 
         public StatisticsService(
             IRepository<UserLessonProgress> userLessonProgress,
@@ -29,7 +30,8 @@ namespace SkillCrest_LearningPlatform.Services
             IRepository<Submission> submissionRepository,
             IRepository<Lesson> lessonsRepository,
             IRepository<QuizSubmission> quizSubmissionRepository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IRepository<Grade> gradeRepository)
             :base(httpContextAccessor, userManager)
         {
             this._userLessonProgressRepository = userLessonProgress;
@@ -37,6 +39,7 @@ namespace SkillCrest_LearningPlatform.Services
             this._lessonsRepository = lessonsRepository;
             this._submissionRepository = submissionRepository;
             this._quizSubmissionRepository = quizSubmissionRepository;
+            this._gradeRepository = gradeRepository;
         }
 
         public async Task<ICollection<CourseStatisticsViewModel>> GetCoureStatistic()
@@ -103,12 +106,30 @@ namespace SkillCrest_LearningPlatform.Services
                 .Where(s=> s.LessonId == lessonGuid)
                 .Select(s=> new StatisticsSubmissionViewModel()
                 {
+                    Id = s.Id.ToString(),
                     FileName = s.FileName,
                     FilePath = s.FilePath,
                     UploaderName = s.Uploader.FullName,
-                    Id = s.Id.ToString()
+                    UploaderId = s.UploaderId.ToString()
                 })
                 .ToListAsync();
+
+            foreach (var submission in lessonSubmissions)
+            {
+                var grade = await _gradeRepository.FirstOrDefaultAsync(g => g.SubmissionId.ToString() == submission.Id);
+
+                if (grade != null)
+                {
+                    GradeViewModel gradeModel = new GradeViewModel()
+                    {
+                        Id = grade.Id.ToString(),
+                        Grade = grade.Score,
+                        Comment = grade.Comment,
+                    };
+
+                    submission.Grade = gradeModel;
+                }
+            }
 
             return lessonSubmissions;
         }
@@ -139,6 +160,36 @@ namespace SkillCrest_LearningPlatform.Services
                 .ToListAsync();
 
             return viewModel;
+        }
+
+        public async Task<bool> Evaluate(CreateGradeViewModel viewModel)
+        {
+            Guid submissionGuid = Guid.Empty;
+            bool isValidGuid = IsGuidValid(viewModel.SubmissionId, ref submissionGuid);
+
+            if (!isValidGuid)
+            {
+                return false;
+            }
+
+
+            var submission = await _submissionRepository.FirstOrDefaultAsync(s => s.Id == submissionGuid);
+
+            if (submission == null)
+            {
+                return false;
+            }
+
+            Grade newGrade = new Grade()
+            {
+                Comment = viewModel.Comment,
+                SubmissionId = submissionGuid,
+                Score = viewModel.Grade
+            };
+
+            await _gradeRepository.AddAsync(newGrade);
+
+            return true;
         }
     }
 }

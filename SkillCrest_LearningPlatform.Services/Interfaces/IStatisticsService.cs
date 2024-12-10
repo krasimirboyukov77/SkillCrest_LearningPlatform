@@ -8,5 +8,6 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
         Task<ICollection<CourseStatisticsViewModel>> GetCoureStatistic();
         Task<ICollection<StatisticsSubmissionViewModel>?> GetSubmissionsForLesson(string lessonId);
         Task<ICollection<QuizShortDetails>?> GetQuizSubmissions(string quizId);
+        Task<bool> Evaluate(CreateGradeViewModel viewModel);
     }
 }

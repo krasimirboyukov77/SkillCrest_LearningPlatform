@@ -1,0 +1,32 @@
+﻿@using SkillCrest_LearningPlatform.ViewModels.StatisticsViewModels
+@model CreateGradeViewModel
+
+<div class="bootstrap-iso">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <form asp-action="Evaluate" method="post">
+                    <div class="form-group">
+                        <label class="control-label " asp-for="Comment">
+                            Comment:
+                        </label>
+                        <textarea class="form-control" cols="20" asp-for="Comment" rows="5"></textarea>
+                        <span asp-validation-for="Comment" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" asp-for="Grade">Grade:</label>
+                        <input type="number" class="form-control" asp-for="Grade" step="0.01" />
+                        <span asp-validation-for="Grade" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" asp-for="SubmissionId" value="@Model.SubmissionId"/>
+                    <div class="form-group">
+                        <div>
+                            <p></p>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

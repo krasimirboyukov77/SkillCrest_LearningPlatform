@@ -18,19 +18,22 @@ namespace SkillCrest_LearningPlatform.Services
         private readonly IRepository<Course> _courseRepository;
         private readonly IRepository<UserLessonProgress> _userLessonProgressRepository;
         private readonly IRepository<Submission> _submissionRepository;
+        private readonly IRepository<Grade> _gradeRepository;
         
         public LessonService(IRepository<Lesson> lessonRepository, 
             IRepository<Course> courseRepository,
             IRepository<UserLessonProgress> userLessonProgressRepository,
             IHttpContextAccessor httpContextAccessor,
             UserManager<ApplicationUser> userManager,
-            IRepository<Submission> submissionRepository)
+            IRepository<Submission> submissionRepository,
+            IRepository<Grade> gradeRepository)
             :base(httpContextAccessor, userManager)
         {
             this._courseRepository = courseRepository;
             this._lessonRepository = lessonRepository;
             this._userLessonProgressRepository = userLessonProgressRepository;
             this._submissionRepository = submissionRepository;
+            this._gradeRepository = gradeRepository;
         }
 
 
@@ -154,6 +157,14 @@ namespace SkillCrest_LearningPlatform.Services
                         FileName = submission.FileName,
                         FilePath = submission.FilePath,
                     };
+
+                    var grade = await _gradeRepository.GetAllAttached().FirstOrDefaultAsync(g => g.SubmissionId == submission.Id);
+
+                    if (grade != null)
+                    {
+                        viewModel.Grade = grade.Score;
+                        viewModel.Comment = grade.Comment;
+                    }
                 }
                 else
                 {
@@ -414,6 +425,40 @@ namespace SkillCrest_LearningPlatform.Services
 
             await _submissionRepository.AddAsync(newSubmission);
             
+            return true;
+        }
+
+        public async Task<bool> EvaluationSubmission(string submissionId, double score)
+
+        {
+            Guid submissionGuid = Guid.Empty;
+            bool isValidId = IsGuidValid(submissionId, ref submissionGuid);
+
+            if (!isValidId)
+            {
+                return false;
+            }
+
+            var submission = await _submissionRepository.FirstOrDefaultAsync(s => s.Id == submissionGuid);
+
+            if (submission == null)
+            {
+                return false;
+            }
+
+            if (score < 2 || score > 6)
+            {
+                return false;
+            }
+
+            Grade newGrade = new()
+            {
+                Score = score,
+                SubmissionId = submissionGuid,
+            };
+
+            await _gradeRepository.AddAsync(newGrade);
+
             return true;
         }
     }

@@ -108,6 +108,10 @@ namespace SkillCrest_LearningPlatform.Controllers
                 .ThenInclude(q=> q.Options)
                 .FirstOrDefaultAsync(q => q.Id.ToString() == Id);
 
+            if(quiz == null)
+            {
+                return NotFound();
+            }
             QuizSubmissionViewModel viewModel = new()
             {
                 Id = quiz.Id,

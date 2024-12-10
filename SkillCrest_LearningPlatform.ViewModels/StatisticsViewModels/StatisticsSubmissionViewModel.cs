@@ -13,5 +13,19 @@ namespace SkillCrest_LearningPlatform.ViewModels.StatisticsViewModels
         public required string FilePath { get; set; } = null!;
         public required string FileName { get; set; } = null!;
         public required string UploaderName { get; set; } = null!;
+        public required string UploaderId { get; set; } = null!;
+
+        public GradeViewModel? Grade { get; set; }
     }
+
+    public class GradeViewModel
+    {
+        [Required]
+        public string Id { get; set; } = null!;
+        public string? Comment { get; set; }
+
+        [Required]
+        public double Grade { get; set; }
+    }
+
 }

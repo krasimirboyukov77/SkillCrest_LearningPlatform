@@ -20,5 +20,6 @@ namespace SkillCrest_LearningPlatform.Services.Interfaces
         Task<bool> EditLesson(LessonDetailsViewModel viewModel);
         Task<DeleteLessonViewModel?> GetLessonForDelete(string lessonId);
         Task<bool> DeleteLesson(DeleteLessonViewModel viewModel);
+        Task<bool> EvaluationSubmission(string submissionId, double score);
     }
 }

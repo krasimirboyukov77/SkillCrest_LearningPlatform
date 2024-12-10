@@ -79,6 +79,19 @@
                         </a>
                         <span>@Model.FileName</span>
                     </div>
+
+                    if(Model.Grade != 0)
+                    {
+                        <p><strong>Grade:</strong> @Model.Grade / 6</p>
+                    if(string.IsNullOrEmpty(Model.Comment))
+                    {
+                            <p><strong>Comment:</strong> @Model.Comment</p>
+                        }
+                        else
+                        {
+                            <p><strong>Comment:</strong>No comment!</p>
+                        }
+                    }
                 }
             </div>
         </div>
