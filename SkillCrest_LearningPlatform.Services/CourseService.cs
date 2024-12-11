@@ -465,7 +465,7 @@ namespace SkillCrest_LearningPlatform.Services
                 return false;
             }
 
-            return false;
+            return true;
         }
         public async Task<bool> RemoveUserFromCourse(string courseId, string userId)
         {

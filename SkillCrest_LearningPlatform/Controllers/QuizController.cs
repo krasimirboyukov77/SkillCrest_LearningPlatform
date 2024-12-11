@@ -12,9 +12,8 @@ namespace SkillCrest_LearningPlatform.Controllers
 {
     public class QuizController : Controller
     {
-        private readonly ApplicationDbContext _context;  // Assuming you are using Entity Framework for your database
-
-        // Injecting the database context
+        private readonly ApplicationDbContext _context;  
+   
         public QuizController(ApplicationDbContext context)
         {
             _context = context;
@@ -233,7 +232,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return RedirectToAction("Index", "Course");
             }
 
-            // If the model is invalid, return to the quiz page with validation errors
+        
             return View(viewModel);
         }
 
@@ -249,8 +248,7 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         private bool IsCorrectOpenTextAnswer(string answer)
         {
-            // Add your custom logic here to check if the answer is correct
-            // For now, assume any answer is correct
+  
             return !string.IsNullOrEmpty(answer);
         }
     }

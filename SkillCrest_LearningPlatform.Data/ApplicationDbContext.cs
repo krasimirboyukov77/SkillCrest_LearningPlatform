@@ -13,7 +13,6 @@ namespace SkillCrest_LearningPlatform.Data
             : base(options)
         {
         }
-        public virtual DbSet<Manager> Managers { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Lesson> Lessons { get; set; }
         public virtual DbSet<UserCourse> UsersCourses { get; set; }

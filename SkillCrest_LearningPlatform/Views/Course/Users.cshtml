@@ -26,6 +26,10 @@
                     {
                         if (user.Id == Model.CreatorId)
                         {
+                            <p>Creator</p>
+                        }
+                        else if (user.Id == BaseService.GetUserId().ToString())
+                        {
                             <p>You</p>
                         }
                         else

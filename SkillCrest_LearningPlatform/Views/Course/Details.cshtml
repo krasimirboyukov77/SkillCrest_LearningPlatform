@@ -80,7 +80,7 @@
                                     </button>
                                 </form>
                             }
-                            @if (User.IsInRole("Teacher") && User?.Identity?.Name == lesson.Creator)
+                            @if ((User.IsInRole("Teacher") && User?.Identity?.Name == lesson.Creator) || await baseService.IsAdmin())
                             {
                                 <a type="button" class="btn btn-primary me-2" asp-action="Edit" asp-controller="Lesson" asp-route-lessonId="@lesson.Id">Edit</a>
                                 <a type="button" class="btn btn-danger" asp-action="Delete" asp-controller="Lesson" asp-route-lessonId="@lesson.Id">Delete</a>

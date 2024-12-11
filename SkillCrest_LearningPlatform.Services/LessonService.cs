@@ -359,7 +359,7 @@ namespace SkillCrest_LearningPlatform.Services
             
             var userId = GetUserId();
 
-            if(userId != viewModel.CreatorId)
+            if(userId != viewModel.CreatorId && !(await IsAdmin()))
             {
                 return false;
             }

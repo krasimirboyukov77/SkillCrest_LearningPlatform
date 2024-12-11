@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 using SkillCrest_LearningPlatform.Data;
 using SkillCrest_LearningPlatform.Data.Data.Models;
-using SkillCrest_LearningPlatform.Infrastructure.Repositories;
-using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
-using SkillCrest_LearningPlatform.Services;
-using SkillCrest_LearningPlatform.Services.Interfaces;
 
 using SkillCrest_LearningPlatform.Infrastructure.ApplicationBuilderExtensions;
+using SkillCrest_LearningPlatform.Extensions;
+using SkillCrest_LearningPlatform.Services.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +27,7 @@ string teacherPassword = builder.Configuration.GetValue<string>("Teacher:Passwor
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
@@ -47,13 +46,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped<IBaseService, BaseService>();
-builder.Services.AddScoped<ICourseService, CourseService>();
-builder.Services.AddScoped<ILessonService, LessonService>();
-builder.Services.AddScoped<IManageService, ManageService>();
-builder.Services.AddScoped<IStatisticsService, StatisticsService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.RegisterAppServices();
 
 builder.Services.AddControllersWithViews();
 
@@ -66,12 +59,18 @@ initializer.InitializeDatabase();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
     app.UseHsts();
+
+    app.UseExceptionHandler("/Error");
+
+
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
 }
 
 app.UseHttpsRedirection();
@@ -84,6 +83,9 @@ app.UseAuthorization();
 
 app.SeedAdministrator(adminEmail, adminUsername, adminPassword);
 app.SeedTeacher(teacherEmail, teacherUsername, teacherPassword);
+
+app.SeedCourses();
+app.SeedLessons();
 
 app.MapControllerRoute(
     name: "admin",

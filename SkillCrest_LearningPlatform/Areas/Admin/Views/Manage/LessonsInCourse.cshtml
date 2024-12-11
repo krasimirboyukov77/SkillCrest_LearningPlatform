@@ -32,10 +32,10 @@
                 <td>@lesson.DateCreated</td>
                 <td>@lesson.DueDate</td>
                 <td class="text-center">
-                    <a asp-action="Edit" asp-controller="Lesson" asp-route-id="@lesson.Id" class="btn btn-primary btn-sm me-2">
+                    <a asp-area="" asp-action="Edit" asp-controller="Lesson" asp-route-lessonId="@lesson.Id" class="btn btn-primary btn-sm me-2">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
-                    <a asp-action="Delete" asp-controller="Lesson" asp-route-id="@lesson.Id" class="btn btn-danger btn-sm">
+                    <a asp-area="" asp-action="Delete" asp-controller="Lesson" asp-route-lessonId="@lesson.Id" class="btn btn-danger btn-sm">
                         <i class="bi bi-trash"></i> Delete
                     </a>
                 </td>

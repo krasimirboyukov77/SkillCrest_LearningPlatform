@@ -176,7 +176,7 @@
             const optionsContainer = document.querySelector(`#question_${questionIdx} .options-container`);
 
             if (typeSelect.value === "2") {
-                // OpenText: Hide Add Option button and clear options
+                // OpenText
                 addOptionButton.style.display = 'none';
                 openTextContainer.style.display = 'block';
                 clearOptions(optionsContainer);
@@ -197,11 +197,11 @@
         function resetCorrectAnswers(container, questionType) {
             const inputs = container.querySelectorAll('input[type="radio"], input[type="checkbox"]');
             inputs.forEach(input => {
-                input.checked = false; // Uncheck all inputs
-                input.type = questionType === "1" ? "radio" : "checkbox"; // Update input type
+                input.checked = false;
+                input.type = questionType === "1" ? "radio" : "checkbox";
                 input.name = questionType === "1"
                     ? container.getAttribute('data-correct-name')
-                    : input.getAttribute('data-original-name'); // Update name dynamically
+                    : input.getAttribute('data-original-name'); 
             });
         }
     </script>

@@ -1,4 +1,8 @@
-﻿@model ICollection<CourseInfoViewModel>
+﻿@using SkillCrest_LearningPlatform.Services.Interfaces
+
+@inject IBaseService baseService
+
+@model ICollection<CourseInfoViewModel>
 
 <!doctype html>
 <html lang="en">
@@ -65,7 +69,7 @@
                                                 </div>
                                             }
 
-                                            @if (User?.Identity?.Name == course.Creator)
+                                            @if (User?.Identity?.Name == course.Creator || await baseService.IsAdmin())
                                             {
                                                 <div class="col-6 px-1">
                                                    <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-warning btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Edit</a>

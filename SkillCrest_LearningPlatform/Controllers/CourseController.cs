@@ -25,7 +25,7 @@ namespace SkillCrest_LearningPlatform.Controllers
 
             return View(courses);
         }
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -34,7 +34,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles ="Teacher")]
+        [Authorize(Roles ="Teacher,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateCourseViewModel viewModel)

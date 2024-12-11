@@ -40,7 +40,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View(lesson);
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpGet]
         public IActionResult Create(string courseId)
         {
@@ -53,7 +53,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateLessonViewModel viewModel, IFormFile? file)
@@ -104,6 +104,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View("Index", "Course");
         }
 
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(string lessonId)
         {
@@ -117,6 +118,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             return View(lessonDetails);
         }
 
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(LessonDetailsViewModel viewModel)
@@ -202,7 +204,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             return Json(new { success = true });
         }
 
-
+        [Authorize(Roles = "Teacher,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Evaluation(string submissionId, double grade)

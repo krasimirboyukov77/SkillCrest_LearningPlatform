@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillCrest_LearningPlatform
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillCrest_LearningPlatform.Services", "SkillCrest_LearningPlatform.Services\SkillCrest_LearningPlatform.Services.csproj", "{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5BC2B3DC-D7CD-4F50-B676-1B113937B9DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillCrest_LearningPlatform.Test", "SkillCrest_LearningPlatform.Test\SkillCrest_LearningPlatform.Test.csproj", "{C124E278-6227-4CE7-9F1D-8B36EEE84DA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,10 @@ Global
 		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C124E278-6227-4CE7-9F1D-8B36EEE84DA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C124E278-6227-4CE7-9F1D-8B36EEE84DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C124E278-6227-4CE7-9F1D-8B36EEE84DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C124E278-6227-4CE7-9F1D-8B36EEE84DA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +81,7 @@ Global
 		{0F473B7E-F144-4FBC-9EED-0A412987FB10} = {98FC7777-34B0-4E79-93AC-E38865A04DF8}
 		{15696B23-B7E6-41B6-A49F-34B20405ACDB} = {416AF261-FE6A-4817-9258-A4646FD4FF2E}
 		{8EB5E4E7-3818-4DB1-8A02-F68C4BCB0B7D} = {416AF261-FE6A-4817-9258-A4646FD4FF2E}
+		{C124E278-6227-4CE7-9F1D-8B36EEE84DA0} = {5BC2B3DC-D7CD-4F50-B676-1B113937B9DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {734944B9-DAD2-4CD9-B02C-90D33BDB74EC}
