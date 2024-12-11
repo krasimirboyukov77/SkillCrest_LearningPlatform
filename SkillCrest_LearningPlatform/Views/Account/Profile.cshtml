@@ -1,13 +1,23 @@
 ﻿@model ProfileViewModel
 
+@{
+    ViewData["Title"] = "User Profile";
+    
+}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>User Profile</title>
-    <link rel="stylesheet" href="~/css/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
 </head>
 <body>
-    <div class="profile-container">
+    <div class="container">
+        <div class="header">
+            <h2>@ViewData["Title"]</h2>
+        </div>
+
         <div class="profile-thumbnail">
             @{
                 var imageUrl = !String.IsNullOrWhiteSpace(Model.UserImage)
@@ -18,9 +28,51 @@
                  alt="Profile Picture"
                  class="profile-image">
         </div>
-        <h2 class="username">@Model.FullName</h2>
-        <h3 class="email">@Model.Email</h3>
-        <h3 class="school">@Model.SchoolName</h3>
+
+        <div class="profile-content">
+            <div class="profile-box">
+                <h3>Full Name</h3>
+                <p>@Model.FullName</p>
+            </div>
+
+            <div class="profile-box">
+                <h3>School Name</h3>
+                @if (string.IsNullOrEmpty(Model.SchoolName))
+                    {
+                        <p>No school!</p>
+                    }
+                    else
+                    {
+                         <p>@Model.SchoolName</p>
+                    }
+            </div>
+
+            <div class="profile-box">
+                <h3>Interests</h3>
+                @if (string.IsNullOrEmpty(Model.Interests))
+                    {
+                        <p>No interests!</p>
+                    }
+                    else
+                    {
+                         <p>@Model.Interests</p>
+                    }
+            </div
+
+            <div class="profile-box biography-box">
+                <h3>Biography</h3>
+                <p>
+                    @if (string.IsNullOrEmpty(Model.Biography))
+                    {
+                        <p>No biography!</p>
+                    }
+                    else
+                    {
+                         <p>@Model.Biography</p>
+                    }
+                </p>
+            </div>
+        </div>
     </div>
 </body>
 </html>

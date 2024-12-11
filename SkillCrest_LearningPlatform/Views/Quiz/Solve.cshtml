@@ -59,8 +59,8 @@
                         <div>
                             <!-- Radio button -->
                             <input type="radio"
-                                   name="Questions[@i].SelectedOption"
-                                   value="@option.OptionId"
+                                   name="Questions[@i].Options[@j].SelectedOption"
+                                   value="true"
                             @(option.SelectedOption ? "checked" : "") />
                             <!-- Hidden fields for option details -->
                             <input type="hidden" name="Questions[@i].Options[@j].Text" value="@option.Text" />

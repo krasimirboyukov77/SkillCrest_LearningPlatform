@@ -142,20 +142,30 @@
                     <input type="text" name="Questions[${questionIdx}].Options[${optionIndex}].Text" class="form-control option-input" />
                     <label>Is Correct</label>
                     <input type="${isRadioButton ? 'radio' : 'checkbox'}"
-                           name="${isRadioButton ? `Questions[${questionIdx}].IsCorrect` : `Questions[${questionIdx}].Options[${optionIndex}].IsCorrect`}"
-                           value="true" onchange="handleCheckboxChange(this)" />
+                           name="${isRadioButton ? `Questions[${questionIdx}].Options[${optionIndex}].IsCorrect` : `Questions[${questionIdx}].Options[${optionIndex}].IsCorrect`}"}
+                           value="true" onchange="handleCheckboxChange(this, ${questionIdx})" />
                     <button type="button" onclick="removeOption(${questionIdx}, ${optionIndex})" class="btn btn-danger btn-sm">Remove Option</button>
                 </div>
             `;
             optionsContainer.insertAdjacentHTML("beforeend", optionHtml);
         }
 
-        function handleCheckboxChange(input) {
-            if (input.type === "radio") {
+        function handleCheckboxChange(input, questionIdx) {
+            const isRadioButton = document.querySelector(`select[name="Questions[${questionIdx}].Type"]`).value === "1";
+
+            if (isRadioButton) {
+                // If it's a radio button, ensure only one radio button can be selected.
                 const radios = input.closest('.options-container').querySelectorAll('input[type="radio"]');
+
+                // Uncheck all radio buttons first
                 radios.forEach(radio => {
-                    if (radio !== input) radio.checked = false;
+                    radio.checked = false;
+                    radio.value = 'false'; // Set value as false for unselected radios
                 });
+
+                // Now check the clicked radio button
+                input.checked = true;
+                input.value = 'true'; // Mark this radio button as the correct answer
             }
         }
 
@@ -198,10 +208,11 @@
             const inputs = container.querySelectorAll('input[type="radio"], input[type="checkbox"]');
             inputs.forEach(input => {
                 input.checked = false;
-                input.type = questionType === "1" ? "radio" : "checkbox";
+                input.type = questionType === "1" ? "radio" : "checkbox"; // Set type based on question type
                 input.name = questionType === "1"
-                    ? container.getAttribute('data-correct-name')
-                    : input.getAttribute('data-original-name'); 
+                    ? `Questions[${questionIndex}].IsCorrect`
+                    : input.getAttribute('data-original-name');
+                input.value = "false"; // Ensure the value is false for unchecked items
             });
         }
     </script>

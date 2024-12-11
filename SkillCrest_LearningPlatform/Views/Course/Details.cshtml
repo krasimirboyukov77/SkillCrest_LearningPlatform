@@ -92,7 +92,7 @@
                     <div class="d-flex justify-content-start">
                         <div>
                             <a type="button" class="btn btn-primary me-2" asp-action="Details" asp-controller="Lesson" asp-route-id="@lesson.Id">Details</a>
-                            @if (User.IsInRole("Teacher") && User?.Identity?.Name == lesson.Creator)
+                            @if ((User.IsInRole("Teacher") && User?.Identity?.Name == lesson.Creator) || await baseService.IsAdmin())
                             {
                                 <a type="button" class="btn btn-info" asp-action="LessonSubmissions" asp-controller="Statistics" asp-route-lessonId="@lesson.Id">Submissions</a>
                             }
@@ -105,7 +105,7 @@
         {
             <p>No lessons yet!</p>
         }
-        @if (User.IsInRole("Teacher") && User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.CreatorId)
+        @if ((User.IsInRole("Teacher") && User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.CreatorId) || await baseService.IsAdmin())
         {
             <div class="text-center mt-4">
                 <a type="button" class="btn btn-primary" asp-action="Create" asp-controller="Lesson" asp-route-courseId="@Model.Id">Click to create new assignment.</a>

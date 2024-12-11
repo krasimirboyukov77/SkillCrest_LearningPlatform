@@ -192,7 +192,9 @@ namespace SkillCrest_LearningPlatform.Controllers
                     }
                     else if(question.Type == QuestionType.RadioButton)
                     {
+
                         var questionSelectedAnswer = questionAnswer.Options.FirstOrDefault(o => o.SelectedOption == true);
+
                         if(questionSelectedAnswer != null)
                         {
                             var correctOption = question.CorrectOptionId.FirstOrDefault();
@@ -233,7 +235,7 @@ namespace SkillCrest_LearningPlatform.Controllers
             }
 
         
-            return View(viewModel);
+            return BadRequest();
         }
 
         private Guid GetUserId()
