@@ -15,9 +15,12 @@
 </div>
 
 <form asp-action="Delete" asp-controller="Lesson" method="post">
+    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="CourseId" />
     <input type="hidden" asp-for="CreatorId" />
+    <input type="hidden" asp-for="DateCreated" />
+    <input type="hidden" asp-for="Title" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-action="Details" asp-controller="Course" asp-route-id="@Model.CourseId" class="btn btn-secondary">Cancel</a>
 </form>

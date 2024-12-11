@@ -3,6 +3,7 @@
 <h2>Create Quiz</h2>
 
 <form asp-action="Create" asp-controller="Quiz" method="post">
+    @Html.AntiForgeryToken()
     <div>
         <label>Quiz Title</label>
         <input type="text" asp-for="Title" class="form-control" />

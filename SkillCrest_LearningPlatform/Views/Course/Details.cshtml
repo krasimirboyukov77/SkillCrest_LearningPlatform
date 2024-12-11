@@ -61,6 +61,7 @@
                             @if (!lesson.IsCompleted)
                             {
                                 <form action="/Lesson/ToggleLessonCompletion" method="post" class="d-inline-block lesson-completion-form" data-lesson-id="@lesson.Id">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="lessonId" value="@lesson.Id" />
                                     <input type="hidden" name="courseId" value="@Model.Id" />
                                     <button type="submit" class="btn btn-success me-2" aria-checked="@lesson.IsCompleted.ToString().ToLower()">
@@ -71,6 +72,7 @@
                             else
                             {
                                 <form action="/Lesson/MarkAsIncomplete" method="post" class="d-inline-block lesson-completion-form" data-lesson-id="@lesson.Id">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="lessonId" value="@lesson.Id" />
                                     <input type="hidden" name="courseId" value="@Model.Id" />
                                     <button type="submit" class="btn btn-warning me-2" aria-checked="@lesson.IsCompleted.ToString().ToLower()">

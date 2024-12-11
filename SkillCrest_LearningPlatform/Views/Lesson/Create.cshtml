@@ -6,6 +6,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
                     <div class="form-group ">
                         <label class="control-label " asp-for="Title">
                             Title
