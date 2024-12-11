@@ -174,7 +174,10 @@ namespace SkillCrest_LearningPlatform.Controllers
         [HttpGet]
         public IActionResult Download(string fileName)
         {
-
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return NotFound();
+            }
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", fileName);
 
 
@@ -201,7 +204,7 @@ namespace SkillCrest_LearningPlatform.Controllers
                 return BadRequest();
             }
 
-            return Json(new { success = true });
+            return RedirectToAction("Details","Lesson", new {id = lessonId});
         }
 
         [Authorize(Roles = "Teacher,Admin")]

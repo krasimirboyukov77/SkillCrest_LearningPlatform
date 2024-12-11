@@ -29,60 +29,65 @@
                     {
                         foreach (var course in Model)
                         {
-                                    <div class="col border-1">
+                            <div class="col border-1">
                                 @{
                                     var imageUrl = string.IsNullOrWhiteSpace(course.ImageUrl)
-                                        ? Url.Content("~/images/course-default-image.jpg")
-                                        : Url.Content(course.ImageUrl);
+                                    ? Url.Content("~/images/course-default-image.jpg")
+                                    : Url.Content(course.ImageUrl);
                                 }
-                                        <div class="img-thumbnail">
-                                            <img class="bd-placeholder-img card-img-top"
-                                                 src="@imageUrl"
-                                                 alt="Thumbnail"
-                                                 width="100%"
-                                                 height="225"
-                                                 style="object-fit: cover;" />
+                                <div class="img-thumbnail">
+                                    <img class="bd-placeholder-img card-img-top"
+                                         src="@imageUrl"
+                                         alt="Thumbnail"
+                                         width="100%"
+                                         height="225"
+                                         style="object-fit: cover;" />
 
-                                            <div class="card-body">
-                                                <h3>@course.Title</h3>
-                                                <p class="card-text">@course.Description</p>
-                                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="card-body">
+                                        <h3>@course.Title</h3>
+                                        <p class="card-text">@course.Description</p>
+                                        <div class="d-flex justify-content-between align-items-center">
                                             @if (course.IsEnrolled == false)
                                             {
                                                 if (!string.IsNullOrEmpty(course.Password))
                                                 {
-                                                 <div class="btn-group">
-                                                   <a class="btn btn-primary" asp-action="EnrollPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
-                                                  </div>
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-primary" asp-action="EnrollPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
+                                                    </div>
                                                 }
                                                 else
                                                 {
-                                                  <div class="btn-group">
-                                                     <a class="btn btn-primary" asp-action="EnrollNoPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
-                                                 </div>
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-primary" asp-action="EnrollNoPassword" asp-controller="Course" asp-route-courseId="@course.Id">Enroll</a>
+                                                    </div>
                                                 }
                                             }
                                             else
                                             {
                                                 <div class="btn-group">
-                                                  <a class="btn btn-primary" asp-action="Details" asp-controller="Course" asp-route-id="@course.Id">View</a>
+                                                    <a class="btn btn-primary" asp-action="Details" asp-controller="Course" asp-route-id="@course.Id">View</a>
                                                 </div>
                                             }
 
                                             @if (User?.Identity?.Name == course.Creator || await baseService.IsAdmin())
                                             {
-                                                <div class="col-6 px-1">
-                                                   <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-warning btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Edit</a>
-                                               </div>
-                                                <div class="col-6 px-1">
-                                                   <a asp-controller="Course" asp-action="Delete" asp-route-courseId="@course.Id.ToString()" class="btn btn-danger btn-sm mb-2 w-50 fw-bold rounded btn-dark-text">Delete</a>
+                                              
+                                                <div class="d-flex justify-content-between align-items-center w-100 mt-2">
+                                                    <div class="col-6 px-1">
+                                                        <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-warning btn-sm w-100 fw-bold rounded">Edit</a>
+                                                    </div>
+                                                    <div class="col-6 px-1">
+                                                        <a asp-controller="Course" asp-action="Delete" asp-route-courseId="@course.Id.ToString()" class="btn btn-danger btn-sm w-100 fw-bold rounded">Delete</a>
+                                                    </div>
                                                 </div>
                                             }
-                                                    <small class="text-muted">@course.DateCreated.ToString("dd-MM-yyyy")</small>
-                                                </div>
-                                            </div>
+
+                                    
+                                            <small class="text-muted mt-2 d-block">@course.DateCreated.ToString("dd-MM-yyyy")</small>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
                         }
                     }
                     else

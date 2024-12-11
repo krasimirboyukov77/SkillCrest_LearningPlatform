@@ -398,34 +398,37 @@ namespace SkillCrest_LearningPlatform.Services
                     await file.CopyToAsync(stream);
                 }
 
+
+                Guid lessonGuid = Guid.Empty;
+                bool isValidId = IsGuidValid(lessonId, ref lessonGuid);
+
+                if (!isValidId)
+                {
+                    return false;
+                }
+
+                var lessonExist = await _lessonRepository.FirstOrDefaultAsync(l => l.Id == lessonGuid);
+
+                if (lessonExist == null)
+                {
+                    return false;
+                }
+
+                Submission newSubmission = new Submission()
+                {
+                    LessonId = lessonGuid,
+                    UploaderId = GetUserId(),
+                    FileName = fileName,
+                    FilePath = filePathEntity
+                };
+
+                await _submissionRepository.AddAsync(newSubmission);
+
+                return true;
+
             }
 
-            Guid lessonGuid = Guid.Empty;
-            bool isValidId = IsGuidValid(lessonId, ref lessonGuid);
-
-            if (!isValidId)
-            {
-                return false;
-            }
-
-            var lessonExist = await _lessonRepository.FirstOrDefaultAsync(l=> l.Id ==  lessonGuid);
-
-            if (lessonExist == null)
-            {
-                return false;
-            }
-
-            Submission newSubmission = new Submission()
-            {
-                LessonId = lessonGuid,
-                UploaderId = GetUserId(),
-                FileName = fileName,
-                FilePath = filePathEntity
-            };
-
-            await _submissionRepository.AddAsync(newSubmission);
-            
-            return true;
+            return false;
         }
 
         public async Task<bool> EvaluationSubmission(string submissionId, double score)

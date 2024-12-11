@@ -10,7 +10,7 @@
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
     <li class="nav-item">
-            <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn btn-link" style="padding: 0; background: none; border: none; color: inherit; cursor: pointer;">
                     Logout

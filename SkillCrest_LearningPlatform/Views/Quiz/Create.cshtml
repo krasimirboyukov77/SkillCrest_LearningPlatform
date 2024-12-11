@@ -154,18 +154,17 @@
             const isRadioButton = document.querySelector(`select[name="Questions[${questionIdx}].Type"]`).value === "1";
 
             if (isRadioButton) {
-                // If it's a radio button, ensure only one radio button can be selected.
                 const radios = input.closest('.options-container').querySelectorAll('input[type="radio"]');
 
-                // Uncheck all radio buttons first
+              
                 radios.forEach(radio => {
                     radio.checked = false;
-                    radio.value = 'false'; // Set value as false for unselected radios
+                    radio.value = 'false'; 
                 });
 
-                // Now check the clicked radio button
+               
                 input.checked = true;
-                input.value = 'true'; // Mark this radio button as the correct answer
+                input.value = 'true'; 
             }
         }
 
@@ -208,11 +207,11 @@
             const inputs = container.querySelectorAll('input[type="radio"], input[type="checkbox"]');
             inputs.forEach(input => {
                 input.checked = false;
-                input.type = questionType === "1" ? "radio" : "checkbox"; // Set type based on question type
+                input.type = questionType === "1" ? "radio" : "checkbox"; 
                 input.name = questionType === "1"
                     ? `Questions[${questionIndex}].IsCorrect`
                     : input.getAttribute('data-original-name');
-                input.value = "false"; // Ensure the value is false for unchecked items
+                input.value = "false"; 
             });
         }
     </script>

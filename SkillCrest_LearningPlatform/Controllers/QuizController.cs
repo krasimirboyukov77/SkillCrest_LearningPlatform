@@ -5,11 +5,13 @@ using SkillCrest_LearningPlatform.ViewModels.QuizViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
-using Microsoft.Identity.Client;
+
 using SkillCrest_LearningPlatform.Data.Models.Enum;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SkillCrest_LearningPlatform.Controllers
 {
+    [Authorize(Roles = "Teacher,Admin")]
     public class QuizController : Controller
     {
         private readonly ApplicationDbContext _context;  
@@ -21,7 +23,7 @@ namespace SkillCrest_LearningPlatform.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> Create(string courseId)
+        public IActionResult Create(string courseId)
         {
             var model = new CreateQuizViewModel() { CourseId = Guid.Parse(courseId)};
             return View(model);
