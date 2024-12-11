@@ -8,6 +8,7 @@ using SkillCrest_LearningPlatform.Infrastructure.Repositories.Contracts;
 using SkillCrest_LearningPlatform.Services.Interfaces;
 using SkillCrest_LearningPlatform.ViewModels.LessonViewModels;
 using SkillCrest_LearningPlatform.Data.Models;
+using SkillCrest_LearningPlatform.Common.Lesson;
 
 
 namespace SkillCrest_LearningPlatform.Services
@@ -288,7 +289,7 @@ namespace SkillCrest_LearningPlatform.Services
                 Title = lesson.Title,
                 Description = lesson.Description,
                 DateCreated = lesson.DateCreated.ToString("dd-MM-yyyy"),
-                DueDate = lesson.DueDate?.ToString("dd-MM-yyyy"),
+                DueDate = lesson.DueDate?.ToString(ValidationConstants.LessonDateFormat),
                 Creator = lesson.Creator.UserName ?? string.Empty,
                 Points = lesson.Points,
                 FilePath = lesson.FilePath,
@@ -304,7 +305,7 @@ namespace SkillCrest_LearningPlatform.Services
                 .GetAllAttached().
                 FirstOrDefaultAsync(l=> l.Id == viewModel.Id);
 
-            bool isValidDate = DateTime.TryParseExact(viewModel.DueDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var lessonDueDate);
+            bool isValidDate = DateTime.TryParseExact(viewModel.DueDate, ValidationConstants.LessonDateCreatedFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var lessonDueDate);
 
             if (lesson != null)
             {

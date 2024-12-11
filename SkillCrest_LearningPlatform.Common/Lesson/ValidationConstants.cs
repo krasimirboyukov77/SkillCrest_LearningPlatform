@@ -14,6 +14,6 @@ namespace SkillCrest_LearningPlatform.Common.Lesson
         public const int LessonDescriptionMaxLength = 700;
 
         public const string LessonDateCreatedFormat = "yyyy-MM-ddTHH:mm";
-        public const string LessonDateFormat = "dd/MM/yyyy HH:mm";
+        public const string LessonDateFormat = "dd-MM-yyyy HH:mm";
     }
 }

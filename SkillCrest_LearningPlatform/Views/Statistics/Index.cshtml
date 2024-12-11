@@ -30,7 +30,7 @@
         }
 
         .progress-label {
-            width: 150px; /* Adjust width as needed */
+            width: 150px; 
             text-align: center;
             font-weight: bold;
             font-size: 0.9em;
@@ -78,6 +78,7 @@
     {
         foreach (var course in Model)
         {
+                var completionPercentage = course.CompletedPercentage.ToString("f2");   
             <div class="course-container">
                 <div class="course-header">@course.CourseName</div>
                 <div class="progress-section">
@@ -89,9 +90,9 @@
                     <!-- Progress Bar -->
                     <div class="progress-bar">
                         <div class="progress-bar-inner"
-                             style="width: @course.CompletedPercentage%"
+                             style="width: @(completionPercentage)%"
                              data-completion="@course.CompletedPercentage">
-                            @course.CompletedPercentage%
+                            @completionPercentage %
                         </div>
                     </div>
                 </div>
