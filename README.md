@@ -43,8 +43,8 @@ The app is pre-configured with two seeded users: an Admin and a Teacher. Their c
 ### Statistics Panel
 ![statistics preview](https://github.com/user-attachments/assets/9cb391df-e2b6-48c2-a588-8ba0daefdc8b)
 
-## Key Features
-
+## Key Features 
+[Back to the Top](#)
 ### Identity
 - Users can register as either a **Teacher** or a **Student**, with separate registration pages for each.  
   - **Students**: Register with a username, email, password, and the name of their school.  
@@ -70,6 +70,7 @@ The app is pre-configured with two seeded users: an Admin and a Teacher. Their c
 ## Project Structure and Architecture
 ![database diagram](https://github.com/user-attachments/assets/ed87b4f4-e720-4605-98da-51e4bee4bacf)
 
+[Back to the Top](#)
 ### Back-End
 ![back end](https://github.com/user-attachments/assets/01d13a98-68a1-4e80-862f-c8c9b298bb63)
 
@@ -79,6 +80,7 @@ Let's start from the top.
 
 All validation constants are separated in different folders for the entities.
 Error messages are for the whole application.
+[Back to the Top](#)
 
 ### Data Folder
 ![data folder](https://github.com/user-attachments/assets/747de653-1b20-43af-ae3e-8878197e7b31)
@@ -86,19 +88,24 @@ Error messages are for the whole application.
 The Data folder contains the following key components:
 
 ### Data
+[Back to the Top](#)
 - **Migrations**: Handles database schema changes and version control.  
 - **Seeds**: Provides initial data for courses and lessons to set up the application.  
 - **ApplicationDbContext**: Includes a global filter to exclude deleted objects from queries automatically.
 
 ### Models
 ![models updated](https://github.com/user-attachments/assets/fcdaa255-9e01-4a22-b3b9-0ed524210aeb)
+
+[Back to the Top](#)
+
 - **Models**: Models used in the application.
 
 ### Services Folder
-
 ![services folder](https://github.com/user-attachments/assets/969c3d01-169e-4ad7-870a-b26ad99c03bf)
 
 #### **Infrastructure**
+
+[Back to the Top](#)
 
 - **ApplicationBuilderExtensions**: Contains the following extensions:  
   - **SeedAdministrator**  
@@ -113,6 +120,8 @@ The Data folder contains the following key components:
 ### Services
 ![all services](https://github.com/user-attachments/assets/53ccc10e-9b29-4836-aeea-21848342e354)
 
+[Back to the Top](#)
+
 - **Extensions**:  
   - **RegisterAppServices**: Registers all the services used in the application.  
   - **Seed**: Automatically seeds the database with initial courses and lessons.  
@@ -122,14 +131,14 @@ The Data folder contains the following key components:
 - **Services**: Implements the logic for all application services.
 
 ### Test
-
 **This feature is not implemented yet!**
 
 ### ViewModels
-
 ![viewmodels](https://github.com/user-attachments/assets/0fe86b16-01f4-49ae-bb16-96a95b562622)
 
 Contains all the ViewModels used across the application for data representation and binding.
+
+[Back to the Top](#)
 
 ### Web
 
